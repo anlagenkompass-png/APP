@@ -3,3903 +3,1292 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AnlageKompass – Dein Investment-Kompass</title>
-
-  <!-- ============================================================
-       EXTERNE BIBLIOTHEKEN
-       - Supabase JS Client (Auth + Datenbank)
-       - Stripe.js (Bezahlung)
-       - Chart.js (Diagramme)
-  ============================================================ -->
-  <script src="[cdn.jsdelivr.net](https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2)"></script>
-  <script src="[js.stripe.com](https://js.stripe.com/v3/)"></script>
-  <script src="[cdn.jsdelivr.net](https://cdn.jsdelivr.net/npm/chart.js)"></script>
-
+  <title>AnlageKompass – Investment-Ideen mit Orientierung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* ============================================================
-       CSS RESET & VARIABLEN
-       Farbpalette, Abstände, Schriften für die gesamte App
-    ============================================================ */
     :root {
-      --primary: #0ea5e9;
-      --primary-dark: #0284c7;
-      --primary-glow: rgba(14, 165, 233, 0.15);
-      --accent: #10b981;
-      --accent-dark: #059669;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --gold: #f59e0b;
-      --bg: #0a0e1a;
-      --bg-card: #111827;
-      --bg-card2: #1a2235;
-      --border: rgba(255,255,255,0.08);
-      --border-active: rgba(14, 165, 233, 0.4);
-      --text: #f1f5f9;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
-      --radius: 16px;
-      --radius-sm: 10px;
-      --shadow: 0 4px 24px rgba(0,0,0,0.4);
-      --shadow-glow: 0 0 30px rgba(14, 165, 233, 0.2);
+      --bg: #030817;
+      --bg-soft: #071226;
+      --card: #0c162c;
+      --card-2: #0e1830;
+      --border: rgba(119, 144, 185, 0.18);
+      --border-strong: rgba(26, 182, 255, 0.72);
+      --text: #eef4fb;
+      --text-muted: #91a2bc;
+      --text-soft: #7890ad;
+      --brand-a: #1ea8ff;
+      --brand-b: #28d0b1;
+      --brand-c: #0fb4ff;
+      --success: #1fe2b0;
+      --radius: 22px;
+      --radius-sm: 14px;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.32);
+      --glow: 0 0 0 1px rgba(22,169,255,0.18), 0 18px 60px rgba(0,0,0,0.24), 0 0 36px rgba(12,163,255,0.10);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background:
+        radial-gradient(circle at 50% 26%, rgba(22, 177, 255, 0.12), transparent 26%),
+        radial-gradient(circle at 82% 8%, rgba(40, 208, 177, 0.06), transparent 18%),
+        linear-gradient(180deg, #030817 0%, #020614 100%);
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* ============================================================
-       UTILITY KLASSEN
-    ============================================================ */
-    .hidden { display: none !important; }
-    .blur-content { filter: blur(5px); pointer-events: none; user-select: none; }
-    .flex { display: flex; }
-    .flex-col { flex-direction: column; }
-    .items-center { align-items: center; }
-    .justify-between { justify-content: space-between; }
-    .gap-4 { gap: 1rem; }
-    .gap-2 { gap: 0.5rem; }
-    .mt-4 { margin-top: 1rem; }
-    .mb-4 { margin-bottom: 1rem; }
+    .container {
+      width: min(1280px, calc(100% - 48px));
+      margin: 0 auto;
+    }
 
-    /* ============================================================
-       NAVIGATION – Fixierte Top-Bar mit Logo und Menüpunkten
-    ============================================================ */
-    .navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: rgba(10, 14, 26, 0.95);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      height: 64px;
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(3, 8, 23, 0.84);
+      border-bottom: 1px solid rgba(133, 157, 196, 0.12);
+    }
+
+    .nav {
+      height: 76px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .navbar-logo {
-      font-size: 1.3rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .navbar-nav {
-      display: flex;
+    .brand {
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.03em;
     }
 
-    .nav-btn {
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
+    .brand-mark {
+      width: 22px;
+      height: 28px;
+      background: linear-gradient(180deg, #1da7ff 0%, #1ebeff 100%);
+      border-radius: 0;
+      box-shadow: 0 0 22px rgba(29, 167, 255, 0.24);
+      flex: 0 0 auto;
+    }
+
+    .brand-text {
+      color: #20c4ea;
+      text-shadow: 0 0 22px rgba(34, 198, 213, 0.05);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 1;
       cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: all 0.2s;
+      transition: 180ms ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
     }
 
-    .nav-btn:hover, .nav-btn.active {
-      background: var(--primary-glow);
-      color: var(--primary);
+    .btn-top-secondary {
+      min-width: 138px;
+      height: 46px;
+      padding: 0 20px;
+      border-color: rgba(27, 172, 255, 0.42);
+      background: rgba(5, 16, 34, 0.72);
+      color: #1db6ff;
+      box-shadow: inset 0 0 0 1px rgba(7, 24, 54, 0.42);
     }
 
-    /* Nav-Button für Premium-Bereich – mit Goldakzent */
-    .nav-btn.premium-nav {
-      color: var(--gold);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    .nav-btn.premium-nav:hover {
-      background: rgba(245, 158, 11, 0.1);
-      color: var(--gold);
-    }
-
-    /* Auth-Buttons in der Navigation */
-    .btn-nav-login {
-      padding: 0.5rem 1.25rem;
-      border: 1px solid var(--border-active);
-      border-radius: 8px;
-      background: transparent;
-      color: var(--primary);
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .btn-nav-login:hover {
-      background: var(--primary-glow);
-    }
-
-    .btn-nav-premium {
-      padding: 0.5rem 1.25rem;
-      border: none;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: white;
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .btn-nav-premium:hover {
-      opacity: 0.9;
+    .btn-top-secondary:hover {
       transform: translateY(-1px);
+      border-color: rgba(27, 172, 255, 0.65);
+      background: rgba(7, 22, 42, 0.88);
     }
 
-    /* Avatar / User-Menu in der Navigation */
-    .user-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 0.875rem;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: border-color 0.2s;
+    .btn-top-primary,
+    .btn-primary {
+      min-width: 176px;
+      height: 46px;
+      padding: 0 22px;
+      color: white;
+      background: linear-gradient(90deg, #20adff 0%, #23d0b1 100%);
+      box-shadow: 0 10px 28px rgba(16, 178, 232, 0.22);
     }
 
-    .user-avatar:hover { border-color: var(--primary); }
-
-    /* ============================================================
-       SEITEN-CONTAINER
-       Alle "Seiten" sind divs die per JS ein-/ausgeblendet werden
-    ============================================================ */
-    .page {
-      display: none;
-      min-height: 100vh;
-      padding-top: 64px;
+    .btn-top-primary:hover,
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
     }
 
-    .page.active { display: block; }
+    .btn-hero-primary {
+      min-width: 252px;
+      height: 56px;
+      font-size: 16px;
+      border-radius: 16px;
+      color: white;
+      background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
+      box-shadow: 0 16px 44px rgba(12, 170, 235, 0.22);
+    }
 
-    /* ============================================================
-       LANDING PAGE – Hero, Features, Pricing
-    ============================================================ */
+    .btn-hero-secondary {
+      min-width: 168px;
+      height: 56px;
+      font-size: 18px;
+      border-radius: 16px;
+      border-color: rgba(123, 143, 175, 0.16);
+      background: rgba(7, 16, 31, 0.55);
+      color: #f5f8fc;
+    }
+
+    .btn-hero-secondary:hover {
+      transform: translateY(-1px);
+      border-color: rgba(123, 143, 175, 0.28);
+    }
+
     .hero {
-      min-height: calc(100vh - 64px);
+      min-height: 760px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 4rem 2rem;
-      position: relative;
-      overflow: hidden;
+      padding: 44px 0 84px;
     }
 
-    /* Animierter Hintergrund-Gradient */
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(ellipse at 50% 50%, rgba(14,165,233,0.08) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(16,185,129,0.06) 0%, transparent 40%);
-      animation: heroGlow 8s ease-in-out infinite alternate;
+    .hero-inner {
+      width: min(980px, 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      margin-top: -20px;
     }
 
-    @keyframes heroGlow {
-      from { transform: rotate(0deg) scale(1); }
-      to   { transform: rotate(5deg) scale(1.1); }
-    }
-
-    .hero-content { position: relative; z-index: 1; max-width: 720px; }
-
-    .hero-badge {
+    .hero-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      background: var(--primary-glow);
-      border: 1px solid var(--border-active);
-      border-radius: 100px;
-      padding: 0.4rem 1rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 1.5rem;
+      gap: 10px;
+      min-height: 34px;
+      padding: 0 22px;
+      border-radius: 999px;
+      color: #1eb6ff;
+      font-weight: 700;
+      font-size: 13px;
+      border: 1px solid rgba(26, 182, 255, 0.42);
+      background: rgba(7, 19, 40, 0.68);
+      box-shadow: inset 0 0 0 1px rgba(4, 13, 28, 0.55);
     }
 
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-size: clamp(46px, 5.1vw, 72px);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
       font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 1.25rem;
-      background: linear-gradient(135deg, #fff 30%, var(--primary) 70%);
+      max-width: 920px;
+      background: linear-gradient(90deg, #f6f9fc 0%, #dfeefa 44%, #1ea9ff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-wrap: balance;
     }
 
-    .hero p {
-      font-size: 1.1rem;
+    .hero-copy {
+      max-width: 980px;
+      font-size: 18px;
+      line-height: 1.72;
       color: var(--text-muted);
-      margin-bottom: 2.5rem;
-      line-height: 1.7;
+      letter-spacing: -0.02em;
+      margin-top: 6px;
     }
 
-    .hero-buttons {
+    .hero-actions {
       display: flex;
-      gap: 1rem;
+      gap: 20px;
+      align-items: center;
       justify-content: center;
+      margin-top: 8px;
       flex-wrap: wrap;
     }
 
-    /* ============================================================
-       BUTTONS – Globale Stile
-    ============================================================ */
-    .btn-primary {
-      padding: 0.875rem 2rem;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(14,165,233,0.3);
+    section.section {
+      padding: 42px 0 58px;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(14,165,233,0.4);
-    }
-
-    .btn-secondary {
-      padding: 0.875rem 2rem;
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    /* ============================================================
-       FEATURE-CARDS auf der Landing Page
-    ============================================================ */
-    .features-section {
-      padding: 5rem 2rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-title {
+    .section-head {
       text-align: center;
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 0.75rem;
+      margin-bottom: 50px;
     }
 
-    .section-sub {
-      text-align: center;
+    .section-head h2 {
+      font-size: clamp(28px, 2.6vw, 40px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      color: #f5f8fd;
+      margin-bottom: 14px;
+    }
+
+    .section-head p {
+      font-size: 16px;
       color: var(--text-muted);
-      margin-bottom: 3rem;
-      font-size: 1rem;
+      line-height: 1.7;
     }
 
-    .features-grid {
+    .feature-grid {
+      width: min(1260px, 100%);
+      margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 26px;
+      padding: 0 4px;
     }
 
     .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      transition: all 0.3s;
+      background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
+      border: 1px solid rgba(117, 141, 181, 0.16);
+      border-radius: 24px;
+      min-height: 228px;
+      padding: 30px 30px 28px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
 
-    .feature-card:hover {
-      border-color: var(--border-active);
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+    .feature-card .emoji {
+      font-size: 36px;
+      line-height: 1;
+      margin-bottom: 18px;
+      display: block;
     }
 
     .feature-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
+      font-size: 18px;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      color: #f6f8fc;
+      margin-bottom: 16px;
     }
 
     .feature-card p {
+      font-size: 16px;
+      line-height: 1.62;
       color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.6;
     }
 
-    /* ============================================================
-       PRICING SECTION – Free vs. Premium Vergleich
-    ============================================================ */
-    .pricing-section {
-      padding: 5rem 2rem;
-      background: linear-gradient(180deg, transparent, rgba(14,165,233,0.03), transparent);
+    .compare-wrap {
+      padding-top: 12px;
+      padding-bottom: 18px;
+    }
+
+    .compare-box {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(12,22,44,0.94), rgba(8,17,34,0.94));
+      border: 1px solid rgba(117, 141, 181, 0.16);
+      border-radius: 30px;
+      padding: 28px 28px 18px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .compare-head {
+      display: grid;
+      grid-template-columns: 1.65fr 0.55fr 0.55fr;
+      gap: 16px;
+      padding: 0 0 12px;
+      color: var(--text-soft);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1.65fr 0.55fr 0.55fr;
+      gap: 16px;
+      align-items: center;
+      min-height: 64px;
+      border-top: 1px solid rgba(117, 141, 181, 0.12);
+      color: #eef4fb;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .compare-feature {
+      font-weight: 700;
+      color: #eef4fb;
+      padding-right: 14px;
+    }
+
+    .compare-cell {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .compare-cell.yes {
+      color: #98f3d4;
+    }
+
+    .pricing-wrap {
+      padding-top: 36px;
+      padding-bottom: 90px;
     }
 
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      max-width: 800px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 34px;
+      width: min(980px, 100%);
       margin: 0 auto;
+      align-items: start;
     }
 
-    .pricing-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
+    .price-card {
       position: relative;
+      background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(9,18,36,0.98));
+      border: 1px solid rgba(117, 141, 181, 0.18);
+      border-radius: 26px;
+      padding: 34px 34px 34px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
 
-    /* Premium-Karte mit besonderem Styling */
-    .pricing-card.premium {
-      border-color: var(--primary);
-      box-shadow: 0 0 40px rgba(14,165,233,0.15);
+    .price-card.plus {
+      border-color: rgba(26, 182, 255, 0.9);
+      box-shadow: var(--glow);
     }
 
-    .popular-badge {
+    .recommend {
       position: absolute;
-      top: -12px;
+      top: -16px;
       left: 50%;
       transform: translateX(-50%);
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: white;
-      padding: 0.25rem 1rem;
-      border-radius: 100px;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-
-    .price-amount {
-      font-size: 2.5rem;
-      font-weight: 900;
-      margin: 1rem 0 0.25rem;
-    }
-
-    .price-amount span {
-      font-size: 1rem;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
-
-    .price-features {
-      list-style: none;
-      margin: 1.5rem 0;
-    }
-
-    .price-features li {
-      padding: 0.5rem 0;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      display: flex;
+      min-width: 198px;
+      height: 30px;
+      border-radius: 999px;
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .price-features li:last-child { border-bottom: none; }
-    .price-features li.active { color: var(--text); }
-    .check { color: var(--accent); }
-    .cross { color: var(--text-dim); }
-
-    /* ============================================================
-       ANALYSE-FORMULAR – Hauptseite mit Fragebogen
-    ============================================================ */
-    .analyse-container {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-    }
-
-    .analyse-header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-
-    .analyse-header h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-
-    /* Stepper – zeigt Fortschritt im Fragebogen */
-    .step-indicator {
-      display: flex;
       justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .step-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--border);
-      transition: background 0.3s;
-    }
-
-    .step-dot.active { background: var(--primary); }
-    .step-dot.done { background: var(--accent); }
-
-    /* Formular-Karte */
-    .form-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
-    }
-
-    .form-question {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      line-height: 1.4;
-    }
-
-    /* Auswahloptionen als Karten */
-    .option-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0.75rem;
-    }
-
-    .option-btn {
-      padding: 1rem;
-      background: var(--bg-card2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
-      font-size: 0.9rem;
-    }
-
-    .option-btn:hover, .option-btn.selected {
-      border-color: var(--primary);
-      background: var(--primary-glow);
-      color: var(--primary);
-    }
-
-    .option-btn .opt-emoji { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
-    .option-btn .opt-title { font-weight: 700; display: block; }
-    .option-btn .opt-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
-
-    /* Slider für Anlagebetrag */
-    .amount-slider {
-      width: 100%;
-      -webkit-appearance: none;
-      height: 6px;
-      border-radius: 3px;
-      background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, var(--border) 50%);
-      outline: none;
-      margin: 1rem 0;
-    }
-
-    .amount-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      background: var(--primary);
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(14,165,233,0.5);
-    }
-
-    .amount-display {
-      font-size: 2rem;
-      font-weight: 900;
-      color: var(--primary);
-      text-align: center;
-      margin: 1rem 0;
-    }
-
-    .form-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 2rem;
-    }
-
-    /* ============================================================
-       ERGEBNISSEITE – Investment-Ideen
-    ============================================================ */
-    .results-container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-    }
-
-    .results-header {
-      margin-bottom: 2.5rem;
-    }
-
-    .results-summary {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .summary-item {
-      text-align: center;
-      flex: 1;
-      min-width: 100px;
-    }
-
-    .summary-label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .summary-value {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-top: 0.25rem;
-    }
-
-    /* Kategorie-Tabs auf der Ergebnisseite */
-    .category-tabs {
-      display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .cat-tab {
-      padding: 0.5rem 1.25rem;
-      border-radius: 100px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-
-    .cat-tab.active, .cat-tab:hover {
-      background: var(--primary-glow);
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    /* Investment-Ideen-Karten */
-    .ideas-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.25rem;
-    }
-
-    .idea-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      transition: all 0.3s;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .idea-card:hover {
-      border-color: var(--border-active);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .idea-card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1rem;
-    }
-
-    .idea-ticker {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
-
-    .idea-name {
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin: 0.2rem 0;
-    }
-
-    .idea-price {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .idea-change {
-      font-size: 0.875rem;
-      font-weight: 700;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-    }
-
-    .idea-change.positive { background: rgba(16,185,129,0.15); color: var(--accent); }
-    .idea-change.negative { background: rgba(239,68,68,0.15); color: var(--danger); }
-
-    .idea-reason {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    .idea-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* Labels/Badges für Investment-Typen */
-    .label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.25rem 0.6rem;
-      border-radius: 100px;
-      letter-spacing: 0.3px;
-    }
-
-    .label-growth { background: rgba(14,165,233,0.15); color: var(--primary); }
-    .label-dividend { background: rgba(16,185,129,0.15); color: var(--accent); }
-    .label-etf { background: rgba(139,92,246,0.15); color: #a78bfa; }
-    .label-crypto { background: rgba(245,158,11,0.15); color: var(--gold); }
-    .label-defensive { background: rgba(100,116,139,0.15); color: var(--text-dim); }
-    .label-chance { background: rgba(239,68,68,0.15); color: var(--danger); }
-
-    /* Risiko-Indikator (1-5 Sterne) */
-    .risk-indicator {
-      display: flex;
-      gap: 3px;
-      align-items: center;
-    }
-
-    .risk-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--border);
-    }
-
-    .risk-dot.filled { background: var(--warning); }
-
-    /* ============================================================
-       PREMIUM LOCK OVERLAY – Zeigt gesperrte Inhalte
-    ============================================================ */
-    .premium-lock-section {
-      position: relative;
-      margin-top: 2rem;
-    }
-
-    .premium-lock-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(to bottom, transparent, var(--bg) 60%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      padding-bottom: 3rem;
-      z-index: 10;
-    }
-
-    .lock-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-active);
-      border-radius: var(--radius);
-      padding: 2rem 2.5rem;
-      text-align: center;
-      max-width: 480px;
-      box-shadow: var(--shadow-glow);
-    }
-
-    .lock-box h3 {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-
-    .lock-box p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
-    }
-
-    /* ============================================================
-       CHANCEN-SEITE – Premium "Chancen nutzen"
-    ============================================================ */
-    .chancen-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-    }
-
-    .chancen-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .chancen-title h1 {
-      font-size: 2rem;
-      font-weight: 800;
-    }
-
-    .chancen-title p {
-      color: var(--text-muted);
-      margin-top: 0.25rem;
-    }
-
-    .last-update {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      padding: 0.5rem 1rem;
-      border-radius: 100px;
-    }
-
-    /* Filter-Buttons für Chancen */
-    .filter-bar {
-      display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .filter-btn {
-      padding: 0.5rem 1.25rem;
-      border-radius: 100px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-
-    .filter-btn.active {
-      background: var(--primary-glow);
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    /* Chance-Karten – groß und visuell stark */
-    .chancen-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .chance-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-
-    .chance-card:hover {
-      border-color: var(--border-active);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 40px rgba(14,165,233,0.15);
-    }
-
-    /* Farbiger Top-Streifen je nach Typ */
-    .chance-card-header {
-      padding: 1.5rem;
-      background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(16,185,129,0.05));
-      border-bottom: 1px solid var(--border);
-    }
-
-    .chance-card-title {
-      font-size: 0.75rem;
-      color: var(--primary);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 0.5rem;
-    }
-
-    .chance-asset-name {
-      font-size: 1.4rem;
-      font-weight: 900;
-    }
-
-    .chance-asset-ticker {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 0.2rem;
-    }
-
-    .chance-price-row {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 0.75rem;
-    }
-
-    .chance-price {
-      font-size: 1.2rem;
-      font-weight: 700;
-    }
-
-    .chance-card-body { padding: 1.5rem; }
-
-    .chance-why {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 1rem;
-    }
-
-    .chance-risk {
-      background: rgba(239,68,68,0.08);
-      border: 1px solid rgba(239,68,68,0.15);
-      border-radius: 8px;
-      padding: 0.75rem;
-      font-size: 0.8rem;
-      color: #fca5a5;
-      margin-bottom: 1rem;
-    }
-
-    .chance-risk strong { color: var(--danger); }
-
-    .chance-meta {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.25rem;
-    }
-
-    .chance-card-footer {
-      padding: 0 1.5rem 1.5rem;
-    }
-
-    /* CTA in der Chance-Karte */
-    .btn-chance {
-      width: 100%;
-      padding: 0.875rem;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      padding: 0 16px;
+      background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
       color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      box-shadow: 0 10px 26px rgba(19, 183, 223, 0.22);
     }
 
-    .btn-chance:hover {
-      opacity: 0.9;
+    .plan-name {
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: -0.04em;
+      font-weight: 800;
+      margin-bottom: 22px;
+      color: #f8fbff;
+    }
+
+    .price-line {
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .price {
+      font-size: 62px;
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      font-weight: 900;
+      color: #f7fbff;
+    }
+
+    .price-card.plus .price { color: #1eaaff; }
+
+    .per {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin: 0 0 30px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 54px;
+      border-bottom: 1px solid rgba(117, 141, 181, 0.14);
+      color: var(--text-muted);
+      font-size: 18px;
+      line-height: 1.4;
+      padding-right: 6px;
+    }
+
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list li strong { color: #edf3fb; font-weight: 500; }
+    .feature-list li.available { color: #eef4fb; }
+
+    .tick, .minus {
+      width: 16px;
+      flex: 0 0 16px;
+      text-align: center;
+      font-size: 24px;
+      line-height: 1;
       transform: translateY(-1px);
     }
 
-    /* ============================================================
-       DETAILSEITE einer Chance
-    ============================================================ */
-    .detail-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
+    .tick { color: var(--success); }
+    .minus { color: #788ca7; }
+
+    .btn-card-secondary {
+      width: 100%;
+      height: 68px;
+      border-radius: 18px;
+      border-color: rgba(117, 141, 181, 0.16);
+      background: rgba(8, 16, 30, 0.56);
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
     }
 
-    .detail-back {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .btn-card-primary {
+      width: 100%;
+      height: 68px;
+      border-radius: 18px;
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #1fafff 0%, #20cfb1 100%);
+      box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
+    }
+
+    .benefits {
+      width: min(980px, 100%);
+      margin: 14px auto 110px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .benefit-card {
+      background: linear-gradient(180deg, rgba(12,22,44,0.86), rgba(9,18,36,0.84));
+      border: 1px solid rgba(117, 141, 181, 0.14);
+      border-radius: 22px;
+      padding: 24px;
+    }
+
+    .benefit-card h4 {
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: #f4f8fe;
+    }
+
+    .benefit-card p {
       color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-      transition: color 0.2s;
+      font-size: 15px;
+      line-height: 1.65;
     }
 
-    .detail-back:hover { color: var(--primary); }
-
-    .detail-hero {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, rgba(14,165,233,0.08), rgba(16,185,129,0.04));
-    }
-
-    .detail-asset-name {
-      font-size: 2rem;
-      font-weight: 900;
-    }
-
-    .detail-price-row {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-top: 0.75rem;
-    }
-
-    .detail-price {
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    /* Abschnitte auf der Detailseite */
-    .detail-section {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .detail-section h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .detail-section p, .detail-section li {
-      font-size: 0.9rem;
-      color: var(--text-muted);
+    .disclaimer {
+      width: min(980px, 100%);
+      margin: 0 auto 72px;
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: rgba(12, 20, 38, 0.7);
+      border: 1px solid rgba(117, 141, 181, 0.12);
+      color: var(--text-soft);
+      font-size: 13px;
       line-height: 1.7;
     }
 
-    .detail-section ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .detail-section li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .detail-section li:last-child { border-bottom: none; }
-
-    /* Disclaimer auf der Detailseite */
-    .disclaimer {
-      background: rgba(100,116,139,0.1);
-      border: 1px solid rgba(100,116,139,0.2);
-      border-radius: var(--radius-sm);
-      padding: 1rem 1.25rem;
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      line-height: 1.6;
-      margin-top: 1.5rem;
-    }
-
-    /* ============================================================
-       WATCHLIST-SEITE
-    ============================================================ */
-    .watchlist-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-    }
-
-    .watchlist-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.75rem;
-      transition: all 0.2s;
-    }
-
-    .watchlist-item:hover {
-      border-color: var(--border-active);
-    }
-
-    /* ============================================================
-       EINSTELLUNGEN / ALERT-PREFERENCES
-    ============================================================ */
-    .settings-container {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-    }
-
-    .settings-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .settings-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    /* Toggle-Switch */
-    .toggle-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .toggle-row:last-child { border-bottom: none; }
-
-    .toggle-label { font-size: 0.9rem; }
-    .toggle-sub { font-size: 0.8rem; color: var(--text-muted); }
-
-    .toggle {
-      position: relative;
-      width: 44px; height: 24px;
-    }
-
-    .toggle input { opacity: 0; width: 0; height: 0; }
-
-    .toggle-slider {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: var(--bg-card2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .toggle-slider:before {
-      content: '';
-      position: absolute;
-      width: 16px; height: 16px;
-      left: 3px; top: 3px;
-      background: var(--text-muted);
-      border-radius: 50%;
-      transition: 0.3s;
-    }
-
-    .toggle input:checked + .toggle-slider { background: var(--primary); border-color: var(--primary); }
-    .toggle input:checked + .toggle-slider:before {
-      transform: translateX(20px);
-      background: white;
-    }
-
-    /* Frequenz-Auswahl für E-Mail Alerts */
-    .frequency-options {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-
-    .freq-btn {
-      flex: 1;
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: all 0.2s;
-      text-align: center;
-    }
-
-    .freq-btn.active {
-      border-color: var(--primary);
-      background: var(--primary-glow);
-      color: var(--primary);
-    }
-
-    /* ============================================================
-       AUTH MODAL – Login & Registrierung
-    ============================================================ */
     .modal-overlay {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
-      z-index: 2000;
+      inset: 0;
+      background: rgba(2, 7, 18, 0.72);
+      backdrop-filter: blur(12px);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 1rem;
+      padding: 24px;
+      z-index: 80;
     }
 
     .modal-overlay.open { display: flex; }
 
     .modal {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2.5rem;
-      max-width: 440px;
-      width: 100%;
+      width: min(100%, 500px);
+      background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(10,18,36,0.98));
+      border: 1px solid rgba(117, 141, 181, 0.2);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 28px;
       position: relative;
     }
 
-    .modal-close {
+    .close {
       position: absolute;
-      top: 1rem; right: 1rem;
-      background: none;
-      border: none;
-      color: var(--text-muted);
+      right: 18px;
+      top: 18px;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: 1px solid rgba(117, 141, 181, 0.16);
+      background: rgba(7, 16, 31, 0.56);
+      color: #d9e8f6;
+      font-size: 20px;
       cursor: pointer;
-      font-size: 1.25rem;
     }
 
-    .modal h2 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-
-    .modal p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-
-    /* Formular-Felder */
-    .form-group { margin-bottom: 1rem; }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-      color: var(--text-muted);
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      background: var(--bg-card2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-group input:focus { border-color: var(--primary); }
-
-    /* Auth Tab-Switcher (Login / Registrieren) */
     .auth-tabs {
-      display: flex;
-      background: var(--bg-card2);
-      border-radius: var(--radius-sm);
-      padding: 4px;
-      margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: rgba(6, 14, 28, 0.64);
+      border: 1px solid rgba(117, 141, 181, 0.12);
+      padding: 6px;
+      border-radius: 16px;
+      margin-bottom: 20px;
     }
 
     .auth-tab {
-      flex: 1;
-      padding: 0.6rem;
+      height: 42px;
+      border-radius: 12px;
       border: none;
       background: transparent;
       color: var(--text-muted);
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 600;
-      border-radius: 7px;
-      transition: all 0.2s;
     }
 
     .auth-tab.active {
-      background: var(--bg-card);
-      color: var(--text);
+      color: #f6fbff;
+      background: rgba(13, 24, 45, 0.98);
     }
 
-    /* Fehlermeldung im Auth-Formular */
-    .auth-error {
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.3);
-      border-radius: var(--radius-sm);
-      padding: 0.75rem;
-      font-size: 0.85rem;
-      color: #fca5a5;
-      margin-bottom: 1rem;
-      display: none;
+    .modal h3 {
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      margin-bottom: 10px;
     }
 
-    /* Erfolgsmeldung */
-    .auth-success {
-      background: rgba(16,185,129,0.1);
-      border: 1px solid rgba(16,185,129,0.3);
-      border-radius: var(--radius-sm);
-      padding: 0.75rem;
-      font-size: 0.85rem;
-      color: #6ee7b7;
-      margin-bottom: 1rem;
-      display: none;
+    .modal .intro {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 20px;
     }
 
-    /* ============================================================
-       STRIPE CHECKOUT MODAL
-    ============================================================ */
-    .stripe-modal {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2.5rem;
-      max-width: 480px;
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field { margin-bottom: 14px; }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #cedced;
+    }
+
+    .field input {
       width: 100%;
-      position: relative;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid rgba(117, 141, 181, 0.18);
+      background: rgba(7, 16, 31, 0.66);
+      color: white;
+      padding: 0 16px;
+      font-size: 16px;
+      outline: none;
     }
 
-    .stripe-header {
-      text-align: center;
-      margin-bottom: 2rem;
+    .field input:focus {
+      border-color: rgba(26, 182, 255, 0.64);
+      box-shadow: 0 0 0 4px rgba(26, 182, 255, 0.08);
     }
 
-    .stripe-price {
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: var(--primary);
-    }
-
-    .stripe-price span { font-size: 1rem; color: var(--text-muted); }
-
-    /* ============================================================
-       TOAST NOTIFICATIONS
-    ============================================================ */
-    .toast-container {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 9999;
+    .check-row {
       display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 10px 0 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
     }
 
-    .toast {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 1rem 1.25rem;
-      min-width: 280px;
-      max-width: 380px;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      box-shadow: var(--shadow);
-      animation: slideIn 0.3s ease;
+    .check-row input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: #1eb6ff;
+      flex: 0 0 auto;
     }
 
-    .toast.success { border-color: var(--accent); }
-    .toast.error { border-color: var(--danger); }
-    .toast.info { border-color: var(--primary); }
-
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to   { transform: translateX(0); opacity: 1; }
-    }
-
-    /* ============================================================
-       LOADING SPINNER
-    ============================================================ */
-    .loading-spinner {
-      display: inline-block;
-      width: 20px; height: 20px;
-      border: 2px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ============================================================
-       PREMIUM BADGE – für Premium-User in der Nav
-    ============================================================ */
-    .premium-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(245,158,11,0.1));
-      border: 1px solid rgba(245,158,11,0.4);
-      color: var(--gold);
-      padding: 0.25rem 0.6rem;
-      border-radius: 100px;
-      font-size: 0.72rem;
-      font-weight: 700;
-    }
-
-    /* ============================================================
-       PROFIL-SEITE
-    ============================================================ */
-    .profile-container {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-    }
-
-    .profile-hero {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .profile-avatar-big {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 1.5rem;
-      flex-shrink: 0;
-    }
-
-    /* ============================================================
-       RESPONSIVE ANPASSUNGEN
-    ============================================================ */
-    @media (max-width: 768px) {
-      .navbar-nav { gap: 0.25rem; }
-      .nav-btn { display: none; }
-      .hero h1 { font-size: 1.8rem; }
-      .ideas-grid { grid-template-columns: 1fr; }
-      .chancen-grid { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .frequency-options { flex-direction: column; }
-    }
-
-    /* ============================================================
-       STRATEGIE-KARTEN
-    ============================================================ */
-    .strategie-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1.5rem;
-    }
-
-    .strategie-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
+    .check-row button.linklike {
+      background: none;
+      border: none;
+      color: #29bbff;
       cursor: pointer;
-      transition: all 0.3s;
+      padding: 0;
+      font: inherit;
     }
 
-    .strategie-card:hover {
-      border-color: var(--border-active);
-      transform: translateY(-3px);
+    .submit-btn {
+      width: 100%;
+      height: 56px;
+      border-radius: 16px;
+      color: white;
+      font-size: 17px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
     }
 
-    .strategie-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-    .strategie-name { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .strategie-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
-
-    /* ============================================================
-       CHART CONTAINER
-    ============================================================ */
-    .chart-wrapper {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
+    .auth-message {
+      display: none;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.55;
     }
 
-    /* ============================================================
-       EMPTY STATE
-    ============================================================ */
-    .empty-state {
-      text-align: center;
-      padding: 4rem 2rem;
+    .auth-message.error {
+      background: rgba(255, 75, 75, 0.12);
+      color: #ffb6b6;
+      border: 1px solid rgba(255, 87, 87, 0.22);
+    }
+
+    .auth-message.success {
+      background: rgba(31, 226, 176, 0.12);
+      color: #9cf6da;
+      border: 1px solid rgba(31, 226, 176, 0.22);
+    }
+
+    .hidden { display: none !important; }
+
+    .legal-modal {
+      width: min(100%, 780px);
+      max-height: min(82vh, 900px);
+      overflow: auto;
+    }
+
+    .legal-modal h3 { margin-bottom: 18px; }
+
+    .legal-modal h4 {
+      font-size: 18px;
+      margin: 22px 0 10px;
+      color: #f3f8ff;
+    }
+
+    .legal-modal p,
+    .legal-modal li {
       color: var(--text-muted);
+      line-height: 1.75;
+      font-size: 15px;
     }
 
-    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .empty-state h3 { font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+    .legal-modal ul { padding-left: 20px; }
 
-    /* ============================================================
-       STATISTIK-ROW auf der Chancen-Seite
-    ============================================================ */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
+    @media (max-width: 1100px) {
+      .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .benefits { grid-template-columns: 1fr; }
     }
 
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 1.25rem;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 1.75rem;
-      font-weight: 900;
-      color: var(--primary);
-    }
-
-    .stat-label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
+    @media (max-width: 820px) {
+      .container { width: min(100% - 28px, 100%); }
+      .compare-box { padding: 18px 18px 10px; border-radius: 22px; }
+      .compare-head,
+      .compare-row {
+        grid-template-columns: 1.5fr 0.5fr 0.5fr;
+        gap: 10px;
+      }
+      .compare-row { min-height: 54px; font-size: 14px; }
+      .compare-cell { font-size: 16px; }
+      .nav { height: 72px; }
+      .brand { font-size: 22px; }
+      .nav-actions { gap: 10px; }
+      .btn-top-secondary,
+      .btn-top-primary { min-width: 128px; padding: 0 18px; font-size: 15px; }
+      .hero { min-height: auto; padding: 54px 0 68px; }
+      .hero h1 { font-size: clamp(38px, 10vw, 56px); }
+      .hero-copy { font-size: 16px; }
+      .feature-grid,
+      .pricing-grid { grid-template-columns: 1fr; }
+      .field-grid { grid-template-columns: 1fr; }
+      .price { font-size: 52px; }
+      .btn-hero-primary,
+      .btn-hero-secondary { width: 100%; }
+      .hero-actions { width: 100%; }
+      .hero-actions .btn { width: 100%; }
     }
   </style>
 </head>
-
 <body>
-
-<!-- ================================================================
-     TOAST CONTAINER – Notifications oben rechts
-================================================================ -->
-<div class="toast-container" id="toastContainer"></div>
-
-<!-- ================================================================
-     NAVIGATION
-     - Links: Logo (→ Startseite)
-     - Mitte: Seiten-Links (Analyse, Chancen, Watchlist)
-     - Rechts: Auth-Buttons oder User-Avatar
-================================================================ -->
-<nav class="navbar">
-  <div class="navbar-logo" onclick="showPage('landing')">📊 AnlageKompass</div>
-
-  <div class="navbar-nav">
-    <!-- Haupt-Navigation (nur sichtbar wenn eingeloggt) -->
-    <button class="nav-btn logged-in-nav hidden" onclick="showPage('analyse')">🔍 Analyse</button>
-    <button class="nav-btn logged-in-nav premium-nav hidden" id="navChancen" onclick="handlePremiumNav('chancen')">⚡ Chancen nutzen</button>
-    <button class="nav-btn logged-in-nav hidden" onclick="handlePremiumNav('watchlist')">🔖 Watchlist</button>
-    <button class="nav-btn logged-in-nav hidden" onclick="showPage('settings')">⚙️ Einstellungen</button>
-
-    <!-- Auth-Buttons (nur sichtbar wenn NICHT eingeloggt) -->
-    <button class="btn-nav-login logged-out-nav" onclick="openAuthModal('login')">Anmelden</button>
-    <button class="btn-nav-premium logged-out-nav" onclick="openAuthModal('register')">Kostenlos starten</button>
-
-    <!-- User-Avatar (nur sichtbar wenn eingeloggt) -->
-    <div class="user-avatar logged-in-nav hidden" id="userAvatar" onclick="showPage('profile')"></div>
-  </div>
-</nav>
-
-<!-- ================================================================
-     AUTH MODAL – Login & Registrierung
-     Enthält: Tab-Switcher, Formular, Fehler/Erfolg-Meldungen
-================================================================ -->
-<div class="modal-overlay" id="authModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeAuthModal()">✕</button>
-
-    <!-- Tab-Switcher: Login / Registrieren -->
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="loginTab" onclick="switchAuthTab('login')">Anmelden</button>
-      <button class="auth-tab" id="registerTab" onclick="switchAuthTab('register')">Registrieren</button>
-    </div>
-
-    <!-- Feedback-Meldungen -->
-    <div class="auth-error" id="authError"></div>
-    <div class="auth-success" id="authSuccess"></div>
-
-    <!-- LOGIN FORMULAR -->
-    <div id="loginForm">
-      <h2>Willkommen zurück</h2>
-      <p>Melde dich an, um deine Investment-Ideen zu sehen.</p>
-      <div class="form-group">
-        <label>E-Mail</label>
-        <input type="email" id="loginEmail" placeholder="deine@email.de" />
-      </div>
-      <div class="form-group">
-        <label>Passwort</label>
-        <input type="password" id="loginPassword" placeholder="••••••••" />
-      </div>
-      <button class="btn-primary" style="width:100%; margin-top:0.5rem" onclick="handleLogin()">
-        Anmelden
-      </button>
-    </div>
-
-    <!-- REGISTRIERUNGS-FORMULAR -->
-    <div id="registerForm" class="hidden">
-      <h2>Konto erstellen</h2>
-      <p>Starte kostenlos – keine Kreditkarte nötig.</p>
-      <div class="form-group">
-        <label>Vorname</label>
-        <input type="text" id="registerName" placeholder="Max" />
-      </div>
-      <div class="form-group">
-        <label>E-Mail</label>
-        <input type="email" id="registerEmail" placeholder="deine@email.de" />
-      </div>
-      <div class="form-group">
-        <label>Passwort</label>
-        <input type="password" id="registerPassword" placeholder="Min. 6 Zeichen" />
-      </div>
-      <button class="btn-primary" style="width:100%; margin-top:0.5rem" onclick="handleRegister()">
-        Konto erstellen
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ================================================================
-     STRIPE / PREMIUM UPGRADE MODAL
-     Zeigt Preisübersicht und leitet zu Stripe Checkout weiter
-================================================================ -->
-<div class="modal-overlay" id="stripeModal">
-  <div class="stripe-modal">
-    <button class="modal-close" onclick="closeStripeModal()">✕</button>
-    <div class="stripe-header">
-      <div style="font-size:2.5rem;margin-bottom:0.5rem">💎</div>
-      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:0.5rem">AnlageKompass Plus</h2>
-      <p style="color:var(--text-muted);font-size:0.9rem">Erhalte täglich neue datenbasierte Investment-Ideen</p>
-      <div class="stripe-price" style="margin-top:1rem">9,99€ <span>/ Monat</span></div>
-    </div>
-
-    <!-- Features-Liste im Checkout -->
-    <ul class="price-features" style="margin-bottom:1.5rem">
-      <li class="active"><span class="check">✓</span> 5–10 Investment-Ideen pro Analyse</li>
-      <li class="active"><span class="check">✓</span> Tagesaktuelle Chancen (Feed)</li>
-      <li class="active"><span class="check">✓</span> E-Mail Alerts bei neuen Chancen</li>
-      <li class="active"><span class="check">✓</span> Watchlist + Kurs-Alerts</li>
-      <li class="active"><span class="check">✓</span> Strategie-Ideen & Marktübersicht</li>
-      <li class="active"><span class="check">✓</span> Komplett werbefrei</li>
-    </ul>
-
-    <!-- Stripe Checkout Button -->
-    <button class="btn-primary" style="width:100%;font-size:1rem" onclick="initiateStripeCheckout()">
-      🔒 Sicher bezahlen mit Stripe
-    </button>
-    <p style="text-align:center;color:var(--text-dim);font-size:0.75rem;margin-top:0.75rem">
-      Testmodus aktiv · Jederzeit kündbar · Sichere Zahlung via Stripe
-    </p>
-  </div>
-</div>
-
-<!-- ================================================================
-     SEITE 1: LANDING PAGE
-     Enthält: Hero, Features-Grid, Pricing-Section
-================================================================ -->
-<div class="page active" id="page-landing">
-
-  <!-- Hero-Bereich -->
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">⚡ Tagesaktuelle Investment-Ideen</div>
-      <h1>Mehr Chancen.<br/>Mehr Ideen.<br/>Mehr Orientierung.</h1>
-      <p>Erhalte täglich neue datenbasierte Investment-Ideen für Aktien, ETFs und Krypto –
-         passend zu deinem Risikoprofil, verständlich erklärt.</p>
-      <div class="hero-buttons">
-        <button class="btn-primary" onclick="openAuthModal('register')">
-          Kostenlos starten →
-        </button>
-        <button class="btn-secondary" onclick="openAuthModal('login')">
-          Anmelden
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Feature-Karten -->
-  <section class="features-section">
-    <h2 class="section-title">Alles was du brauchst</h2>
-    <p class="section-sub">AnlageKompass bringt dir Investment-Ideen, die du sonst verpassen würdest.</p>
-    <div class="features-grid">
-      <!-- Feature 1: Investment-Ideen -->
-      <div class="feature-card">
-        <div class="feature-icon">💡</div>
-        <h3>Konkrete Investment-Ideen</h3>
-        <p>Keine vagen Tipps – jede Idee kommt mit Ticker, Preis, Begründung und Risikoeinschätzung.</p>
-      </div>
-      <!-- Feature 2: Tagesaktuelle Chancen -->
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Tagesaktuelle Chancen</h3>
-        <p>Der "Chancen nutzen"-Feed zeigt dir täglich aktualisierte Marktchancen – bevor sie alle sehen.</p>
-      </div>
-      <!-- Feature 3: E-Mail Alerts -->
-      <div class="feature-card">
-        <div class="feature-icon">📬</div>
-        <h3>E-Mail Alerts</h3>
-        <p>Werde per E-Mail benachrichtigt, sobald neue Chancen entdeckt werden – täglich oder nach Bedarf.</p>
-      </div>
-      <!-- Feature 4: Klar und verständlich -->
-      <div class="feature-card">
-        <div class="feature-icon">🧭</div>
-        <h3>Verständliche Sprache</h3>
-        <p>Kein Börsenjargon. Jede Idee erklärt, warum sie aktuell spannend sein könnte – klar und direkt.</p>
-      </div>
-      <!-- Feature 5: Watchlist -->
-      <div class="feature-card">
-        <div class="feature-icon">🔖</div>
-        <h3>Watchlist & Alerts</h3>
-        <p>Speichere Aktien, verfolge Preisänderungen und lass dich bei wichtigen Bewegungen benachrichtigen.</p>
-      </div>
-      <!-- Feature 6: Werbefrei -->
-      <div class="feature-card">
-        <div class="feature-icon">🚫</div>
-        <h3>Keine Werbung</h3>
-        <p>Premium ist komplett werbefrei. Fokus auf das Wesentliche: deine Investment-Ideen.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing-Section -->
-  <section class="pricing-section">
-    <div style="max-width:1100px;margin:0 auto;padding:0 2rem">
-      <h2 class="section-title">Preise</h2>
-      <p class="section-sub">Starte kostenlos und upgrade wenn du mehr Ideen möchtest.</p>
-    </div>
-    <div class="pricing-grid">
-      <!-- FREE PLAN -->
-      <div class="pricing-card">
-        <h3 style="font-size:1.2rem;font-weight:700">Free</h3>
-        <div class="price-amount">0€ <span>/ Monat</span></div>
-        <ul class="price-features">
-          <li class="active"><span class="check">✓</span> 2–3 Investment-Ideen</li>
-          <li class="active"><span class="check">✓</span> Basis-Analyse</li>
-          <li class="active"><span class="check">✓</span> Risikoeinschätzung</li>
-          <li><span class="cross">–</span> Tagesaktuelle Chancen</li>
-          <li><span class="cross">–</span> E-Mail Alerts</li>
-          <li><span class="cross">–</span> Watchlist</li>
-          <li><span class="cross">–</span> Strategie-Ideen</li>
-          <li><span class="cross">–</span> Werbefrei</li>
-        </ul>
-        <button class="btn-secondary" style="width:100%" onclick="openAuthModal('register')">Kostenlos starten</button>
-      </div>
-
-      <!-- PREMIUM PLAN -->
-      <div class="pricing-card premium">
-        <div class="popular-badge">⭐ Empfohlen</div>
-        <h3 style="font-size:1.2rem;font-weight:700">AnlageKompass Plus</h3>
-        <div class="price-amount" style="color:var(--primary)">9,99€ <span>/ Monat</span></div>
-        <ul class="price-features">
-          <li class="active"><span class="check">✓</span> 5–10 Investment-Ideen</li>
-          <li class="active"><span class="check">✓</span> Vollständige Analyse</li>
-          <li class="active"><span class="check">✓</span> Tagesaktuelle Chancen</li>
-          <li class="active"><span class="check">✓</span> E-Mail Alerts (täglich)</li>
-          <li class="active"><span class="check">✓</span> Watchlist + Kurs-Alerts</li>
-          <li class="active"><span class="check">✓</span> Strategie-Ideen</li>
-          <li class="active"><span class="check">✓</span> Marktübersicht</li>
-          <li class="active"><span class="check">✓</span> Komplett werbefrei</li>
-        </ul>
-        <button class="btn-primary" style="width:100%" onclick="openStripeModal()">
-          Plus freischalten
-        </button>
-      </div>
-    </div>
-  </section>
-
-</div><!-- Ende Landing Page -->
-
-
-<!-- ================================================================
-     SEITE 2: ANALYSE-FRAGEBOGEN
-     5-stufiger Fragebogen zur Ermittlung des Risikoprofils
-================================================================ -->
-<div class="page" id="page-analyse">
-  <div class="analyse-container">
-    <div class="analyse-header">
-      <h1>📊 Deine Analyse</h1>
-      <p style="color:var(--text-muted)">Beantworte 5 Fragen für deine persönlichen Investment-Ideen</p>
-    </div>
-
-    <!-- Fortschrittsanzeige (5 Dots) -->
-    <div class="step-indicator">
-      <div class="step-dot active" id="dot0"></div>
-      <div class="step-dot" id="dot1"></div>
-      <div class="step-dot" id="dot2"></div>
-      <div class="step-dot" id="dot3"></div>
-      <div class="step-dot" id="dot4"></div>
-    </div>
-
-    <!-- SCHRITT 1: Risikotyp -->
-    <div class="form-card" id="step0">
-      <div class="form-question">1/5 — Wie gehst du mit Risiko um?</div>
-      <div class="option-grid">
-        <button class="option-btn" onclick="selectOption(0, 'conservative', this)">
-          <span class="opt-emoji">🛡️</span>
-          <span class="opt-title">Konservativ</span>
-          <span class="opt-desc">Sicherheit geht vor. Wenig Schwankungen.</span>
-        </button>
-        <button class="option-btn" onclick="selectOption(0, 'balanced', this)">
-          <span class="opt-emoji">⚖️</span>
-          <span class="opt-title">Ausgewogen</span>
-          <span class="opt-desc">Guter Mix aus Sicherheit und Rendite.</span>
-        </button>
-        <button class="option-btn" onclick="selectOption(0, 'growth', this)">
-          <span class="opt-emoji">🚀</span>
-          <span class="opt-title">Wachstum</span>
-          <span class="opt-desc">Höhere Rendite, mehr Schwankungen ok.</span>
-        </button>
-        <button class="option-btn" onclick="selectOption(0, 'aggressive', this)">
-          <span class="opt-emoji">⚡</span>
-          <span class="opt-title">Spekulativ</span>
-          <span class="opt-desc">Maximale Rendite, hohes Risiko akzeptiert.</span>
-        </button>
-      </div>
-      <div class="form-nav">
-        <div></div>
-        <button class="btn-primary" onclick="nextStep()" id="nextBtn0" disabled>Weiter →</button>
-      </div>
-    </div>
-
-    <!-- SCHRITT 2: Anlagehorizont -->
-    <div class="form-card hidden" id="step1">
-      <div class="form-question">2/5 — Wie lange möchtest du anlegen?</div>
-      <div class="option-grid">
-        <button class="option-btn" onclick="selectOption(1, 'short', this)">
-          <span class="opt-emoji">⏱️</span>
-          <span class="opt-title">Unter 1 Jahr</span>
-          <span class="opt-desc">Kurzfristig, schnell verfügbar</span>
-        </button>
-        <button class="option-btn" onclick="selectOption(1, 'medium', this)">
-          <span class="opt-emoji">📅</span>
-          <span class="opt-title">1–5 Jahre</span>
-          <span class="opt-desc">Mittelfristiger Aufbau</span>
-        </button>
-        <button class="option-btn" onclick="selectOption(1, 'long', this)">
-          <span class="opt-emoji">🌱</span>
-          <span class="opt-title">5–10 Jahre</span>
-          <span class="opt-desc">Langfristig investieren</span>
-        </button>
-        <button class="option-btn" onclick="selectOption(1, 'verylong', this)">
-          <span class="opt-emoji">🌳</span>
-          <span class="opt-title">Über 10 Jahre</span>
-          <span class="opt-desc">Vermögensaufbau für die Zukunft</span>
-        </button>
-      </div>
-      <div class="form-nav">
-        <button class="btn-secondary" onclick="prevStep()">← Zurück</button>
-        <button class="btn-primary" onclick="nextStep()" id="nextBtn1" disabled>Weiter →</button>
-      </div>
-    </div>
-
-    <!-- SCHRITT 3: Anlagebetrag -->
-    <div class="form-card hidden" id="step2">
-      <div class="form-question">3/5 — Wie viel möchtest du anlegen?</div>
-      <div class="amount-display" id="amountDisplay">5.000 €</div>
-      <input type="range" class="amount-slider" id="amountSlider"
-             min="500" max="100000" step="500" value="5000"
-             oninput="updateAmount(this.value)" />
-      <div style="display:flex;justify-content:space-between;color:var(--text-dim);font-size:0.8rem">
-        <span>500 €</span><span>100.000 €</span>
-      </div>
-      <div class="form-nav">
-        <button class="btn-secondary" onclick="prevStep()">← Zurück</button>
-        <button class="btn-primary" onclick="nextStep()">Weiter →</button>
-      </div>
-    </div>
-
-    <!-- SCHRITT 4: Interessen -->
-    <div class="form-card hidden" id="step3">
-      <div class="form-question">4/5 — Was interessiert dich?</div>
-      <div class="option-grid">
-        <button class="option-btn" onclick="toggleInterest('stocks', this)">
-          <span class="opt-emoji">📈</span>
-          <span class="opt-title">Aktien</span>
-          <span class="opt-desc">Einzelne Unternehmen</span>
-        </button>
-        <button class="option-btn" onclick="toggleInterest('etf', this)">
-          <span class="opt-emoji">🗂️</span>
-          <span class="opt-title">ETFs</span>
-          <span class="opt-desc">Breite Diversifikation</span>
-        </button>
-        <button class="option-btn" onclick="toggleInterest('crypto', this)">
-          <span class="opt-emoji">₿</span>
-          <span class="opt-title">Krypto</span>
-          <span class="opt-desc">Bitcoin, Ethereum & Co.</span>
-        </button>
-        <button class="option-btn" onclick="toggleInterest('dividend', this)">
-          <span class="opt-emoji">💰</span>
-          <span class="opt-title">Dividenden</span>
-          <span class="opt-desc">Regelmäßige Ausschüttungen</span>
-        </button>
-      </div>
-      <div class="form-nav">
-        <button class="btn-secondary" onclick="prevStep()">← Zurück</button>
-        <button class="btn-primary" onclick="nextStep()" id="nextBtn3" disabled>Weiter →</button>
-      </div>
-    </div>
-
-    <!-- SCHRITT 5: Erfahrung -->
-    <div class="form-card hidden" id="step4">
-      <div class="form-question">5/5 — Wie erfahren bist du?</div>
-      <div class="option-grid">
-        <button class="option-btn" onclick="selectOption(4, 'beginner', this)">
-          <span class="opt-emoji">🌱</span>
-          <span class="opt-title">Anfänger</span>
-          <span class="opt-desc">Wenig bis keine Erfahrung</span>
-        </button>
-        <button class="option-btn" onclick="selectOption(4, 'intermediate', this)">
-          <span class="opt-emoji">📊</span>
-          <span class="opt-title">Fortgeschritten</span>
-          <span class="opt-desc">Erste Erfahrungen vorhanden</span>
-        </button>
-        <button class="option-btn" onclick="selectOption(4, 'expert', this)">
-          <span class="opt-emoji">🎯</span>
-          <span class="opt-title">Erfahren</span>
-          <span class="opt-desc">Regelmäßig aktiv am Markt</span>
-        </button>
-      </div>
-      <div class="form-nav">
-        <button class="btn-secondary" onclick="prevStep()">← Zurück</button>
-        <button class="btn-primary" onclick="runAnalysis()" id="nextBtn4" disabled>
-          Analyse starten 🚀
-        </button>
-      </div>
-    </div>
-
-  </div>
-</div><!-- Ende Analyse-Seite -->
-
-
-<!-- ================================================================
-     SEITE 3: ERGEBNISSE
-     - Zusammenfassung des Profils
-     - Kostenlose Ideen (2-3)
-     - Premium-Lock für weitere Ideen
-================================================================ -->
-<div class="page" id="page-results">
-  <div class="results-container">
-
-    <div class="results-header">
-      <h1 style="font-size:1.75rem;font-weight:800;margin-bottom:0.5rem">
-        Deine Investment-Ideen
-      </h1>
-      <p style="color:var(--text-muted)">Basierend auf deinem Profil – datenbasiert und verständlich erklärt</p>
-    </div>
-
-    <!-- Profil-Zusammenfassung -->
-    <div class="results-summary" id="resultsSummary">
-      <!-- Wird dynamisch befüllt -->
-    </div>
-
-    <!-- Kategorie-Filter Tabs -->
-    <div class="category-tabs" id="categoryTabs">
-      <button class="cat-tab active" onclick="filterIdeas('all', this)">Alle</button>
-      <button class="cat-tab" onclick="filterIdeas('growth', this)">📈 Wachstum</button>
-      <button class="cat-tab" onclick="filterIdeas('dividend', this)">💰 Dividende</button>
-      <button class="cat-tab" onclick="filterIdeas('etf', this)">🗂️ ETF</button>
-      <button class="cat-tab" onclick="filterIdeas('defensive', this)">🛡️ Defensiv</button>
-      <button class="cat-tab" onclick="filterIdeas('crypto', this)">₿ Krypto</button>
-    </div>
-
-    <!-- Kostenlose Ideen (immer sichtbar) -->
-    <div class="ideas-grid" id="freeIdeasGrid">
-      <!-- Wird durch JS befüllt -->
-    </div>
-
-    <!-- Premium Lock Section -->
-    <div class="premium-lock-section" id="premiumLockSection">
-      <!-- Geblurrte Premium-Ideen im Hintergrund -->
-      <div class="ideas-grid blur-content" id="blurredIdeasGrid">
-        <!-- Wird durch JS befüllt -->
-      </div>
-      <!-- Lock Overlay -->
-      <div class="premium-lock-overlay">
-        <div class="lock-box">
-          <div style="font-size:2rem;margin-bottom:0.75rem">💎</div>
-          <h3>+7 weitere passende Chancen</h3>
-          <p>Premium-Nutzer sehen 5–10 konkrete Investment-Ideen pro Analyse –
-             aufgeteilt nach Wachstum, Dividende, ETF und Krypto.</p>
-          <button class="btn-primary" onclick="openStripeModal()">
-            AnlageKompass Plus freischalten →
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Strategie-Ideen (Premium) -->
-    <div id="strategieSection" class="hidden" style="margin-top:3rem">
-      <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:0.5rem">🧠 Alternative Strategien</h2>
-      <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem">
-        Verschiedene Ansätze passend zu deinem Profil
-      </p>
-      <div class="strategie-grid" id="strategieGrid">
-        <!-- Wird durch JS befüllt -->
-      </div>
-    </div>
-
-  </div>
-</div><!-- Ende Ergebnisse-Seite -->
-
-
-<!-- ================================================================
-     SEITE 4: CHANCEN NUTZEN (PREMIUM)
-     - Stats-Row mit Kennzahlen
-     - Filter-Bar
-     - Chancen-Karten-Grid
-================================================================ -->
-<div class="page" id="page-chancen">
-  <div class="chancen-container">
-
-    <!-- Header -->
-    <div class="chancen-header">
-      <div class="chancen-title">
-        <h1>⚡ Chancen nutzen</h1>
-        <p style="color:var(--text-muted)">Tagesaktuelle Investment-Chancen – regelmäßig aktualisiert</p>
-      </div>
-      <div class="last-update" id="lastUpdateTime">
-        🕐 Zuletzt aktualisiert: Wird geladen...
-      </div>
-    </div>
-
-    <!-- Statistik-Karten -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-number" id="statChancen">0</div>
-        <div class="stat-label">Aktuelle Chancen</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="statNeu">0</div>
-        <div class="stat-label">Heute neu</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="statWatchlist">0</div>
-        <div class="stat-label">In Watchlist</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="statMarkt">–</div>
-        <div class="stat-label">Markt-Sentiment</div>
-      </div>
-    </div>
-
-    <!-- Filter-Leiste -->
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="filterChancen('all', this)">Alle</button>
-      <button class="filter-btn" onclick="filterChancen('growth', this)">📈 Wachstum</button>
-      <button class="filter-btn" onclick="filterChancen('defensive', this)">🛡️ Defensiv</button>
-      <button class="filter-btn" onclick="filterChancen('dividend', this)">💰 Dividende</button>
-      <button class="filter-btn" onclick="filterChancen('etf', this)">🗂️ ETF</button>
-      <button class="filter-btn" onclick="filterChancen('crypto', this)">₿ Krypto</button>
-      <button class="filter-btn" onclick="filterChancen('speculative', this)">⚡ Spekulativ</button>
-    </div>
-
-    <!-- Chancen-Grid – wird durch JS befüllt -->
-    <div class="chancen-grid" id="chancenGrid">
-      <div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--text-muted)">
-        <div class="loading-spinner" style="margin:0 auto 1rem"></div>
-        Chancen werden geladen...
-      </div>
-    </div>
-
-  </div>
-</div><!-- Ende Chancen-Seite -->
-
-
-<!-- ================================================================
-     SEITE 5: CHANCE DETAIL
-     Detailansicht einer einzelnen Investment-Chance
-================================================================ -->
-<div class="page" id="page-detail">
-  <div class="detail-container">
-
-    <!-- Zurück-Button -->
-    <div class="detail-back" onclick="showPage('chancen')">
-      ← Zurück zu Chancen nutzen
-    </div>
-
-    <!-- Asset-Header -->
-    <div class="detail-hero" id="detailHero">
-      <!-- Wird dynamisch befüllt -->
-    </div>
-
-    <!-- Abschnitt 1: Warum aktuell interessant -->
-    <div class="detail-section" id="detailWhy">
-      <h3>💡 Warum könnte das aktuell interessant sein?</h3>
-      <p id="detailWhyText"></p>
-    </div>
-
-    <!-- Abschnitt 2: Was ist passiert -->
-    <div class="detail-section" id="detailNews">
-      <h3>📰 Was ist passiert?</h3>
-      <ul id="detailNewsList"></ul>
-    </div>
-
-    <!-- Abschnitt 3 & 4: Chancen und Risiken nebeneinander -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
-      <div class="detail-section">
-        <h3>📈 Chancen</h3>
-        <ul id="detailChances"></ul>
-      </div>
-      <div class="detail-section">
-        <h3>⚠️ Risiken</h3>
-        <ul id="detailRisks"></ul>
-      </div>
-    </div>
-
-    <!-- Abschnitt 5: Für wen passt das -->
-    <div class="detail-section">
-      <h3>👤 Für wen könnte das passen?</h3>
-      <p id="detailFitText"></p>
-    </div>
-
-    <!-- Abschnitt 6: Alternative Ideen -->
-    <div class="detail-section">
-      <h3>🔄 Alternative Ideen</h3>
-      <div class="ideas-grid" id="detailAlternatives" style="margin-top:0.5rem">
-        <!-- Wird dynamisch befüllt -->
-      </div>
-    </div>
-
-    <!-- Disclaimer – Wichtig für Compliance -->
-    <div class="disclaimer">
-      ⚠️ <strong>Kein Anlageberatung.</strong> Alle Inhalte auf AnlageKompass dienen ausschließlich
-      Informations- und Bildungszwecken. Die dargestellten Informationen stellen keine Anlageberatung,
-      Anlageempfehlung oder Aufforderung zum Kauf oder Verkauf von Wertpapieren dar.
-      Investitionen sind mit Risiken verbunden. Vergangene Wertentwicklungen sind kein Indikator
-      für zukünftige Ergebnisse. Konsultiere einen qualifizierten Finanzberater vor
-      Investitionsentscheidungen.
-    </div>
-
-  </div>
-</div><!-- Ende Detail-Seite -->
-
-
-<!-- ================================================================
-     SEITE 6: WATCHLIST
-     Premium-Feature: Gespeicherte Assets verfolgen
-================================================================ -->
-<div class="page" id="page-watchlist">
-  <div class="watchlist-container">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem">
-      <div>
-        <h1 style="font-size:1.75rem;font-weight:800">🔖 Watchlist</h1>
-        <p style="color:var(--text-muted);margin-top:0.25rem">Behalte deine Favoriten im Blick</p>
-      </div>
-      <!-- Asset zur Watchlist hinzufügen -->
-      <button class="btn-primary" onclick="showAddToWatchlist()">+ Asset hinzufügen</button>
-    </div>
-
-    <!-- Watchlist-Items (dynamisch befüllt) -->
-    <div id="watchlistItems">
-      <div class="empty-state">
-        <div class="empty-icon">🔖</div>
-        <h3>Noch nichts gespeichert</h3>
-        <p>Füge Aktien und ETFs aus den Chancen hinzu um sie hier zu verfolgen.</p>
+  <!-- Hauptnavigation im Stil der Referenzseite -->
+  <div class="nav-wrap">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="AnlageKompass Startseite">
+        <span class="brand-mark"></span>
+        <span class="brand-text">AnlageKompass</span>
+      </a>
+      <div class="nav-actions">
+        <button class="btn btn-top-secondary" type="button" onclick="openAuthModal('login')">Anmelden</button>
+        <button class="btn btn-top-primary" type="button" onclick="openAuthModal('register')">Kostenlos starten</button>
       </div>
     </div>
   </div>
-</div><!-- Ende Watchlist-Seite -->
 
-
-<!-- ================================================================
-     SEITE 7: EINSTELLUNGEN / ALERT-PRÄFERENZEN
-     E-Mail Benachrichtigungs-Einstellungen und Profil-Verwaltung
-================================================================ -->
-<div class="page" id="page-settings">
-  <div class="settings-container">
-    <h1 style="font-size:1.75rem;font-weight:800;margin-bottom:2rem">⚙️ Einstellungen</h1>
-
-    <!-- E-MAIL ALERT EINSTELLUNGEN -->
-    <div class="settings-card">
-      <h3>📬 E-Mail Benachrichtigungen</h3>
-
-      <!-- Haupt-Toggle -->
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">Chancen-Alerts aktivieren</div>
-          <div class="toggle-sub">Benachrichtige mich bei neuen Investment-Chancen</div>
-        </div>
-        <label class="toggle">
-          <input type="checkbox" id="alertToggle" onchange="saveAlertSettings()" />
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-
-      <!-- Wichtige Chancen Toggle -->
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">Nur wichtige Chancen</div>
-          <div class="toggle-sub">Nur Chancen mit hohem Potential</div>
-        </div>
-        <label class="toggle">
-          <input type="checkbox" id="importantOnlyToggle" onchange="saveAlertSettings()" />
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-
-      <!-- Frequenz-Auswahl -->
-      <div style="margin-top:1.25rem">
-        <div class="toggle-label" style="margin-bottom:0.75rem">Frequenz</div>
-        <div class="frequency-options">
-          <button class="freq-btn active" id="freq-daily" onclick="setFrequency('daily')">Täglich</button>
-          <button class="freq-btn" id="freq-weekly" onclick="setFrequency('weekly')">Mehrmals/Woche</button>
-          <button class="freq-btn" id="freq-important" onclick="setFrequency('important')">Nur wichtige</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- WATCHLIST ALERTS -->
-    <div class="settings-card">
-      <h3>🔔 Watchlist Alerts</h3>
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">Preisänderungen verfolgen</div>
-          <div class="toggle-sub">Alert bei Änderungen > 5%</div>
-        </div>
-        <label class="toggle">
-          <input type="checkbox" id="priceAlertToggle" onchange="saveAlertSettings()" />
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-    </div>
-
-    <!-- PROFIL-EINSTELLUNGEN -->
-    <div class="settings-card">
-      <h3>👤 Profil</h3>
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" id="settingsName" placeholder="Dein Name" />
-      </div>
-      <div class="form-group">
-        <label>E-Mail</label>
-        <input type="email" id="settingsEmail" placeholder="deine@email.de" disabled style="opacity:0.6" />
-      </div>
-      <button class="btn-primary" style="margin-top:0.75rem" onclick="saveProfile()">Speichern</button>
-    </div>
-
-    <!-- PREMIUM STATUS -->
-    <div class="settings-card" id="premiumStatusCard">
-      <h3>💎 Premium Status</h3>
-      <div id="premiumStatusContent">
-        <!-- Wird dynamisch befüllt -->
-      </div>
-    </div>
-
-    <!-- ABMELDEN -->
-    <button class="btn-secondary" style="width:100%;margin-top:1rem" onclick="handleLogout()">
-      Abmelden
-    </button>
-
-  </div>
-</div><!-- Ende Einstellungen-Seite -->
-
-
-<!-- ================================================================
-     SEITE 8: PROFIL
-================================================================ -->
-<div class="page" id="page-profile">
-  <div class="profile-container">
-    <div class="profile-hero">
-      <div class="profile-avatar-big" id="profileAvatarBig"></div>
-      <div>
-        <h2 id="profileName" style="font-size:1.5rem;font-weight:800"></h2>
-        <p id="profileEmail" style="color:var(--text-muted);margin-top:0.25rem"></p>
-        <div id="profileBadge" style="margin-top:0.75rem"></div>
-      </div>
-    </div>
-
-    <!-- Schnellzugriff-Buttons -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
-      <button class="btn-secondary" onclick="showPage('analyse')">🔍 Neue Analyse</button>
-      <button class="btn-secondary" onclick="showPage('settings')">⚙️ Einstellungen</button>
-    </div>
-
-    <!-- Premium CTA falls nicht Premium -->
-    <div id="profilePremiumCTA"></div>
-
-    <button class="btn-secondary" style="width:100%;margin-top:1rem" onclick="handleLogout()">
-      Abmelden
-    </button>
-  </div>
-</div><!-- Ende Profil-Seite -->
-
-
-<!-- ================================================================
-     JAVASCRIPT – ALLE LOGIK
-================================================================ -->
-<script>
-// ================================================================
-// KONFIGURATION – API Keys und Einstellungen
-// ================================================================
-const CONFIG = {
-  // Supabase – Datenbank und Auth
-  supabase: {
-    url: '[wksfnfhlnynrkqzjcqxb.supabase.co](https://wksfnfhlnynrkqzjcqxb.supabase.co)',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrc2ZuZmhsbnlucmtxempjcXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNjQ1MjcsImV4cCI6MjA4OTg0MDUyN30.hs-9YKdo-vjzR9EIxYzCqalDc90CiRhcH6ALOvd_WXsn'
-  },
-  // Alpha Vantage – Aktien-Kursdaten
-  alphaVantage: {
-    key: 'DNT3MXCDYZ54C5PR',
-    baseUrl: '[alphavantage.co](https://www.alphavantage.co/query)'
-  },
-  // Resend – E-Mail Versand (wird über Edge Function aufgerufen)
-  resend: {
-    // API Key nur serverseitig verwenden! Hier für Edge Function Referenz
-    fromEmail: 'alerts@anlagekompass.de'
-  },
-  // Stripe – Bezahlung
-  stripe: {
-    publishableKey: 'pk_test_51TE72nIsdaBGCM31LaH3fa6eV74HKOOdb7hd5d1oJLcgtyW6cqbCBVZQLR5NPWpnQ09NsacVDxkuFXtGJIZ1YlWZ00Rc8fyfpf',
-    // Test-Preis-ID – ersetze mit echtem Stripe Price ID aus deinem Dashboard
-    priceId: 'price_premium_monthly'
-  }
-};
-
-// ================================================================
-// SUPABASE INITIALISIERUNG
-// ================================================================
-const supabase = window.supabase.createClient(CONFIG.supabase.url, CONFIG.supabase.anonKey);
-
-// ================================================================
-// APP STATE – Globaler Zustand der Anwendung
-// ================================================================
-let appState = {
-  user: null,           // Eingeloggter User (Supabase Auth)
-  profile: null,        // User-Profil aus der profiles Tabelle
-  isPremium: false,     // Premium-Status
-  currentStep: 0,       // Aktueller Analyse-Schritt
-  answers: {            // Fragebogen-Antworten
-    risk: null,
-    horizon: null,
-    amount: 5000,
-    interests: [],
-    experience: null
-  },
-  watchlist: [],        // Gespeicherte Assets
-  alertSettings: {      // E-Mail Alert Einstellungen
-    enabled: false,
-    frequency: 'daily',
-    importantOnly: false,
-    priceAlerts: false
-  },
-  currentChance: null,  // Aktuell angezeigte Chance (Detailseite)
-  allChancen: [],       // Alle geladenen Chancen
-  filteredChancen: []   // Gefilterte Chancen
-};
-
-// ================================================================
-// INITIALISIERUNG – Beim Laden der Seite
-// ================================================================
-async function init() {
-  // Supabase Auth State prüfen (ist User noch eingeloggt?)
-  const { data: { session } } = await supabase.auth.getSession();
-  if (session?.user) {
-    appState.user = session.user;
-    await loadUserProfile();
-    updateUIForLoggedInUser();
-  }
-
-  // Auth State Changes abhören (Login/Logout Events)
-  supabase.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session?.user) {
-      appState.user = session.user;
-      await loadUserProfile();
-      updateUIForLoggedInUser();
-      closeAuthModal();
-    } else if (event === 'SIGNED_OUT') {
-      appState.user = null;
-      appState.profile = null;
-      appState.isPremium = false;
-      updateUIForLoggedOutUser();
-      showPage('landing');
-    }
-  });
-
-  // URL Parameter prüfen (z.B. nach Stripe Redirect)
-  checkUrlParams();
-}
-
-// ================================================================
-// URL PARAMETER PRÜFEN – Nach Stripe Checkout Redirect
-// ================================================================
-function checkUrlParams() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('success') === 'true') {
-    // Stripe Checkout erfolgreich – Premium aktivieren
-    handleStripeSuccess();
-  }
-  if (params.get('canceled') === 'true') {
-    showToast('Zahlung abgebrochen.', 'info');
-  }
-}
-
-// ================================================================
-// USER PROFIL LADEN aus Supabase
-// ================================================================
-async function loadUserProfile() {
-  if (!appState.user) return;
-
-  const { data: profile, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', appState.user.id)
-    .single();
-
-  if (error && error.code === 'PGRST116') {
-    // Profil existiert noch nicht – neues erstellen
-    await createUserProfile();
-  } else if (profile) {
-    appState.profile = profile;
-    appState.isPremium = profile.is_premium || false;
-
-    // Alert-Einstellungen laden
-    if (profile.alert_settings) {
-      appState.alertSettings = { ...appState.alertSettings, ...profile.alert_settings };
-    }
-
-    // Watchlist laden
-    await loadWatchlist();
-  }
-}
-
-// ================================================================
-// USER PROFIL ERSTELLEN (erster Login / Registrierung)
-// ================================================================
-async function createUserProfile() {
-  const { data, error } = await supabase
-    .from('profiles')
-    .insert({
-      id: appState.user.id,
-      email: appState.user.email,
-      name: appState.user.user_metadata?.name || '',
-      is_premium: false,
-      alert_settings: appState.alertSettings,
-      created_at: new Date().toISOString()
-    })
-    .select()
-    .single();
-
-  if (data) {
-    appState.profile = data;
-    appState.isPremium = false;
-  }
-}
-
-// ================================================================
-// AUTH: LOGIN
-// ================================================================
-async function handleLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-
-  if (!email || !password) {
-    showAuthError('Bitte fülle alle Felder aus.');
-    return;
-  }
-
-  // Loading-State
-  const btn = document.querySelector('#loginForm .btn-primary');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loading-spinner"></span>';
-
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-  btn.disabled = false;
-  btn.innerHTML = 'Anmelden';
-
-  if (error) {
-    showAuthError(getAuthErrorMessage(error));
-  }
-  // Erfolg wird durch onAuthStateChange behandelt
-}
-
-// ================================================================
-// AUTH: REGISTRIERUNG
-// ================================================================
-async function handleRegister() {
-  const name = document.getElementById('registerName').value.trim();
-  const email = document.getElementById('registerEmail').value.trim();
-  const password = document.getElementById('registerPassword').value;
-
-  if (!name || !email || !password) {
-    showAuthError('Bitte fülle alle Felder aus.');
-    return;
-  }
-
-  if (password.length < 6) {
-    showAuthError('Das Passwort muss mindestens 6 Zeichen lang sein.');
-    return;
-  }
-
-  const btn = document.querySelector('#registerForm .btn-primary');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loading-spinner"></span>';
-
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: { data: { name } }
-  });
-
-  btn.disabled = false;
-  btn.innerHTML = 'Konto erstellen';
-
-  if (error) {
-    showAuthError(getAuthErrorMessage(error));
-  } else {
-    showAuthSuccess('Konto erstellt! Prüfe dein E-Mail-Postfach zur Bestätigung.');
-  }
-}
-
-// ================================================================
-// AUTH: LOGOUT
-// ================================================================
-async function handleLogout() {
-  await supabase.auth.signOut();
-}
-
-// ================================================================
-// AUTH FEHLER-NACHRICHTEN (Übersetzt)
-// ================================================================
-function getAuthErrorMessage(error) {
-  const messages = {
-    'Invalid login credentials': 'Falsche E-Mail oder Passwort.',
-    'Email not confirmed': 'Bitte bestätige zuerst deine E-Mail-Adresse.',
-    'User already registered': 'Diese E-Mail ist bereits registriert.',
-    'Password should be at least 6 characters': 'Passwort muss mindestens 6 Zeichen lang sein.'
-  };
-  return messages[error.message] || 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.';
-}
-
-// ================================================================
-// UI UPDATE – Nach Login
-// ================================================================
-function updateUIForLoggedInUser() {
-  // Logged-in Elemente anzeigen
-  document.querySelectorAll('.logged-in-nav').forEach(el => el.classList.remove('hidden'));
-  // Logged-out Elemente verstecken
-  document.querySelectorAll('.logged-out-nav').forEach(el => el.classList.add('hidden'));
-
-  // Avatar initialen setzen
-  const name = appState.profile?.name || appState.user?.email || 'U';
-  document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
-
-  // Premium Nav Button anzeigen/verstecken
-  if (appState.isPremium) {
-    document.getElementById('navChancen').classList.remove('hidden');
-  }
-
-  // Einstellungen befüllen
-  if (document.getElementById('settingsName')) {
-    document.getElementById('settingsName').value = appState.profile?.name || '';
-    document.getElementById('settingsEmail').value = appState.user?.email || '';
-  }
-
-  // Alert-Settings laden
-  loadAlertSettingsUI();
-
-  // Profil-Seite befüllen
-  updateProfilePage();
-
-  // Premium Status Karte
-  updatePremiumStatusCard();
-
-  // Zur Analyse-Seite navigieren
-  showPage('analyse');
-}
-
-// ================================================================
-// UI UPDATE – Nach Logout
-// ================================================================
-function updateUIForLoggedOutUser() {
-  document.querySelectorAll('.logged-in-nav').forEach(el => el.classList.add('hidden'));
-  document.querySelectorAll('.logged-out-nav').forEach(el => el.classList.remove('hidden'));
-}
-
-// ================================================================
-// PROFIL-SEITE AKTUALISIEREN
-// ================================================================
-function updateProfilePage() {
-  const name = appState.profile?.name || appState.user?.email?.split('@')[0] || 'User';
-  const email = appState.user?.email || '';
-
-  document.getElementById('profileName').textContent = name;
-  document.getElementById('profileEmail').textContent = email;
-  document.getElementById('profileAvatarBig').textContent = name.charAt(0).toUpperCase();
-
-  const badgeEl = document.getElementById('profileBadge');
-  const ctaEl = document.getElementById('profilePremiumCTA');
-
-  if (appState.isPremium) {
-    badgeEl.innerHTML = '<span class="premium-badge">💎 AnlageKompass Plus</span>';
-    ctaEl.innerHTML = '';
-  } else {
-    badgeEl.innerHTML = '<span style="font-size:0.85rem;color:var(--text-muted)">Free Account</span>';
-    ctaEl.innerHTML = `
-      <div class="settings-card" style="background:linear-gradient(135deg,rgba(14,165,233,0.08),rgba(16,185,129,0.04));border-color:var(--border-active)">
-        <h3 style="color:var(--primary)">💎 Auf Premium upgraden</h3>
-        <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.6">
-          Erhalte täglich neue Investment-Ideen, tagesaktuelle Chancen und E-Mail Alerts.
+  <main id="top">
+    <!-- Hero bewusst sehr nah an der Referenz: Badge, Headline, Text und zwei CTAs -->
+    <section class="hero container">
+      <div class="hero-inner">
+        <div class="hero-pill">⚡ Tagesaktuelle Investment-Ideen</div>
+        <h1>Mehr Chancen.<br>Mehr Ideen.<br>Mehr Orientierung.</h1>
+        <p class="hero-copy">
+          Erhalte täglich neue datenbasierte Investment-Ideen für Aktien, ETFs und Krypto – passend<br>
+          zu deinem Risikoprofil, verständlich erklärt.
         </p>
-        <button class="btn-primary" style="width:100%" onclick="openStripeModal()">
-          AnlageKompass Plus für 9,99€/Monat
-        </button>
+        <div class="hero-actions">
+          <button class="btn btn-hero-primary" type="button" onclick="openAuthModal('register')">Kostenlos starten →</button>
+          <button class="btn btn-hero-secondary" type="button" onclick="openAuthModal('login')">Anmelden</button>
+        </div>
       </div>
-    `;
-  }
-}
+    </section>
 
-// ================================================================
-// PREMIUM STATUS KARTE
-// ================================================================
-function updatePremiumStatusCard() {
-  const el = document.getElementById('premiumStatusContent');
-  if (!el) return;
+    <!-- Features exakt im dunklen Karten-Look mit 3x2 Raster -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Alles was du brauchst</h2>
+          <p>AnlageKompass bringt dir Investment-Ideen, die du sonst verpassen würdest.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="emoji">💡</span>
+            <h3>Konkrete Investment-Ideen</h3>
+            <p>Keine vagen Tipps – jede Idee kommt mit Ticker, Preis, Begründung und Risikoeinschätzung.</p>
+          </article>
+          <article class="feature-card">
+            <span class="emoji">⚡</span>
+            <h3>Tagesaktuelle Chancen</h3>
+            <p>Der "Chancen nutzen"-Feed zeigt dir täglich aktualisierte Marktchancen – bevor sie alle sehen.</p>
+          </article>
+          <article class="feature-card">
+            <span class="emoji">📬</span>
+            <h3>E-Mail Alerts</h3>
+            <p>Werde per E-Mail benachrichtigt, sobald neue Chancen entdeckt werden – täglich oder nach Bedarf.</p>
+          </article>
+          <article class="feature-card">
+            <span class="emoji">🧭</span>
+            <h3>Verständliche Sprache</h3>
+            <p>Kein Börsenjargon. Jede Idee erklärt, warum sie aktuell spannend sein könnte – klar und direkt.</p>
+          </article>
+          <article class="feature-card">
+            <span class="emoji">🏷️</span>
+            <h3>Watchlist &amp; Alerts</h3>
+            <p>Speichere Aktien, verfolge Preisänderungen und lass dich bei wichtigen Bewegungen benachrichtigen.</p>
+          </article>
+          <article class="feature-card">
+            <span class="emoji">🚫</span>
+            <h3>Keine Werbung</h3>
+            <p>Premium ist komplett werbefrei. Fokus auf das Wesentliche: deine Investment-Ideen.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-  if (appState.isPremium) {
-    el.innerHTML = `
-      <div style="display:flex;align-items:center;gap:1rem">
-        <div style="font-size:2rem">💎</div>
-        <div>
-          <div style="font-weight:700;color:var(--accent)">AnlageKompass Plus aktiv</div>
-          <div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.25rem">
-            Nächste Abrechnung: ${getNextBillingDate()}
+    <!-- Vergleichsblock vor den Preisen: was Free kann und was Plus zusätzlich bringt -->
+    <section class="section compare-wrap">
+      <div class="container">
+        <div class="section-head">
+          <h2>Was Free kann – und was Plus zusätzlich bringt</h2>
+          <p>Free ist ein guter Einstieg. Plus ist die Version für echte, regelmäßige Nutzung.</p>
+        </div>
+
+        <div class="compare-box">
+          <div class="compare-head">
+            <div></div>
+            <div style="text-align:center">Free</div>
+            <div style="text-align:center">Plus</div>
+          </div>
+
+          <div class="compare-row">
+            <div class="compare-feature">2–3 Ideen pro Analyse</div>
+            <div class="compare-cell yes">✓</div>
+            <div class="compare-cell yes">✓</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-feature">5–10 Ideen pro Analyse</div>
+            <div class="compare-cell">–</div>
+            <div class="compare-cell yes">✓</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-feature">Dauerhaft kostenlos nutzbar</div>
+            <div class="compare-cell yes">✓</div>
+            <div class="compare-cell">–</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-feature">Chancen-Feed mit aktuellen Ideen</div>
+            <div class="compare-cell">–</div>
+            <div class="compare-cell yes">✓</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-feature">E-Mail-Benachrichtigungen</div>
+            <div class="compare-cell">–</div>
+            <div class="compare-cell yes">✓</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-feature">Watchlist &amp; Alerts</div>
+            <div class="compare-cell">–</div>
+            <div class="compare-cell yes">✓</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-feature">Alternative Strategien &amp; mehr Orientierung</div>
+            <div class="compare-cell">–</div>
+            <div class="compare-cell yes">✓</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-feature">Werbefrei</div>
+            <div class="compare-cell">–</div>
+            <div class="compare-cell yes">✓</div>
           </div>
         </div>
       </div>
-    `;
-  } else {
-    el.innerHTML = `
-      <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem">
-        Du nutzt aktuell den kostenlosen Plan.
-      </p>
-      <button class="btn-primary" onclick="openStripeModal()">Auf Premium upgraden</button>
-    `;
-  }
-}
+    </section>
 
-function getNextBillingDate() {
-  const date = new Date();
-  date.setMonth(date.getMonth() + 1);
-  return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-}
+    <!-- Pricing-Look sehr nah am Screenshot, zusätzlich sauberer Free-vs-Plus-Vergleich -->
+    <section class="section pricing-wrap">
+      <div class="container">
+        <div class="section-head">
+          <h2>Preise</h2>
+          <p>Starte kostenlos und upgrade wenn du mehr Ideen möchtest.</p>
+        </div>
 
-// ================================================================
-// SEITEN-NAVIGATION
-// ================================================================
-function showPage(pageId) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const page = document.getElementById(`page-${pageId}`);
-  if (page) {
-    page.classList.add('active');
-    window.scrollTo(0, 0);
-  }
+        <div class="pricing-grid">
+          <article class="price-card">
+            <div class="plan-name">Free</div>
+            <div class="price-line">
+              <div class="price">0€</div>
+              <div class="per">/ Monat</div>
+            </div>
+            <ul class="feature-list">
+              <li class="available"><span class="tick">✓</span><strong>2–3 Investment-Ideen</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Basis-Analyse</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Risikoeinschätzung</strong></li>
+              <li><span class="minus">–</span>Tagesaktuelle Chancen</li>
+              <li><span class="minus">–</span>E-Mail Alerts</li>
+              <li><span class="minus">–</span>Watchlist</li>
+              <li><span class="minus">–</span>Strategie-Ideen</li>
+              <li><span class="minus">–</span>Werbefrei</li>
+            </ul>
+            <button class="btn btn-card-secondary" type="button" onclick="openAuthModal('register')">Kostenlos starten</button>
+          </article>
 
-  // Seiten-spezifische Aktionen beim Öffnen
-  if (pageId === 'chancen') loadChancen();
-  if (pageId === 'watchlist') renderWatchlist();
-  if (pageId === 'settings') {
-    loadAlertSettingsUI();
-    updatePremiumStatusCard();
-  }
-}
+          <article class="price-card plus">
+            <div class="recommend">⭐ Empfohlen</div>
+            <div class="plan-name">AnlageKompass Plus</div>
+            <div class="price-line">
+              <div class="price">9,99€</div>
+              <div class="per">/ Monat</div>
+            </div>
+            <ul class="feature-list">
+              <li class="available"><span class="tick">✓</span><strong>5–10 Investment-Ideen</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Vollständige Analyse</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Tagesaktuelle Chancen</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>E-Mail Alerts (täglich)</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Watchlist + Kurs-Alerts</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Strategie-Ideen</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Marktübersicht</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Komplett werbefrei</strong></li>
+            </ul>
+            <button class="btn btn-card-primary" type="button" onclick="openPremiumModal()">Plus freischalten</button>
+          </article>
+        </div>
+      </div>
+    </section>
 
-// ================================================================
-// PREMIUM-GESCHÜTZTE NAVIGATION
-// ================================================================
-function handlePremiumNav(pageId) {
-  if (!appState.user) {
-    openAuthModal('login');
-    return;
-  }
-  if (!appState.isPremium) {
-    openStripeModal();
-    return;
-  }
-  showPage(pageId);
-}
+    <!-- Zusätzlicher Nutzenblock, von dir gewünscht: was Free kann, was Plus mehr bringt, warum es sich im Alltag lohnt -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Warum sich Plus im Alltag lohnt</h2>
+          <p>Free bleibt dauerhaft kostenlos. Plus lohnt sich dann, wenn du regelmäßig neue Ideen sehen und schneller reagieren willst.</p>
+        </div>
+        <div class="benefits">
+          <article class="benefit-card">
+            <h4>Free bleibt kostenlos</h4>
+            <p>Du kannst AnlageKompass kostenlos nutzen, dein Profil anlegen und dir erste passende Investment-Ideen anzeigen lassen – ohne Zeitdruck und ohne Zwang zum Upgrade.</p>
+          </article>
+          <article class="benefit-card">
+            <h4>Plus bringt mehr Aktualität</h4>
+            <p>Mit Plus bekommst du neue Chancen, weitere passende Ideen, E-Mail Alerts und Watchlist-Funktionen. So wird AnlageKompass zu einer laufenden Ideenquelle statt nur zu einer einmaligen Analyse.</p>
+          </article>
+          <article class="benefit-card">
+            <h4>Mehr Nutzen im echten Alltag</h4>
+            <p>Wenn du Märkte nicht ständig selbst beobachten willst, hilft dir Plus dabei, relevante Chancen kompakt, verständlich und regelmäßig aufbereitet zu sehen – ohne den Eindruck von Anlageberatung.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-// ================================================================
-// FRAGEBOGEN – STEP MANAGEMENT
-// ================================================================
-function nextStep() {
-  document.getElementById(`step${appState.currentStep}`).classList.add('hidden');
-  document.getElementById(`dot${appState.currentStep}`).classList.remove('active');
-  document.getElementById(`dot${appState.currentStep}`).classList.add('done');
+    <div class="disclaimer container">
+      Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen, aber keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten. Investitionen sind mit Risiken verbunden.
+    </div>
+  </main>
 
-  appState.currentStep++;
+  <!-- Login/Registrierung mit Vorname, Nachname und Pflicht-Checkbox -->
+  <div class="modal-overlay" id="authModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="close" type="button" aria-label="Schließen" onclick="closeAuthModal()">×</button>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" type="button" onclick="switchAuth('login')">Anmelden</button>
+        <button class="auth-tab" id="tabRegister" type="button" onclick="switchAuth('register')">Registrieren</button>
+      </div>
 
-  document.getElementById(`step${appState.currentStep}`).classList.remove('hidden');
-  document.getElementById(`dot${appState.currentStep}`).classList.add('active');
-}
+      <div class="auth-message error" id="authError"></div>
+      <div class="auth-message success" id="authSuccess"></div>
 
-function prevStep() {
-  document.getElementById(`step${appState.currentStep}`).classList.add('hidden');
-  document.getElementById(`dot${appState.currentStep}`).classList.remove('active');
+      <section id="panelLogin">
+        <h3 id="authTitle">Willkommen zurück</h3>
+        <p class="intro">Melde dich an, um deine Investment-Ideen zu sehen.</p>
+        <div class="field">
+          <label for="loginEmail">E-Mail</label>
+          <input id="loginEmail" type="email" placeholder="deine@email.de" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="loginPassword">Passwort</label>
+          <input id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="submit-btn" id="loginBtn" type="button" onclick="handleLogin()">Anmelden</button>
+      </section>
 
-  appState.currentStep--;
+      <section id="panelRegister" class="hidden">
+        <h3>Konto erstellen</h3>
+        <p class="intro">Starte kostenlos – keine Kreditkarte nötig.</p>
+        <div class="field-grid">
+          <div class="field">
+            <label for="registerFirstName">Vorname</label>
+            <input id="registerFirstName" type="text" placeholder="Max" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="registerLastName">Nachname</label>
+            <input id="registerLastName" type="text" placeholder="Mustermann" autocomplete="family-name">
+          </div>
+        </div>
+        <div class="field">
+          <label for="registerEmail">E-Mail</label>
+          <input id="registerEmail" type="email" placeholder="deine@email.de" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="registerPassword">Passwort</label>
+          <input id="registerPassword" type="password" placeholder="Mindestens 6 Zeichen" autocomplete="new-password">
+        </div>
+        <label class="check-row">
+          <input id="registerTerms" type="checkbox">
+          <span>Ich bestätige die <button class="linklike" type="button" onclick="openLegalModal('agb')">AGB</button> und habe die <button class="linklike" type="button" onclick="openLegalModal('datenschutz')">Datenschutzhinweise</button> gelesen.</span>
+        </label>
+        <button class="submit-btn" id="registerBtn" type="button" onclick="handleRegister()">Konto erstellen</button>
+      </section>
+    </div>
+  </div>
 
-  document.getElementById(`step${appState.currentStep}`).classList.remove('hidden');
-  document.getElementById(`dot${appState.currentStep}`).classList.add('active');
-  document.getElementById(`dot${appState.currentStep}`).classList.remove('done');
-}
+  <!-- Premium Modal als vorbereiteter Hook für den späteren Stripe-Flow -->
+  <div class="modal-overlay" id="premiumModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="premiumTitle">
+      <button class="close" type="button" aria-label="Schließen" onclick="closePremiumModal()">×</button>
+      <h3 id="premiumTitle">AnlageKompass Plus</h3>
+      <p class="intro">Erhalte täglich neue datenbasierte Investment-Ideen, Chancen-Alerts und mehr Orientierung im Alltag.</p>
+      <ul class="feature-list" style="margin-top:8px; margin-bottom:22px;">
+        <li class="available"><span class="tick">✓</span><strong>5–10 Investment-Ideen pro Analyse</strong></li>
+        <li class="available"><span class="tick">✓</span><strong>Tagesaktuelle Chancen</strong></li>
+        <li class="available"><span class="tick">✓</span><strong>E-Mail Alerts für Premium-Mitglieder</strong></li>
+        <li class="available"><span class="tick">✓</span><strong>Watchlist + Kurs-Alerts</strong></li>
+        <li class="available"><span class="tick">✓</span><strong>Werbefrei</strong></li>
+      </ul>
+      <button class="submit-btn" type="button" onclick="showSuccess('Stripe-Checkout ist hier vorbereitet. Für Live-Zahlungen muss dein serverseitiger Stripe-Endpoint verbunden sein.')">Plus freischalten</button>
+    </div>
+  </div>
 
-// Einzelauswahl-Option (Risiko, Horizont, Erfahrung)
-function selectOption(step, value, btn) {
-  // Alle Buttons in dieser Gruppe deselektieren
-  btn.closest('.option-grid').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
+  <!-- AGB / Datenschutz als Platzhalter, damit die Pflicht-Checkbox sinnvoll nutzbar ist -->
+  <div class="modal-overlay" id="legalModal" aria-hidden="true">
+    <div class="modal legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
+      <button class="close" type="button" aria-label="Schließen" onclick="closeLegalModal()">×</button>
+      <h3 id="legalTitle">Rechtliche Hinweise</h3>
+      <div id="legalContent"></div>
+    </div>
+  </div>
 
-  // Wert im State speichern
-  const keys = ['risk', 'horizon', null, null, 'experience'];
-  if (keys[step]) appState.answers[keys[step]] = value;
+  <script>
+    // Öffentliche Frontend-Konfiguration. Secret Keys gehören NICHT in diese Datei.
+    const CONFIG = {
+      supabaseUrl: 'https://wksfnfhlnynrkqzjcqxb.supabase.co',
+      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrc2ZuZmhsbnlucmtxempjcXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNjQ1MjcsImV4cCI6MjA4OTg0MDUyN30.hs-9YKdo-vjzR9EIxYzCqalDc90CiRhcH6ALOvd_WXsn'
+    };
 
-  // Weiter-Button aktivieren
-  const nextBtn = document.getElementById(`nextBtn${step}`);
-  if (nextBtn) nextBtn.disabled = false;
-}
-
-// Mehrfachauswahl (Interessen)
-function toggleInterest(interest, btn) {
-  btn.classList.toggle('selected');
-  const idx = appState.answers.interests.indexOf(interest);
-  if (idx === -1) {
-    appState.answers.interests.push(interest);
-  } else {
-    appState.answers.interests.splice(idx, 1);
-  }
-
-  // Weiter-Button aktivieren sobald min. 1 gewählt
-  document.getElementById('nextBtn3').disabled = appState.answers.interests.length === 0;
-}
-
-// Slider-Update
-function updateAmount(value) {
-  appState.answers.amount = parseInt(value);
-  const display = value >= 1000
-    ? `${(value / 1000).toLocaleString('de-DE')}k €`
-    : `${parseInt(value).toLocaleString('de-DE')} €`;
-  document.getElementById('amountDisplay').textContent =
-    parseInt(value).toLocaleString('de-DE') + ' €';
-
-  // Slider-Gradient aktualisieren
-  const pct = (value - 500) / (100000 - 500) * 100;
-  document.getElementById('amountSlider').style.background =
-    `linear-gradient(to right, var(--primary) ${pct}%, var(--primary) ${pct}%, var(--border) ${pct}%)`;
-}
-
-// ================================================================
-// ANALYSE AUSFÜHREN – Investment-Ideen generieren
-// ================================================================
-async function runAnalysis() {
-  if (!appState.user) {
-    openAuthModal('login');
-    return;
-  }
-
-  // Lade-Animation zeigen
-  const btn = document.getElementById('nextBtn4');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loading-spinner"></span> Analysiere...';
-
-  // Analyse-Profil speichern
-  await saveAnalysisProfile();
-
-  // Ideen generieren (kombination aus statischen Daten + API)
-  const ideas = await generateInvestmentIdeas();
-
-  // Ergebnisse anzeigen
-  renderResults(ideas);
-
-  // Strategie-Ideen (nur Premium)
-  if (appState.isPremium) {
-    renderStrategies();
-  }
-
-  showPage('results');
-
-  btn.disabled = false;
-  btn.innerHTML = 'Analyse starten 🚀';
-}
-
-// ================================================================
-// ANALYSE-PROFIL IN SUPABASE SPEICHERN
-// ================================================================
-async function saveAnalysisProfile() {
-  if (!appState.user) return;
-
-  await supabase.from('analyses').insert({
-    user_id: appState.user.id,
-    risk_type: appState.answers.risk,
-    horizon: appState.answers.horizon,
-    amount: appState.answers.amount,
-    interests: appState.answers.interests,
-    experience: appState.answers.experience,
-    created_at: new Date().toISOString()
-  });
-}
-
-// ================================================================
-// INVESTMENT-IDEEN GENERIEREN
-// basierend auf Risikoprofil + Alpha Vantage API Daten
-// ================================================================
-async function generateInvestmentIdeas() {
-  // Asset-Pool basierend auf Interessen und Risiko
-  const assetPool = getAssetPool();
-
-  // Kursdaten von Alpha Vantage holen (für erste Assets)
-  const ideasWithPrices = await enrichWithPriceData(assetPool);
-
-  return ideasWithPrices;
-}
-
-// ================================================================
-// ASSET POOL – Basierend auf Nutzerprofil zusammenstellen
-// ================================================================
-function getAssetPool() {
-  const { risk, interests } = appState.answers;
-
-  // Basis-Pools für verschiedene Kategorien
-  const pools = {
-    stocks: {
-      growth: [
-        { name: 'NVIDIA', ticker: 'NVDA', category: 'growth', risk: 4,
-          reason: 'NVIDIA profitiert massiv vom KI-Boom. Datacenter-Umsätze wachsen weiterhin stark. Das Unternehmen hat eine dominante Position im KI-Chip-Markt.',
-          risk_hint: 'Hohe Bewertung. Starke Schwankungen möglich. Abhängig vom KI-Wachstum.',
-          context: 'KI, Chips, Datacenter', industry: 'Technologie' },
-        { name: 'Microsoft', ticker: 'MSFT', category: 'growth', risk: 3,
-          reason: 'Microsoft integriert KI in alle Produkte (Copilot). Azure wächst stark. Stabiles, profitables Geschäftsmodell mit breiter Diversifikation.',
-          risk_hint: 'Regulatorische Risiken. Hohe Bewertung im Vergleich zum Markt.',
-          context: 'KI, Cloud, Software', industry: 'Technologie' },
-        { name: 'Amazon', ticker: 'AMZN', category: 'growth', risk: 3,
-          reason: 'AWS (Cloud) wächst wieder beschleunigt. Advertising-Geschäft profitabel. E-Commerce-Margen verbessern sich kontinuierlich.',
-          risk_hint: 'Konsumabhängigkeit. Regulatorische Aufmerksamkeit.',
-          context: 'Cloud, E-Commerce, KI', industry: 'Technologie/Handel' },
-        { name: 'Alphabet', ticker: 'GOOGL', category: 'growth', risk: 3,
-          reason: 'Google dominiert Suchmaschinenmarkt. YouTube wächst. Gemini KI-Modelle zeigen Fortschritte. Günstigere Bewertung als viele Tech-Peers.',
-          risk_hint: 'Suchmarkt-Disruption durch KI möglich. Regulierung.',
-          context: 'Suche, KI, Cloud, Werbung', industry: 'Technologie' },
-        { name: 'Meta Platforms', ticker: 'META', category: 'growth', risk: 3,
-          reason: 'Meta hat Effizienz massiv gesteigert. KI-Investment zeigt Ergebnisse. Instagram und WhatsApp monetarisieren besser.',
-          risk_hint: 'Metaverse-Investitionen mit ungewissem Ausgang.',
-          context: 'Social Media, KI, Werbung', industry: 'Technologie' }
-      ],
-      defensive: [
-        { name: 'Johnson & Johnson', ticker: 'JNJ', category: 'defensive', risk: 2,
-          reason: 'Stabile Pharma & Medizintechnik. Langjährige Dividendenhistorie. Defensive Branche mit wenig Konjunkturabhängigkeit.',
-          risk_hint: 'Produkthaftungsklagen. Patentklippen.',
-          context: 'Pharma, Medizin', industry: 'Gesundheit' },
-        { name: 'Procter & Gamble', ticker: 'PG', category: 'defensive', risk: 2,
-          reason: 'Konsumgüterriese mit starken Marken (Gillette, Pampers). Stabile Umsätze durch Non-Zyklikalität. Verlässliche Dividende.',
-          risk_hint: 'Begrenzte Wachstumschancen. Margendruch durch Rohstoffe.',
-          context: 'Konsumgüter', industry: 'Konsumgüter' }
-      ],
-      dividend: [
-        { name: 'Realty Income', ticker: 'O', category: 'dividend', risk: 2,
-          reason: 'REIT mit monatlicher Dividende. "Dividend Aristocrat" mit 30+ Jahren Erhöhungen. Breites Portfolio an Gewerbeimmobilien.',
-          risk_hint: 'Zinssensitiv. Immobilienmarkt-Risiken.',
-          context: 'Immobilien, REIT', industry: 'Immobilien' },
-        { name: 'Coca-Cola', ticker: 'KO', category: 'dividend', risk: 1,
-          reason: 'Buffett-Liebling. 60+ Jahre Dividendenwachstum. Starke globale Marke. Stabile Cashflows in jedem Wirtschaftsumfeld.',
-          risk_hint: 'Sehr begrenztes Wachstumspotenzial.',
-          context: 'Getränke, Konsumgüter', industry: 'Konsumgüter' },
-        { name: 'BASF', ticker: 'BAS.DE', category: 'dividend', risk: 3,
-          reason: 'Europas größter Chemiekonzern. Hohe Dividendenrendite. Möglicherweise unterbewertet nach Kursrückgang.',
-          risk_hint: 'Hohe Energiekosten in Europa. China-Abhängigkeit.',
-          context: 'Chemie, Europa', industry: 'Chemie' }
-      ]
-    },
-    etf: [
-      { name: 'Vanguard S&P 500 ETF', ticker: 'VOO', category: 'etf', risk: 2,
-        reason: 'Günstigster S&P 500 ETF. Breite US-Diversifikation. Ideal als Kernbaustein jedes Portfolios.',
-        risk_hint: 'USA-Konzentration. Marktrisiko.',
-        context: 'US-Aktien, Broad Market', industry: 'ETF' },
-      { name: 'iShares Core MSCI World', ticker: 'IWDA', category: 'etf', risk: 2,
-        reason: 'Globale Diversifikation über 1.600+ Unternehmen. Sehr günstige Kostenquote (TER 0,20%). Ideal für langfristigen Vermögensaufbau.',
-        risk_hint: 'Marktrisiko. USD/EUR Wechselkursrisiko.',
-        context: 'Global, Diversifikation', industry: 'ETF' },
-      { name: 'Global X Robotics & AI ETF', ticker: 'BOTZ', category: 'etf', risk: 4,
-        reason: 'Thematisches Engagement in Robotik und KI. Wachstumsstarkes Segment. Gut diversifiziert über viele KI-Unternehmen.',
-        risk_hint: 'Themenfonds mit höherem Risiko. Konzentriert.',
-        context: 'KI, Robotik, Thema', industry: 'ETF' }
-    ],
-    crypto: [
-      { name: 'Bitcoin', ticker: 'BTC', category: 'crypto', risk: 5,
-        reason: 'Digitales Gold. ETF-Zulassung erhöht institutionelle Nachfrage. Halving 2024 könnte Angebotsdruck reduzieren.',
-        risk_hint: 'Extreme Volatilität. Regulatorisches Risiko. Kein innerer Wert.',
-        context: 'Krypto, Store of Value', industry: 'Kryptowährung' },
-      { name: 'Ethereum', ticker: 'ETH', category: 'crypto', risk: 5,
-        reason: 'Größte Smart-Contract-Plattform. DeFi und NFT Ökosystem. Staking-Renditen möglich.',
-        risk_hint: 'Technische Komplexität. Konkurrenz durch andere L1-Chains.',
-        context: 'Smart Contracts, DeFi', industry: 'Kryptowährung' }
-    ]
-  };
-
-  // Passende Assets basierend auf Profil zusammenstellen
-  let selected = [];
-
-  if (interests.includes('stocks')) {
-    if (risk === 'conservative' || risk === 'balanced') {
-      selected.push(...pools.stocks.defensive);
-      selected.push(...pools.stocks.dividend.slice(0, 2));
-      selected.push(...pools.stocks.growth.slice(0, 2));
-    } else {
-      selected.push(...pools.stocks.growth);
-    }
-  }
-
-  if (interests.includes('etf')) {
-    selected.push(...pools.etf);
-  }
-
-  if (interests.includes('dividend')) {
-    selected.push(...pools.stocks.dividend);
-  }
-
-  if (interests.includes('crypto') && (risk === 'growth' || risk === 'aggressive')) {
-    selected.push(...pools.crypto);
-  }
-
-  // Duplikate entfernen
-  const unique = selected.filter((item, idx, arr) =>
-    arr.findIndex(i => i.ticker === item.ticker) === idx
-  );
-
-  // Maximal 10 Ideen
-  return unique.slice(0, 10);
-}
-
-// ================================================================
-// KURSDATEN VON ALPHA VANTAGE HOLEN
-// ================================================================
-async function enrichWithPriceData(assets) {
-  const enriched = [];
-
-  for (const asset of assets.slice(0, 5)) { // Nur erste 5 wegen API Rate Limit
+    let supabaseClient = null;
     try {
-      const response = await fetch(
-        `${CONFIG.alphaVantage.baseUrl}?function=GLOBAL_QUOTE&symbol=${asset.ticker}&apikey=${CONFIG.alphaVantage.key}`
-      );
-      const data = await response.json();
-      const quote = data['Global Quote'];
+      if (window.supabase?.createClient) {
+        supabaseClient = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey);
+      }
+    } catch (e) {
+      console.error('Supabase konnte nicht initialisiert werden:', e);
+    }
 
-      if (quote && quote['05. price']) {
-        enriched.push({
-          ...asset,
-          price: parseFloat(quote['05. price']).toFixed(2),
-          change: parseFloat(quote['10. change percent']).toFixed(2),
-          currency: asset.ticker.includes('.DE') ? '€' : '$'
-        });
+    function openAuthModal(tab = 'login') {
+      document.getElementById('authModal').classList.add('open');
+      document.getElementById('authModal').setAttribute('aria-hidden', 'false');
+      switchAuth(tab);
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('open');
+      document.getElementById('authModal').setAttribute('aria-hidden', 'true');
+      clearMessages();
+    }
+
+    function switchAuth(mode) {
+      const login = mode === 'login';
+      document.getElementById('tabLogin').classList.toggle('active', login);
+      document.getElementById('tabRegister').classList.toggle('active', !login);
+      document.getElementById('panelLogin').classList.toggle('hidden', !login);
+      document.getElementById('panelRegister').classList.toggle('hidden', login);
+      clearMessages();
+    }
+
+    function openPremiumModal() {
+      document.getElementById('premiumModal').classList.add('open');
+      document.getElementById('premiumModal').setAttribute('aria-hidden', 'false');
+    }
+
+    function closePremiumModal() {
+      document.getElementById('premiumModal').classList.remove('open');
+      document.getElementById('premiumModal').setAttribute('aria-hidden', 'true');
+    }
+
+    function openLegalModal(type) {
+      const title = document.getElementById('legalTitle');
+      const content = document.getElementById('legalContent');
+      if (type === 'agb') {
+        title.textContent = 'Allgemeine Geschäftsbedingungen';
+        content.innerHTML = `
+          <p>Diese Platzhalter-AGB sind für den Registrierungsflow vorbereitet. Du kannst hier später deine finalen AGB einfügen.</p>
+          <h4>1. Leistungsbeschreibung</h4>
+          <p>AnlageKompass stellt Informationen, Einordnungen und datenbasierte Investment-Ideen bereit. Die Inhalte dienen ausschließlich Informationszwecken.</p>
+          <h4>2. Kein Beratungsverhältnis</h4>
+          <p>Es wird keine Anlageberatung, Finanzberatung oder individuelle Empfehlung erbracht.</p>
+          <h4>3. Nutzung von Free und Plus</h4>
+          <p>Ein Teil der Funktionen ist dauerhaft kostenlos nutzbar. Zusätzliche Funktionen können im Rahmen eines kostenpflichtigen Plus-Zugangs bereitgestellt werden.</p>
+        `;
       } else {
-        // Fallback bei API-Limit oder Fehler
-        enriched.push({
-          ...asset,
-          price: null,
-          change: null,
-          currency: asset.ticker.includes('.DE') ? '€' : '$'
+        title.textContent = 'Datenschutzhinweise';
+        content.innerHTML = `
+          <p>Diese Platzhalter-Datenschutzhinweise sind für den Registrierungsflow vorbereitet. Du kannst hier später deine finalen Datenschutzhinweise einfügen.</p>
+          <h4>1. Verarbeitete Daten</h4>
+          <p>Bei der Registrierung werden insbesondere Name, E-Mail-Adresse und technische Nutzungsdaten verarbeitet.</p>
+          <h4>2. Zweck</h4>
+          <p>Die Daten werden zur Kontoverwaltung, Authentifizierung und Nutzung der Plattform verarbeitet.</p>
+          <h4>3. Hinweise</h4>
+          <p>Bitte ergänze hier später deine rechtsverbindlichen Angaben zu Verantwortlichen, Speicherfristen und Betroffenenrechten.</p>
+        `;
+      }
+      document.getElementById('legalModal').classList.add('open');
+      document.getElementById('legalModal').setAttribute('aria-hidden', 'false');
+    }
+
+    function closeLegalModal() {
+      document.getElementById('legalModal').classList.remove('open');
+      document.getElementById('legalModal').setAttribute('aria-hidden', 'true');
+    }
+
+    function showError(message) {
+      const box = document.getElementById('authError');
+      const ok = document.getElementById('authSuccess');
+      ok.style.display = 'none';
+      box.textContent = message;
+      box.style.display = 'block';
+    }
+
+    function showSuccess(message) {
+      const box = document.getElementById('authSuccess');
+      const err = document.getElementById('authError');
+      err.style.display = 'none';
+      box.textContent = message;
+      box.style.display = 'block';
+    }
+
+    function clearMessages() {
+      document.getElementById('authError').style.display = 'none';
+      document.getElementById('authSuccess').style.display = 'none';
+    }
+
+    function setLoading(button, loading, text) {
+      if (!button) return;
+      button.disabled = loading;
+      button.textContent = loading ? 'Bitte warten…' : text;
+    }
+
+    function mapAuthError(message) {
+      const known = {
+        'Invalid login credentials': 'Falsche E-Mail oder falsches Passwort.',
+        'Email not confirmed': 'Bitte bestätige zuerst deine E-Mail-Adresse.',
+        'User already registered': 'Diese E-Mail-Adresse ist bereits registriert.',
+        'Password should be at least 6 characters': 'Das Passwort muss mindestens 6 Zeichen lang sein.'
+      };
+      return known[message] || 'Die Anmeldung konnte gerade nicht abgeschlossen werden.';
+    }
+
+    async function handleLogin() {
+      clearMessages();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      if (!email || !password) {
+        showError('Bitte fülle E-Mail und Passwort aus.');
+        return;
+      }
+      if (!supabaseClient) {
+        showError('Supabase ist nicht verfügbar. Bitte prüfe die Frontend-Konfiguration.');
+        return;
+      }
+      const button = document.getElementById('loginBtn');
+      setLoading(button, true, 'Anmelden');
+      try {
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          showError(mapAuthError(error.message));
+        } else {
+          showSuccess('Anmeldung erfolgreich. Dein Konto ist jetzt verbunden.');
+          setTimeout(() => closeAuthModal(), 900);
+        }
+      } catch (error) {
+        showError('Die Anmeldung konnte nicht ausgeführt werden.');
+      } finally {
+        setLoading(button, false, 'Anmelden');
+      }
+    }
+
+    async function handleRegister() {
+      clearMessages();
+      const firstName = document.getElementById('registerFirstName').value.trim();
+      const lastName = document.getElementById('registerLastName').value.trim();
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      const terms = document.getElementById('registerTerms').checked;
+
+      if (!firstName || !lastName || !email || !password) {
+        showError('Bitte fülle alle Felder aus.');
+        return;
+      }
+      if (!terms) {
+        showError('Bitte bestätige die AGB und Datenschutzhinweise.');
+        return;
+      }
+      if (password.length < 6) {
+        showError('Das Passwort muss mindestens 6 Zeichen lang sein.');
+        return;
+      }
+      if (!supabaseClient) {
+        showError('Supabase ist nicht verfügbar. Bitte prüfe die Frontend-Konfiguration.');
+        return;
+      }
+
+      const button = document.getElementById('registerBtn');
+      setLoading(button, true, 'Konto erstellen');
+
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              full_name: `${firstName} ${lastName}`
+            }
+          }
         });
+
+        if (error) {
+          showError(mapAuthError(error.message));
+          return;
+        }
+
+        const userId = data?.user?.id;
+        if (userId) {
+          try {
+            await supabaseClient.from('profiles').upsert({
+              id: userId,
+              email,
+              name: `${firstName} ${lastName}`,
+              first_name: firstName,
+              last_name: lastName,
+              is_premium: false,
+              created_at: new Date().toISOString()
+            });
+          } catch (profileError) {
+            console.warn('Profil konnte nicht direkt angelegt werden:', profileError);
+          }
+        }
+
+        showSuccess('Konto erstellt. Bitte prüfe dein E-Mail-Postfach und bestätige deine Adresse, falls Supabase die Bestätigung verlangt.');
+      } catch (error) {
+        showError('Die Registrierung konnte nicht abgeschlossen werden.');
+      } finally {
+        setLoading(button, false, 'Konto erstellen');
       }
-    } catch {
-      enriched.push({ ...asset, price: null, change: null });
     }
 
-    // Kleine Pause um Rate Limit zu respektieren
-    await new Promise(r => setTimeout(r, 200));
-  }
-
-  // Verbleibende Assets ohne Preis hinzufügen
-  for (const asset of assets.slice(5)) {
-    enriched.push({ ...asset, price: null, change: null });
-  }
-
-  return enriched;
-}
-
-// ================================================================
-// ERGEBNISSE RENDERN
-// ================================================================
-function renderResults(ideas) {
-  // Profil-Zusammenfassung
-  const summary = document.getElementById('resultsSummary');
-  const riskLabels = {
-    conservative: '🛡️ Konservativ',
-    balanced: '⚖️ Ausgewogen',
-    growth: '🚀 Wachstum',
-    aggressive: '⚡ Spekulativ'
-  };
-  const horizonLabels = {
-    short: 'Unter 1 Jahr',
-    medium: '1–5 Jahre',
-    long: '5–10 Jahre',
-    verylong: '10+ Jahre'
-  };
-
-  summary.innerHTML = `
-    <div class="summary-item">
-      <div class="summary-label">Risikotyp</div>
-      <div class="summary-value">${riskLabels[appState.answers.risk] || '–'}</div>
-    </div>
-    <div class="summary-item">
-      <div class="summary-label">Horizont</div>
-      <div class="summary-value">${horizonLabels[appState.answers.horizon] || '–'}</div>
-    </div>
-    <div class="summary-item">
-      <div class="summary-label">Betrag</div>
-      <div class="summary-value">${appState.answers.amount.toLocaleString('de-DE')} €</div>
-    </div>
-    <div class="summary-item">
-      <div class="summary-label">Ideen gefunden</div>
-      <div class="summary-value">${appState.isPremium ? ideas.length : Math.min(3, ideas.length)}</div>
-    </div>
-  `;
-
-  // Kostenlose Ideen (erste 2-3)
-  const freeIdeas = ideas.slice(0, appState.isPremium ? ideas.length : 3);
-  const freeGrid = document.getElementById('freeIdeasGrid');
-  freeGrid.innerHTML = freeIdeas.map(idea => createIdeaCardHTML(idea)).join('');
-
-  // Premium Lock Section
-  const lockSection = document.getElementById('premiumLockSection');
-  if (appState.isPremium) {
-    lockSection.classList.add('hidden');
-    document.getElementById('strategieSection').classList.remove('hidden');
-  } else {
-    lockSection.classList.remove('hidden');
-    // Geblurrte Vorschau der gesperrten Ideen
-    const blurredGrid = document.getElementById('blurredIdeasGrid');
-    const lockedIdeas = ideas.slice(3, 7);
-    blurredGrid.innerHTML = lockedIdeas.map(idea => createIdeaCardHTML(idea)).join('');
-  }
-}
-
-// ================================================================
-// IDEEN-KARTE HTML ERSTELLEN
-// ================================================================
-function createIdeaCardHTML(idea) {
-  const changeVal = parseFloat(idea.change);
-  const isPositive = changeVal >= 0;
-  const changeClass = isPositive ? 'positive' : 'negative';
-  const changeText = idea.change ? `${isPositive ? '+' : ''}${idea.change}%` : '–';
-  const priceText = idea.price ? `${idea.currency}${parseFloat(idea.price).toLocaleString('de-DE')}` : 'Kurs lädt...';
-
-  const riskDots = Array.from({ length: 5 }, (_, i) =>
-    `<div class="risk-dot ${i < idea.risk ? 'filled' : ''}"></div>`
-  ).join('');
-
-  const labelClass = {
-    growth: 'label-growth', dividend: 'label-dividend', etf: 'label-etf',
-    crypto: 'label-crypto', defensive: 'label-defensive'
-  }[idea.category] || 'label-growth';
-
-  const labelText = {
-    growth: '📈 Wachstum', dividend: '💰 Dividende', etf: '🗂️ ETF',
-    crypto: '₿ Krypto', defensive: '🛡️ Defensiv'
-  }[idea.category] || idea.category;
-
-  return `
-    <div class="idea-card" onclick="openIdeaDetail(${JSON.stringify(idea).replace(/"/g, '&quot;')})">
-      <div class="idea-card-top">
-        <div>
-          <div class="idea-ticker">${idea.ticker}</div>
-          <div class="idea-name">${idea.name}</div>
-          <div class="idea-price">${priceText}</div>
-        </div>
-        <div>
-          <span class="idea-change ${changeClass}">${changeText}</span>
-        </div>
-      </div>
-      <div class="idea-reason">${idea.reason.substring(0, 120)}...</div>
-      <div class="idea-footer">
-        <span class="label ${labelClass}">${labelText}</span>
-        <div class="risk-indicator" title="Risikolevel ${idea.risk}/5">${riskDots}</div>
-      </div>
-    </div>
-  `;
-}
-
-// ================================================================
-// IDEEN FILTERN nach Kategorie
-// ================================================================
-function filterIdeas(category, btn) {
-  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  // Vereinfacht – in einer echten App würde hier neu gefiltert
-}
-
-// ================================================================
-// STRATEGIE-IDEEN RENDERN (nur Premium)
-// ================================================================
-function renderStrategies() {
-  const strategies = [
-    { icon: '🛡️', name: 'Defensiver Aufbau', desc: 'Fokus auf stabile Unternehmen und Dividendenzahler. Wenig Schwankungen, verlässliche Renditen.' },
-    { icon: '🚀', name: 'Wachstumsorientiert', desc: 'Technologie und Wachstumsaktien. Höheres Risiko, mehr Renditepotenzial.' },
-    { icon: '🗂️', name: 'ETF-First', desc: 'Breite Diversifikation über kostengünstige ETFs als Kernbaustein.' },
-    { icon: '⚡', name: 'Offensiver Mix', desc: 'Kombination aus Wachstumsaktien und Krypto-Beimischung für maximale Rendite.' },
-    { icon: '₿', name: 'Krypto-Beimischung', desc: '5-10% Kryptoanteil als Beimischung zum klassischen Portfolio.' }
-  ];
-
-  const grid = document.getElementById('strategieGrid');
-  grid.innerHTML = strategies.map(s => `
-    <div class="strategie-card">
-      <div class="strategie-icon">${s.icon}</div>
-      <div class="strategie-name">${s.name}</div>
-      <div class="strategie-desc">${s.desc}</div>
-    </div>
-  `).join('');
-
-  document.getElementById('strategieSection').classList.remove('hidden');
-}
-
-// ================================================================
-// CHANCEN LADEN – Premium Feed
-// Alpha Vantage + statische Chancen kombiniert
-// ================================================================
-async function loadChancen() {
-  const grid = document.getElementById('chancenGrid');
-
-  // Chancen aus Supabase laden (von Admin eingepflegt oder generiert)
-  const { data: dbChancen, error } = await supabase
-    .from('chancen')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(20);
-
-  // Falls keine DB-Chancen vorhanden, Beispieldaten verwenden
-  const chancen = (dbChancen && dbChancen.length > 0) ? dbChancen : getDefaultChancen();
-
-  appState.allChancen = chancen;
-  appState.filteredChancen = chancen;
-
-  // Kursdaten anreichern
-  await enrichChancenWithPrices(chancen);
-
-  // Stats aktualisieren
-  document.getElementById('statChancen').textContent = chancen.length;
-  document.getElementById('statNeu').textContent = chancen.filter(c =>
-    new Date(c.created_at) > new Date(Date.now() - 86400000)
-  ).length;
-  document.getElementById('statMarkt').textContent = '📈 Positiv';
-  document.getElementById('lastUpdateTime').textContent =
-    '🕐 Zuletzt aktualisiert: ' + new Date().toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
-
-  renderChancen(chancen);
-}
-
-// ================================================================
-// STANDARD-CHANCEN (Fallback wenn DB leer)
-// ================================================================
-function getDefaultChancen() {
-  return [
-    {
-      id: 1, ticker: 'NVDA', name: 'NVIDIA Corporation', category: 'growth',
-      title: 'Neue Marktchance entdeckt',
-      why: 'Die Aktie ist nach den letzten Zahlen leicht gefallen, während das Wachstum im KI-Bereich weiterhin stark bleibt. Das Verhältnis zwischen Wachstum und Bewertung hat sich dadurch leicht verbessert.',
-      risk: 'Hohe Bewertung bleibt bestehen. Starke Schwankungen möglich. Abhängigkeit vom KI-Investmentzyklus.',
-      risk_level: 4,
-      news: ['Q3 Zahlen übertreffen Erwartungen', 'Neue Blackwell GPU Architektur angekündigt', 'Datacenter-Umsatz +122% YoY'],
-      chances: ['Dominante Position im KI-Chip-Markt', 'Wachsendes Software-Ökosystem (CUDA)', 'Neue Märkte: Automotive, Healthcare'],
-      risks: ['Sehr hohe Bewertung (KGV >30)', 'Zykliziät der Chip-Branche', 'Konkurrenz durch AMD, Intel'],
-      fit: 'Wachstumsorientierte Anleger mit 3+ Jahren Horizont und Toleranz für hohe Schwankungen.',
-      industry: 'Technologie / KI', horizon: 'Mittel bis Lang',
-      created_at: new Date().toISOString(), price: null, change: null
-    },
-    {
-      id: 2, ticker: 'IWDA', name: 'iShares Core MSCI World', category: 'etf',
-      title: 'Solide ETF-Basisposition',
-      why: 'Nach den jüngsten Marktkorrekturen könnte dieser global diversifizierte ETF einen attraktiven Einstiegspunkt bieten. Historisch hat der MSCI World langfristig solide Renditen geliefert.',
-      risk: 'Marktrisiko. Wechselkursrisiko USD/EUR. Kurzfristige Schwankungen möglich.',
-      risk_level: 2,
-      news: ['Globale Märkte erholen sich', 'US-Zinssenkungen erwartet', 'Emerging Markets wachsen'],
-      chances: ['Breite Diversifikation über 1.600+ Titel', 'Sehr günstige TER (0,20%)', 'Langfristiger Vermögensaufbau'],
-      risks: ['USA-Übergewichtung (~70%)', 'Keine Überrendite gegenüber Markt', 'Wechselkursrisiko'],
-      fit: 'Anleger aller Erfahrungsstufen als Kernposition. Ideal für langfristigen Horizont (5+ Jahre).',
-      industry: 'Global / Diversifiziert', horizon: 'Lang',
-      created_at: new Date().toISOString(), price: null, change: null
-    },
-    {
-      id: 3, ticker: 'META', name: 'Meta Platforms', category: 'growth',
-      title: 'Tech-Chance nach Konsolidierung',
-      why: 'Meta hat durch massiven Stellenabbau und Kostenoptimierung die Profitabilität deutlich gesteigert. KI-Integration in alle Produkte zeigt erste Ergebnisse. Bewertung attraktiver als viele Tech-Peers.',
-      risk: 'Regulatorische Risiken in EU und USA. Metaverse-Investitionen mit ungewissem Ausgang.',
-      risk_level: 3,
-      news: ['Llama KI-Modell zeigt Stärke', 'Werbeumsätze besser als erwartet', 'Threads wächst stark'],
-      chances: ['3 Milliarden Daily Active Users', 'KI-gestützte Werbetargeting verbessert', 'WhatsApp Monetarisierung beginnt'],
-      risks: ['EU Digital Markets Act', 'Jugendschutz-Regulierung', 'Metaverse-Verluste fortlaufend'],
-      fit: 'Wachstumsorientierte Anleger mit mittlerem bis hohem Risikobewusstsein.',
-      industry: 'Social Media / Werbung', horizon: 'Mittel bis Lang',
-      created_at: new Date(Date.now() - 3600000).toISOString(), price: null, change: null
-    },
-    {
-      id: 4, ticker: 'KO', name: 'Coca-Cola Company', category: 'dividend',
-      title: 'Stabile Dividendenperle',
-      why: 'Coca-Cola hat seit über 60 Jahren die Dividende erhöht – selbst in Rezessionen. In einem unsicheren Marktumfeld könnte die defensive Qualität des Unternehmens attraktiv sein.',
-      risk: 'Sehr begrenztes Wachstumspotenzial. Zuckersteuern in verschiedenen Ländern.',
-      risk_level: 1,
-      news: ['Dividende erneut erhöht (+5%)', 'Expansion in Schwellenländer', 'Portfolio-Diversifikation'],
-      chances: ['Über 60 Jahre Dividendenwachstum', 'Rezessionssichere Produkte', 'Globale Markenbekanntheit'],
-      risks: ['Sehr begrenzte Wachstumsrate', 'Gesundheitstrends gegen Zucker', 'Abhängigkeit von Emerging Markets'],
-      fit: 'Konservative Anleger, Dividendenfokus, alle Erfahrungsstufen.',
-      industry: 'Konsumgüter / Getränke', horizon: 'Lang',
-      created_at: new Date(Date.now() - 7200000).toISOString(), price: null, change: null
-    },
-    {
-      id: 5, ticker: 'AMZN', name: 'Amazon', category: 'growth',
-      title: 'Cloud & KI Kombi-Chance',
-      why: 'Amazon Web Services beschleunigt wieder sein Wachstum. Das Advertising-Geschäft wächst profitabel. KI-Angebote (Bedrock, Q) gewinnen Enterprise-Kunden.',
-      risk: 'Regulatorisches Risiko. E-Commerce-Margendruck. Starker Wettbewerb im Cloud-Markt.',
-      risk_level: 3,
-      news: ['AWS Wachstum beschleunigt sich', 'Neue KI-Infrastruktur angekündigt', 'Same-Day Delivery ausgebaut'],
-      chances: ['AWS Marktführer im Cloud-Bereich', 'Prime Ökosystem bindet Kunden', 'KI-Integration in alle Services'],
-      risks: ['Antitrust-Untersuchungen', 'Margin-Druck im Retail', 'Capex-intensiv'],
-      fit: 'Wachstumsorientierte Anleger mit 2-5 Jahren Horizont.',
-      industry: 'Cloud / E-Commerce', horizon: 'Mittel bis Lang',
-      created_at: new Date(Date.now() - 10800000).toISOString(), price: null, change: null
-    },
-    {
-      id: 6, ticker: 'BTC', name: 'Bitcoin', category: 'crypto',
-      title: 'Krypto-Beimischung: Bitcoin',
-      why: 'Bitcoin ETF-Zulassung in den USA hat institutionelle Adoption beschleunigt. Das Halving im April 2024 hat das Angebot reduziert. Als "digitales Gold" könnten regulatorische Klarheiten weitere Institutionen anziehen.',
-      risk: 'Extreme Volatilität. Kein innerer Wert. Regulatorisches Risiko weltweit.',
-      risk_level: 5,
-      news: ['Spot-ETF Zuflüsse weiterhin stark', 'Halving reduziert Mining-Reward', 'MicroStrategy kauft weiter'],
-      chances: ['Institutionelle Adoption wächst', 'Begrenztes Angebot (21 Mio.)', 'Store of Value Narrativ'],
-      risks: ['50-80% Kursrückgänge historisch möglich', 'Quantum Computing Bedrohung langfristig', 'Regulierung jederzeit möglich'],
-      fit: 'Nur als kleine Beimischung (max. 5-10%) für Anleger mit sehr hoher Risikobereitschaft.',
-      industry: 'Kryptowährung', horizon: 'Mittel bis Lang',
-      created_at: new Date(Date.now() - 14400000).toISOString(), price: null, change: null
-    }
-  ];
-}
-
-// ================================================================
-// CHANCEN MIT PREISEN ANREICHERN (Alpha Vantage)
-// ================================================================
-async function enrichChancenWithPrices(chancen) {
-  for (let chance of chancen) {
-    if (chance.price) continue; // Bereits vorhanden
-
-    try {
-      const response = await fetch(
-        `${CONFIG.alphaVantage.baseUrl}?function=GLOBAL_QUOTE&symbol=${chance.ticker}&apikey=${CONFIG.alphaVantage.key}`
-      );
-      const data = await response.json();
-      const quote = data['Global Quote'];
-
-      if (quote && quote['05. price']) {
-        chance.price = parseFloat(quote['05. price']).toFixed(2);
-        chance.change = parseFloat(quote['10. change percent']).toFixed(2);
-        chance.currency = chance.ticker.includes('.DE') ? '€' : '$';
-      }
-    } catch { /* Silent fail – Fallback auf "–" */ }
-
-    await new Promise(r => setTimeout(r, 200));
-  }
-}
-
-// ================================================================
-// CHANCEN RENDERN
-// ================================================================
-function renderChancen(chancen) {
-  const grid = document.getElementById('chancenGrid');
-
-  if (chancen.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column:1/-1">
-        <div class="empty-state">
-          <div class="empty-icon">⚡</div>
-          <h3>Keine Chancen gefunden</h3>
-          <p>Für diesen Filter gibt es aktuell keine Chancen.</p>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  grid.innerHTML = chancen.map(chance => createChanceCardHTML(chance)).join('');
-}
-
-// ================================================================
-// CHANCE-KARTE HTML ERSTELLEN
-// ================================================================
-function createChanceCardHTML(chance) {
-  const changeVal = parseFloat(chance.change);
-  const isPositive = !isNaN(changeVal) && changeVal >= 0;
-  const changeText = chance.change ? `${isPositive ? '+' : ''}${chance.change}%` : '–';
-  const priceText = chance.price
-    ? `${chance.currency || '$'}${parseFloat(chance.price).toLocaleString('de-DE', { minimumFractionDigits: 2 })}`
-    : '–';
-
-  const categoryLabel = {
-    growth: '📈 Wachstum', defensive: '🛡️ Defensiv', dividend: '💰 Dividende',
-    etf: '🗂️ ETF', crypto: '₿ Krypto', speculative: '⚡ Spekulativ'
-  }[chance.category] || chance.category;
-
-  const labelClass = {
-    growth: 'label-growth', defensive: 'label-defensive', dividend: 'label-dividend',
-    etf: 'label-etf', crypto: 'label-crypto', speculative: 'label-chance'
-  }[chance.category] || 'label-growth';
-
-  // Zeitstempel
-  const timeAgo = getTimeAgo(new Date(chance.created_at));
-
-  return `
-    <div class="chance-card">
-      <!-- Karten-Header mit Asset-Info -->
-      <div class="chance-card-header">
-        <div class="chance-card-title">✨ ${chance.title || 'Neue Marktchance entdeckt'}</div>
-        <div class="chance-asset-name">${chance.name}</div>
-        <div class="chance-asset-ticker">${chance.ticker} · ${chance.industry || ''}</div>
-        <div class="chance-price-row">
-          <span class="chance-price">${priceText}</span>
-          <span class="idea-change ${isPositive ? 'positive' : 'negative'}">${changeText} heute</span>
-          <span style="font-size:0.75rem;color:var(--text-dim);margin-left:auto">${timeAgo}</span>
-        </div>
-      </div>
-
-      <!-- Karten-Body mit Begründung und Risiko -->
-      <div class="chance-card-body">
-        <div class="chance-why">
-          <strong style="font-size:0.8rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">
-            🔍 Warum könnte das interessant sein?
-          </strong><br/>
-          <span style="margin-top:0.5rem;display:block">${chance.why}</span>
-        </div>
-        <div class="chance-risk">
-          <strong>⚠️ Risiko:</strong> ${chance.risk}
-        </div>
-        <div class="chance-meta">
-          <span class="label ${labelClass}">${categoryLabel}</span>
-          <span class="label" style="background:rgba(100,116,139,0.1);color:var(--text-muted)">
-            🕐 ${chance.horizon || 'Mittel'}
-          </span>
-        </div>
-      </div>
-
-      <!-- CTA Button -->
-      <div class="chance-card-footer">
-        <button class="btn-chance" onclick="openChanceDetail(${chance.id})">
-          Chance ansehen →
-        </button>
-      </div>
-    </div>
-  `;
-}
-
-// ================================================================
-// CHANCEN FILTERN
-// ================================================================
-function filterChancen(category, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  if (category === 'all') {
-    appState.filteredChancen = appState.allChancen;
-  } else {
-    appState.filteredChancen = appState.allChancen.filter(c => c.category === category);
-  }
-
-  renderChancen(appState.filteredChancen);
-}
-
-// ================================================================
-// CHANCE DETAIL ÖFFNEN
-// ================================================================
-function openChanceDetail(chanceId) {
-  const chance = appState.allChancen.find(c => c.id === chanceId);
-  if (!chance) return;
-
-  appState.currentChance = chance;
-
-  // Header befüllen
-  const changeVal = parseFloat(chance.change);
-  const isPositive = !isNaN(changeVal) && changeVal >= 0;
-  const priceText = chance.price
-    ? `${chance.currency || '$'}${parseFloat(chance.price).toLocaleString('de-DE', { minimumFractionDigits: 2 })}`
-    : '–';
-
-  document.getElementById('detailHero').innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem">
-      <div>
-        <div style="font-size:0.8rem;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem">
-          ${chance.industry || ''}
-        </div>
-        <div class="detail-asset-name">${chance.name}</div>
-        <div style="color:var(--text-muted);font-size:0.9rem;margin-top:0.25rem">${chance.ticker}</div>
-        <div class="detail-price-row">
-          <span class="detail-price">${priceText}</span>
-          <span class="idea-change ${isPositive ? 'positive' : 'negative'}">
-            ${chance.change ? `${isPositive ? '+' : ''}${chance.change}% heute` : '–'}
-          </span>
-        </div>
-      </div>
-      <button onclick="addToWatchlist('${chance.ticker}', '${chance.name}')"
-              style="padding:0.75rem 1.25rem;border:1px solid var(--border-active);border-radius:8px;background:transparent;color:var(--primary);cursor:pointer;font-weight:600">
-        + Watchlist
-      </button>
-    </div>
-  `;
-
-  // Warum interessant
-  document.getElementById('detailWhyText').textContent = chance.why;
-
-  // News
-  const newsList = document.getElementById('detailNewsList');
-  if (chance.news && Array.isArray(chance.news)) {
-    newsList.innerHTML = chance.news.map(n =>
-      `<li>📰 ${n}</li>`
-    ).join('');
-  }
-
-  // Chancen
-  const chancesList = document.getElementById('detailChances');
-  if (chance.chances && Array.isArray(chance.chances)) {
-    chancesList.innerHTML = chance.chances.map(c =>
-      `<li><span style="color:var(--accent)">✓</span> ${c}</li>`
-    ).join('');
-  }
-
-  // Risiken
-  const risksList = document.getElementById('detailRisks');
-  if (chance.risks && Array.isArray(chance.risks)) {
-    risksList.innerHTML = chance.risks.map(r =>
-      `<li><span style="color:var(--danger)">!</span> ${r}</li>`
-    ).join('');
-  }
-
-  // Für wen passt das
-  document.getElementById('detailFitText').textContent = chance.fit || '';
-
-  // Alternativen (ähnliche Chancen)
-  const alternatives = appState.allChancen
-    .filter(c => c.id !== chanceId && c.category === chance.category)
-    .slice(0, 3);
-
-  const altContainer = document.getElementById('detailAlternatives');
-  altContainer.innerHTML = alternatives.length > 0
-    ? alternatives.map(alt => `
-        <div class="idea-card" onclick="openChanceDetail(${alt.id})" style="cursor:pointer">
-          <div style="font-weight:700">${alt.name}</div>
-          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.25rem">${alt.ticker}</div>
-          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem">${alt.why.substring(0, 80)}...</div>
-        </div>
-      `).join('')
-    : '<p style="color:var(--text-muted);font-size:0.9rem">Keine ähnlichen Chancen gefunden.</p>';
-
-  showPage('detail');
-}
-
-// ================================================================
-// IDEEN DETAIL ÖFFNEN (von Ergebnisseite)
-// ================================================================
-function openIdeaDetail(idea) {
-  // Idee als temporäre Chance behandeln
-  const tempChance = {
-    id: Math.random(),
-    ...idea,
-    why: idea.reason,
-    risk: idea.risk_hint,
-    news: ['Basierend auf aktuellen Marktdaten'],
-    chances: [idea.reason],
-    risks: [idea.risk_hint],
-    fit: `Passend für ${appState.answers.risk} Risikotypen.`,
-    industry: idea.context
-  };
-
-  appState.allChancen = [...appState.allChancen, tempChance];
-  openChanceDetail(tempChance.id);
-}
-
-// ================================================================
-// WATCHLIST
-// ================================================================
-async function loadWatchlist() {
-  if (!appState.user) return;
-
-  const { data } = await supabase
-    .from('watchlist')
-    .select('*')
-    .eq('user_id', appState.user.id);
-
-  appState.watchlist = data || [];
-  document.getElementById('statWatchlist').textContent = appState.watchlist.length;
-}
-
-function renderWatchlist() {
-  const container = document.getElementById('watchlistItems');
-  if (appState.watchlist.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">🔖</div>
-        <h3>Noch nichts gespeichert</h3>
-        <p>Füge Aktien und ETFs aus den Chancen hinzu, um sie hier zu verfolgen.</p>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = appState.watchlist.map(item => `
-    <div class="watchlist-item">
-      <div>
-        <div style="font-weight:700">${item.name}</div>
-        <div style="font-size:0.85rem;color:var(--text-muted);margin-top:0.2rem">${item.ticker}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:1rem">
-        <div style="text-align:right">
-          <div style="font-weight:700">${item.price ? `$${item.price}` : '–'}</div>
-          <div style="font-size:0.8rem;color:var(--text-muted)">Kurs</div>
-        </div>
-        <button onclick="removeFromWatchlist('${item.ticker}')"
-                style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);padding:0.4rem 0.75rem;cursor:pointer;font-size:0.8rem">
-          Entfernen
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-async function addToWatchlist(ticker, name) {
-  if (!appState.user) { openAuthModal('login'); return; }
-  if (!appState.isPremium) { openStripeModal(); return; }
-
-  // Bereits in Watchlist?
-  if (appState.watchlist.find(w => w.ticker === ticker)) {
-    showToast(`${ticker} ist bereits in deiner Watchlist.`, 'info');
-    return;
-  }
-
-  const { data, error } = await supabase.from('watchlist').insert({
-    user_id: appState.user.id,
-    ticker,
-    name,
-    added_at: new Date().toISOString()
-  }).select().single();
-
-  if (!error && data) {
-    appState.watchlist.push(data);
-    document.getElementById('statWatchlist').textContent = appState.watchlist.length;
-    showToast(`${name} zur Watchlist hinzugefügt! 🔖`, 'success');
-  }
-}
-
-async function removeFromWatchlist(ticker) {
-  await supabase.from('watchlist').delete()
-    .eq('user_id', appState.user.id)
-    .eq('ticker', ticker);
-
-  appState.watchlist = appState.watchlist.filter(w => w.ticker !== ticker);
-  renderWatchlist();
-  document.getElementById('statWatchlist').textContent = appState.watchlist.length;
-  showToast('Aus Watchlist entfernt.', 'info');
-}
-
-function showAddToWatchlist() {
-  const ticker = prompt('Ticker eingeben (z.B. AAPL):');
-  if (ticker) addToWatchlist(ticker.toUpperCase(), ticker.toUpperCase());
-}
-
-// ================================================================
-// ALERT EINSTELLUNGEN
-// ================================================================
-function loadAlertSettingsUI() {
-  const settings = appState.alertSettings;
-  if (document.getElementById('alertToggle')) {
-    document.getElementById('alertToggle').checked = settings.enabled;
-    document.getElementById('importantOnlyToggle').checked = settings.importantOnly;
-    document.getElementById('priceAlertToggle').checked = settings.priceAlerts;
-  }
-
-  // Aktiven Frequenz-Button markieren
-  document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
-  const freqBtn = document.getElementById(`freq-${settings.frequency}`);
-  if (freqBtn) freqBtn.classList.add('active');
-}
-
-function setFrequency(freq) {
-  appState.alertSettings.frequency = freq;
-  document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`freq-${freq}`).classList.add('active');
-  saveAlertSettings();
-}
-
-async function saveAlertSettings() {
-  appState.alertSettings = {
-    enabled: document.getElementById('alertToggle').checked,
-    importantOnly: document.getElementById('importantOnlyToggle').checked,
-    priceAlerts: document.getElementById('priceAlertToggle').checked,
-    frequency: appState.alertSettings.frequency
-  };
-
-  if (appState.user) {
-    await supabase.from('profiles').update({
-      alert_settings: appState.alertSettings
-    }).eq('id', appState.user.id);
-  }
-
-  showToast('Einstellungen gespeichert ✓', 'success');
-}
-
-// ================================================================
-// PROFIL SPEICHERN
-// ================================================================
-async function saveProfile() {
-  if (!appState.user) return;
-
-  const name = document.getElementById('settingsName').value.trim();
-
-  const { error } = await supabase.from('profiles').update({ name }).eq('id', appState.user.id);
-
-  if (!error) {
-    if (appState.profile) appState.profile.name = name;
-    document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
-    updateProfilePage();
-    showToast('Profil gespeichert ✓', 'success');
-  }
-}
-
-// ================================================================
-// STRIPE – CHECKOUT INITIIEREN
-// ================================================================
-async function initiateStripeCheckout() {
-  if (!appState.user) {
-    closeStripeModal();
-    openAuthModal('login');
-    return;
-  }
-
-  // Loading-State
-  const btn = document.querySelector('.stripe-modal .btn-primary');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loading-spinner"></span> Weiterleitung zu Stripe...';
-
-  try {
-    // Stripe Checkout Session über Supabase Edge Function erstellen
-    // Die Edge Function erstellt eine Stripe Session mit dem echten Price
-    const { data, error } = await supabase.functions.invoke('create-checkout', {
-      body: {
-        user_id: appState.user.id,
-        email: appState.user.email,
-        price_id: CONFIG.stripe.priceId,
-        success_url: `${window.location.origin}${window.location.pathname}?success=true`,
-        cancel_url: `${window.location.origin}${window.location.pathname}?canceled=true`
-      }
+    document.querySelectorAll('.modal-overlay').forEach((overlay) => {
+      overlay.addEventListener('click', (event) => {
+        if (event.target !== overlay) return;
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+      });
     });
 
-    if (error || !data?.url) {
-      // Fallback: Direkte Stripe.js Integration
-      await fallbackStripeCheckout();
-    } else {
-      // Weiterleitung zur Stripe-gehosteten Checkout-Seite
-      window.location.href = data.url;
-    }
-  } catch (err) {
-    await fallbackStripeCheckout();
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = '🔒 Sicher bezahlen mit Stripe';
-}
-
-// ================================================================
-// STRIPE FALLBACK – Direkter Stripe.js Checkout
-// ================================================================
-async function fallbackStripeCheckout() {
-  const stripe = Stripe(CONFIG.stripe.publishableKey);
-
-  // Im Testmodus: Direkte Weiterleitung zum Stripe Billing Portal
-  // oder Test-Checkout-Session
-  showToast('Stripe Testmodus: Bitte konfiguriere einen echten Price ID im Stripe Dashboard.', 'info');
-
-  // Für echten Einsatz: Edge Function aufrufen
-  // const session = await createStripeSession();
-  // stripe.redirectToCheckout({ sessionId: session.id });
-}
-
-// ================================================================
-// STRIPE SUCCESS HANDLER – Nach erfolgreicher Zahlung
-// ================================================================
-async function handleStripeSuccess() {
-  if (!appState.user) return;
-
-  // Premium im Profil aktivieren
-  await supabase.from('profiles').update({ is_premium: true }).eq('id', appState.user.id);
-
-  appState.isPremium = true;
-  if (appState.profile) appState.profile.is_premium = true;
-
-  // URL bereinigen
-  window.history.replaceState({}, '', window.location.pathname);
-
-  // UI aktualisieren
-  document.getElementById('navChancen').classList.remove('hidden');
-  updateProfilePage();
-  updatePremiumStatusCard();
-
-  // Willkommens-E-Mail über Resend (via Supabase Edge Function)
-  await sendWelcomeEmail();
-
-  showToast('🎉 AnlageKompass Plus aktiviert! Willkommen!', 'success');
-  showPage('chancen');
-}
-
-// ================================================================
-// E-MAIL SENDEN über Resend (via Supabase Edge Function)
-// Die API Keys sind NUR server-seitig in der Edge Function
-// ================================================================
-async function sendWelcomeEmail() {
-  if (!appState.user?.email) return;
-
-  try {
-    await supabase.functions.invoke('send-email', {
-      body: {
-        type: 'welcome',
-        to: appState.user.email,
-        name: appState.profile?.name || 'Investor',
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeAuthModal();
+        closePremiumModal();
+        closeLegalModal();
       }
     });
-  } catch { /* Silent fail */ }
-}
-
-async function sendChanceAlert(chance) {
-  // Nur an User mit aktivierten Alerts senden
-  // Wird normalerweise serverseitig/via Cron Job aufgerufen
-  try {
-    await supabase.functions.invoke('send-email', {
-      body: {
-        type: 'chance_alert',
-        to: appState.user.email,
-        name: appState.profile?.name || 'Investor',
-        chance
-      }
-    });
-    showToast('Alert-E-Mail gesendet! 📬', 'success');
-  } catch {
-    showToast('E-Mail konnte nicht gesendet werden.', 'error');
-  }
-}
-
-// ================================================================
-// AUTH MODAL MANAGEMENT
-// ================================================================
-function openAuthModal(tab = 'login') {
-  document.getElementById('authModal').classList.add('open');
-  switchAuthTab(tab);
-}
-
-function closeAuthModal() {
-  document.getElementById('authModal').classList.remove('open');
-}
-
-function switchAuthTab(tab) {
-  document.getElementById('loginTab').classList.toggle('active', tab === 'login');
-  document.getElementById('registerTab').classList.toggle('active', tab === 'register');
-  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-  document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
-  hideAuthMessages();
-}
-
-function showAuthError(msg) {
-  const el = document.getElementById('authError');
-  el.textContent = msg;
-  el.style.display = 'block';
-  document.getElementById('authSuccess').style.display = 'none';
-}
-
-function showAuthSuccess(msg) {
-  const el = document.getElementById('authSuccess');
-  el.textContent = msg;
-  el.style.display = 'block';
-  document.getElementById('authError').style.display = 'none';
-}
-
-function hideAuthMessages() {
-  document.getElementById('authError').style.display = 'none';
-  document.getElementById('authSuccess').style.display = 'none';
-}
-
-// Klick außerhalb schließt Modal
-document.getElementById('authModal').addEventListener('click', function(e) {
-  if (e.target === this) closeAuthModal();
-});
-
-// ================================================================
-// STRIPE MODAL MANAGEMENT
-// ================================================================
-function openStripeModal() {
-  document.getElementById('stripeModal').classList.add('open');
-}
-
-function closeStripeModal() {
-  document.getElementById('stripeModal').classList.remove('open');
-}
-
-document.getElementById('stripeModal').addEventListener('click', function(e) {
-  if (e.target === this) closeStripeModal();
-});
-
-// ================================================================
-// TOAST NOTIFICATIONS
-// ================================================================
-function showToast(message, type = 'info') {
-  const container = document.getElementById('toastContainer');
-  const icons = { success: '✅', error: '❌', info: '💡' };
-
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.innerHTML = `
-    <span style="font-size:1.1rem">${icons[type]}</span>
-    <span style="font-size:0.875rem">${message}</span>
-  `;
-
-  container.appendChild(toast);
-
-  // Auto-remove nach 4 Sekunden
-  setTimeout(() => {
-    toast.style.animation = 'slideIn 0.3s ease reverse';
-    setTimeout(() => toast.remove(), 300);
-  }, 4000);
-}
-
-// ================================================================
-// HILFSFUNKTIONEN
-// ================================================================
-function getTimeAgo(date) {
-  const diff = Date.now() - date.getTime();
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-
-  if (hours < 1) return 'Gerade eben';
-  if (hours < 24) return `vor ${hours} Std.`;
-  if (days === 1) return 'Gestern';
-  return `vor ${days} Tagen`;
-}
-
-// Keyboard Shortcut: ESC schließt Modals
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeAuthModal();
-    closeStripeModal();
-  }
-});
-
-// ================================================================
-// APP STARTEN
-// ================================================================
-init();
-
-</script>
-
-<!-- ================================================================
-     SUPABASE EDGE FUNCTIONS – SQL SETUP
-     
-     Führe diese SQL-Befehle in deinem Supabase SQL-Editor aus:
-     
-     -- Profiles Tabelle
-     CREATE TABLE profiles (
-       id UUID REFERENCES auth.users PRIMARY KEY,
-       email TEXT,
-       name TEXT,
-       is_premium BOOLEAN DEFAULT FALSE,
-       alert_settings JSONB DEFAULT '{}',
-       created_at TIMESTAMPTZ DEFAULT NOW()
-     );
-     
-     -- Watchlist Tabelle
-     CREATE TABLE watchlist (
-       id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-       user_id UUID REFERENCES auth.users,
-       ticker TEXT,
-       name TEXT,
-       price TEXT,
-       added_at TIMESTAMPTZ DEFAULT NOW()
-     );
-     
-     -- Chancen Tabelle (Admin befüllt)
-     CREATE TABLE chancen (
-       id BIGSERIAL PRIMARY KEY,
-       ticker TEXT,
-       name TEXT,
-       category TEXT,
-       title TEXT,
-       why TEXT,
-       risk TEXT,
-       risk_level INTEGER,
-       news JSONB,
-       chances JSONB,
-       risks JSONB,
-       fit TEXT,
-       industry TEXT,
-       horizon TEXT,
-       price TEXT,
-       change TEXT,
-       currency TEXT,
-       created_at TIMESTAMPTZ DEFAULT NOW()
-     );
-     
-     -- Analysen Tabelle
-     CREATE TABLE analyses (
-       id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-       user_id UUID REFERENCES auth.users,
-       risk_type TEXT,
-       horizon TEXT,
-       amount INTEGER,
-       interests JSONB,
-       experience TEXT,
-       created_at TIMESTAMPTZ DEFAULT NOW()
-     );
-     
-     -- Row Level Security aktivieren
-     ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-     ALTER TABLE watchlist ENABLE ROW LEVEL SECURITY;
-     ALTER TABLE analyses ENABLE ROW LEVEL SECURITY;
-     
-     -- Policies
-     CREATE POLICY "Users can manage own profile" ON profiles FOR ALL USING (auth.uid() = id);
-     CREATE POLICY "Users can manage own watchlist" ON watchlist FOR ALL USING (auth.uid() = user_id);
-     CREATE POLICY "Users can manage own analyses" ON analyses FOR ALL USING (auth.uid() = user_id);
-     CREATE POLICY "Everyone can read chancen" ON chancen FOR SELECT USING (true);
-================================================================ -->
-
+  </script>
 </body>
 </html>
