@@ -1191,7 +1191,8 @@
       try {
         const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (error) {
-          showError(mapAuthError(error.message));
+          console.error('Supabase login error:', error);
+          showError(error.message || JSON.stringify(error));
         } else {
           showSuccess('Anmeldung erfolgreich. Dein Konto ist jetzt verbunden.');
           setTimeout(() => closeAuthModal(), 900);
@@ -1245,7 +1246,8 @@
         });
 
         if (error) {
-          showError(mapAuthError(error.message));
+          console.error('Supabase signUp error:', error);
+          showError(error.message || JSON.stringify(error));
           return;
         }
 
