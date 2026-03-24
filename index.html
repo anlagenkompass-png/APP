@@ -3,1292 +3,2012 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AnlageKompass – Investment-Ideen mit Orientierung</title>
+  <title>AnlageKompass</title>
+
+  <!-- ============================================================
+       EXTERNE LIBS
+       - Supabase für Auth + Daten
+       - Chart.js für Kurschart auf Premium-Detailseite
+  ============================================================ -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    :root {
-      --bg: #030817;
-      --bg-soft: #071226;
-      --card: #0c162c;
-      --card-2: #0e1830;
-      --border: rgba(119, 144, 185, 0.18);
-      --border-strong: rgba(26, 182, 255, 0.72);
-      --text: #eef4fb;
-      --text-muted: #91a2bc;
-      --text-soft: #7890ad;
-      --brand-a: #1ea8ff;
-      --brand-b: #28d0b1;
-      --brand-c: #0fb4ff;
-      --success: #1fe2b0;
-      --radius: 22px;
-      --radius-sm: 14px;
-      --shadow: 0 18px 60px rgba(0, 0, 0, 0.32);
-      --glow: 0 0 0 1px rgba(22,169,255,0.18), 0 18px 60px rgba(0,0,0,0.24), 0 0 36px rgba(12,163,255,0.10);
+    :root{
+      --bg:#030817;
+      --bg-soft:#071226;
+      --card:#0c162c;
+      --card-2:#0e1830;
+      --line:rgba(117,141,181,.16);
+      --line-strong:rgba(26,182,255,.6);
+      --text:#eef4fb;
+      --muted:#91a2bc;
+      --muted-2:#6f86a4;
+      --blue:#1ea8ff;
+      --green:#28d0b1;
+      --success:#1fe2b0;
+      --danger:#ff6b7a;
+      --warning:#ffcb5b;
+      --radius:24px;
+      --radius-sm:16px;
+      --shadow:0 20px 60px rgba(0,0,0,.32);
+      --glow:0 0 0 1px rgba(22,169,255,.14), 0 0 36px rgba(12,163,255,.10);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       background:
-        radial-gradient(circle at 50% 26%, rgba(22, 177, 255, 0.12), transparent 26%),
-        radial-gradient(circle at 82% 8%, rgba(40, 208, 177, 0.06), transparent 18%),
-        linear-gradient(180deg, #030817 0%, #020614 100%);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .container {
-      width: min(1280px, calc(100% - 48px));
-      margin: 0 auto;
-    }
-
-    .nav-wrap {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(18px);
-      background: rgba(3, 8, 23, 0.84);
-      border-bottom: 1px solid rgba(133, 157, 196, 0.12);
-    }
-
-    .nav {
-      height: 76px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: inherit;
-      font-weight: 800;
-      font-size: 22px;
-      letter-spacing: -0.03em;
-    }
-
-    .brand-mark {
-      width: 22px;
-      height: 28px;
-      background: linear-gradient(180deg, #1da7ff 0%, #1ebeff 100%);
-      border-radius: 0;
-      box-shadow: 0 0 22px rgba(29, 167, 255, 0.24);
-      flex: 0 0 auto;
-    }
-
-    .brand-text {
-      color: #20c4ea;
-      text-shadow: 0 0 22px rgba(34, 198, 213, 0.05);
-    }
-
-    .nav-actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .btn {
-      appearance: none;
-      border: 1px solid transparent;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 15px;
-      line-height: 1;
-      cursor: pointer;
-      transition: 180ms ease;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      white-space: nowrap;
-    }
-
-    .btn-top-secondary {
-      min-width: 138px;
-      height: 46px;
-      padding: 0 20px;
-      border-color: rgba(27, 172, 255, 0.42);
-      background: rgba(5, 16, 34, 0.72);
-      color: #1db6ff;
-      box-shadow: inset 0 0 0 1px rgba(7, 24, 54, 0.42);
-    }
-
-    .btn-top-secondary:hover {
-      transform: translateY(-1px);
-      border-color: rgba(27, 172, 255, 0.65);
-      background: rgba(7, 22, 42, 0.88);
-    }
-
-    .btn-top-primary,
-    .btn-primary {
-      min-width: 176px;
-      height: 46px;
-      padding: 0 22px;
-      color: white;
-      background: linear-gradient(90deg, #20adff 0%, #23d0b1 100%);
-      box-shadow: 0 10px 28px rgba(16, 178, 232, 0.22);
-    }
-
-    .btn-top-primary:hover,
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.03);
-    }
-
-    .btn-hero-primary {
-      min-width: 252px;
-      height: 56px;
-      font-size: 16px;
-      border-radius: 16px;
-      color: white;
-      background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
-      box-shadow: 0 16px 44px rgba(12, 170, 235, 0.22);
-    }
-
-    .btn-hero-secondary {
-      min-width: 168px;
-      height: 56px;
-      font-size: 18px;
-      border-radius: 16px;
-      border-color: rgba(123, 143, 175, 0.16);
-      background: rgba(7, 16, 31, 0.55);
-      color: #f5f8fc;
-    }
-
-    .btn-hero-secondary:hover {
-      transform: translateY(-1px);
-      border-color: rgba(123, 143, 175, 0.28);
-    }
-
-    .hero {
-      min-height: 760px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 44px 0 84px;
-    }
-
-    .hero-inner {
-      width: min(980px, 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 22px;
-      margin-top: -20px;
-    }
-
-    .hero-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 34px;
-      padding: 0 22px;
-      border-radius: 999px;
-      color: #1eb6ff;
-      font-weight: 700;
-      font-size: 13px;
-      border: 1px solid rgba(26, 182, 255, 0.42);
-      background: rgba(7, 19, 40, 0.68);
-      box-shadow: inset 0 0 0 1px rgba(4, 13, 28, 0.55);
-    }
-
-    .hero h1 {
-      font-size: clamp(46px, 5.1vw, 72px);
-      line-height: 0.98;
-      letter-spacing: -0.055em;
-      font-weight: 900;
-      max-width: 920px;
-      background: linear-gradient(90deg, #f6f9fc 0%, #dfeefa 44%, #1ea9ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-wrap: balance;
-    }
-
-    .hero-copy {
-      max-width: 980px;
-      font-size: 18px;
-      line-height: 1.72;
-      color: var(--text-muted);
-      letter-spacing: -0.02em;
-      margin-top: 6px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      justify-content: center;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-
-    section.section {
-      padding: 42px 0 58px;
-    }
-
-    .section-head {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .section-head h2 {
-      font-size: clamp(28px, 2.6vw, 40px);
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-      font-weight: 900;
-      color: #f5f8fd;
-      margin-bottom: 14px;
-    }
-
-    .section-head p {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-
-    .feature-grid {
-      width: min(1260px, 100%);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 26px;
-      padding: 0 4px;
-    }
-
-    .feature-card {
-      background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      border-radius: 24px;
-      min-height: 228px;
-      padding: 30px 30px 28px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-    }
-
-    .feature-card .emoji {
-      font-size: 36px;
-      line-height: 1;
-      margin-bottom: 18px;
-      display: block;
-    }
-
-    .feature-card h3 {
-      font-size: 18px;
-      line-height: 1.2;
-      letter-spacing: -0.03em;
-      font-weight: 800;
-      color: #f6f8fc;
-      margin-bottom: 16px;
-    }
-
-    .feature-card p {
-      font-size: 16px;
-      line-height: 1.62;
-      color: var(--text-muted);
-    }
-
-    .compare-wrap {
-      padding-top: 12px;
-      padding-bottom: 18px;
-    }
-
-    .compare-box {
-      width: min(1120px, 100%);
-      margin: 0 auto;
-      background: linear-gradient(180deg, rgba(12,22,44,0.94), rgba(8,17,34,0.94));
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      border-radius: 30px;
-      padding: 28px 28px 18px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-    }
-
-    .compare-head {
-      display: grid;
-      grid-template-columns: 1.65fr 0.55fr 0.55fr;
-      gap: 16px;
-      padding: 0 0 12px;
-      color: var(--text-soft);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-
-    .compare-row {
-      display: grid;
-      grid-template-columns: 1.65fr 0.55fr 0.55fr;
-      gap: 16px;
-      align-items: center;
-      min-height: 64px;
-      border-top: 1px solid rgba(117, 141, 181, 0.12);
-      color: #eef4fb;
-      font-size: 17px;
-      line-height: 1.35;
-    }
-
-    .compare-feature {
-      font-weight: 700;
-      color: #eef4fb;
-      padding-right: 14px;
-    }
-
-    .compare-cell {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 19px;
-      font-weight: 700;
-    }
-
-    .compare-cell.yes {
-      color: #98f3d4;
-    }
-
-    .pricing-wrap {
-      padding-top: 36px;
-      padding-bottom: 90px;
-    }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 34px;
-      width: min(980px, 100%);
-      margin: 0 auto;
-      align-items: start;
-    }
-
-    .price-card {
-      position: relative;
-      background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(9,18,36,0.98));
-      border: 1px solid rgba(117, 141, 181, 0.18);
-      border-radius: 26px;
-      padding: 34px 34px 34px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-    }
-
-    .price-card.plus {
-      border-color: rgba(26, 182, 255, 0.9);
-      box-shadow: var(--glow);
-    }
-
-    .recommend {
-      position: absolute;
-      top: -16px;
-      left: 50%;
-      transform: translateX(-50%);
-      min-width: 198px;
-      height: 30px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 16px;
-      background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
-      color: white;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      box-shadow: 0 10px 26px rgba(19, 183, 223, 0.22);
-    }
-
-    .plan-name {
-      font-size: 22px;
-      line-height: 1.2;
-      letter-spacing: -0.04em;
-      font-weight: 800;
-      margin-bottom: 22px;
-      color: #f8fbff;
-    }
-
-    .price-line {
-      display: flex;
-      align-items: flex-end;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
-    .price {
-      font-size: 62px;
-      line-height: 0.95;
-      letter-spacing: -0.06em;
-      font-weight: 900;
-      color: #f7fbff;
-    }
-
-    .price-card.plus .price { color: #1eaaff; }
-
-    .per {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .feature-list {
-      list-style: none;
-      margin: 0 0 30px;
-    }
-
-    .feature-list li {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      min-height: 54px;
-      border-bottom: 1px solid rgba(117, 141, 181, 0.14);
-      color: var(--text-muted);
-      font-size: 18px;
-      line-height: 1.4;
-      padding-right: 6px;
-    }
-
-    .feature-list li:last-child { border-bottom: none; }
-    .feature-list li strong { color: #edf3fb; font-weight: 500; }
-    .feature-list li.available { color: #eef4fb; }
-
-    .tick, .minus {
-      width: 16px;
-      flex: 0 0 16px;
-      text-align: center;
-      font-size: 24px;
-      line-height: 1;
-      transform: translateY(-1px);
-    }
-
-    .tick { color: var(--success); }
-    .minus { color: #788ca7; }
-
-    .btn-card-secondary {
-      width: 100%;
-      height: 68px;
-      border-radius: 18px;
-      border-color: rgba(117, 141, 181, 0.16);
-      background: rgba(8, 16, 30, 0.56);
-      color: white;
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .btn-card-primary {
-      width: 100%;
-      height: 68px;
-      border-radius: 18px;
-      color: white;
-      font-size: 18px;
-      font-weight: 800;
-      background: linear-gradient(90deg, #1fafff 0%, #20cfb1 100%);
-      box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
-    }
-
-    .benefits {
-      width: min(980px, 100%);
-      margin: 14px auto 110px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-    }
-
-    .benefit-card {
-      background: linear-gradient(180deg, rgba(12,22,44,0.86), rgba(9,18,36,0.84));
-      border: 1px solid rgba(117, 141, 181, 0.14);
-      border-radius: 22px;
-      padding: 24px;
-    }
-
-    .benefit-card h4 {
-      font-size: 20px;
-      line-height: 1.2;
-      letter-spacing: -0.03em;
-      font-weight: 800;
-      margin-bottom: 10px;
-      color: #f4f8fe;
-    }
-
-    .benefit-card p {
-      color: var(--text-muted);
-      font-size: 15px;
-      line-height: 1.65;
-    }
-
-    .disclaimer {
-      width: min(980px, 100%);
-      margin: 0 auto 72px;
-      padding: 18px 22px;
-      border-radius: 18px;
-      background: rgba(12, 20, 38, 0.7);
-      border: 1px solid rgba(117, 141, 181, 0.12);
-      color: var(--text-soft);
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 7, 18, 0.72);
-      backdrop-filter: blur(12px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      z-index: 80;
-    }
-
-    .modal-overlay.open { display: flex; }
-
-    .modal {
-      width: min(100%, 500px);
-      background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(10,18,36,0.98));
-      border: 1px solid rgba(117, 141, 181, 0.2);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      padding: 28px;
-      position: relative;
-    }
-
-    .close {
-      position: absolute;
-      right: 18px;
-      top: 18px;
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      background: rgba(7, 16, 31, 0.56);
-      color: #d9e8f6;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .auth-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      background: rgba(6, 14, 28, 0.64);
-      border: 1px solid rgba(117, 141, 181, 0.12);
-      padding: 6px;
-      border-radius: 16px;
-      margin-bottom: 20px;
-    }
-
-    .auth-tab {
-      height: 42px;
-      border-radius: 12px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .auth-tab.active {
-      color: #f6fbff;
-      background: rgba(13, 24, 45, 0.98);
-    }
-
-    .modal h3 {
-      font-size: 30px;
-      line-height: 1.1;
-      letter-spacing: -0.04em;
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
-
-    .modal .intro {
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
-
-    .field-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .field { margin-bottom: 14px; }
-
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #cedced;
-    }
-
-    .field input {
-      width: 100%;
-      height: 52px;
-      border-radius: 14px;
-      border: 1px solid rgba(117, 141, 181, 0.18);
-      background: rgba(7, 16, 31, 0.66);
-      color: white;
-      padding: 0 16px;
-      font-size: 16px;
-      outline: none;
-    }
-
-    .field input:focus {
-      border-color: rgba(26, 182, 255, 0.64);
-      box-shadow: 0 0 0 4px rgba(26, 182, 255, 0.08);
-    }
-
-    .check-row {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      margin: 10px 0 20px;
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .check-row input {
-      width: 18px;
-      height: 18px;
-      margin-top: 2px;
-      accent-color: #1eb6ff;
-      flex: 0 0 auto;
-    }
-
-    .check-row button.linklike {
-      background: none;
-      border: none;
-      color: #29bbff;
-      cursor: pointer;
-      padding: 0;
-      font: inherit;
-    }
-
-    .submit-btn {
-      width: 100%;
-      height: 56px;
-      border-radius: 16px;
-      color: white;
-      font-size: 17px;
-      font-weight: 800;
-      background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
-    }
-
-    .auth-message {
-      display: none;
-      margin-bottom: 16px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-size: 14px;
-      line-height: 1.55;
-    }
-
-    .auth-message.error {
-      background: rgba(255, 75, 75, 0.12);
-      color: #ffb6b6;
-      border: 1px solid rgba(255, 87, 87, 0.22);
-    }
-
-    .auth-message.success {
-      background: rgba(31, 226, 176, 0.12);
-      color: #9cf6da;
-      border: 1px solid rgba(31, 226, 176, 0.22);
-    }
-
-    .hidden { display: none !important; }
-
-    .legal-modal {
-      width: min(100%, 780px);
-      max-height: min(82vh, 900px);
-      overflow: auto;
-    }
-
-    .legal-modal h3 { margin-bottom: 18px; }
-
-    .legal-modal h4 {
-      font-size: 18px;
-      margin: 22px 0 10px;
-      color: #f3f8ff;
-    }
-
-    .legal-modal p,
-    .legal-modal li {
-      color: var(--text-muted);
-      line-height: 1.75;
-      font-size: 15px;
-    }
-
-    .legal-modal ul { padding-left: 20px; }
-
-    @media (max-width: 1100px) {
-      .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .benefits { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 820px) {
-      .container { width: min(100% - 28px, 100%); }
-      .compare-box { padding: 18px 18px 10px; border-radius: 22px; }
-      .compare-head,
-      .compare-row {
-        grid-template-columns: 1.5fr 0.5fr 0.5fr;
-        gap: 10px;
-      }
-      .compare-row { min-height: 54px; font-size: 14px; }
-      .compare-cell { font-size: 16px; }
-      .nav { height: 72px; }
-      .brand { font-size: 22px; }
-      .nav-actions { gap: 10px; }
-      .btn-top-secondary,
-      .btn-top-primary { min-width: 128px; padding: 0 18px; font-size: 15px; }
-      .hero { min-height: auto; padding: 54px 0 68px; }
-      .hero h1 { font-size: clamp(38px, 10vw, 56px); }
-      .hero-copy { font-size: 16px; }
-      .feature-grid,
-      .pricing-grid { grid-template-columns: 1fr; }
-      .field-grid { grid-template-columns: 1fr; }
-      .price { font-size: 52px; }
-      .btn-hero-primary,
-      .btn-hero-secondary { width: 100%; }
-      .hero-actions { width: 100%; }
-      .hero-actions .btn { width: 100%; }
+        radial-gradient(circle at 50% 16%, rgba(22,177,255,.12), transparent 24%),
+        radial-gradient(circle at 82% 8%, rgba(40,208,177,.05), transparent 18%),
+        linear-gradient(180deg,#030817 0%,#020614 100%);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    .hidden{display:none !important}
+    .center{text-align:center}
+    .container{width:min(1240px,calc(100% - 44px));margin:0 auto}
+
+    /* ============================================================
+       NAV
+    ============================================================ */
+    .nav-wrap{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(18px);
+      background:rgba(3,8,23,.84);
+      border-bottom:1px solid rgba(133,157,196,.12);
+    }
+    .nav{
+      height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+    .brand{
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      font-size:22px;
+      letter-spacing:-.03em;
+    }
+    .brand-mark{
+      width:22px;height:28px;
+      background:linear-gradient(180deg,#1da7ff 0%,#1ebeff 100%);
+      box-shadow:0 0 22px rgba(29,167,255,.24);
+      flex:0 0 auto;
+    }
+    .brand-text{color:#20c4ea}
+    .nav-middle{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .nav-link{
+      padding:10px 14px;
+      border-radius:14px;
+      color:var(--muted);
+      font-weight:600;
+      font-size:14px;
+      transition:.18s ease;
+    }
+    .nav-link:hover,.nav-link.active{
+      color:#f6fbff;
+      background:rgba(12,22,44,.72);
+      border:1px solid rgba(117,141,181,.14);
+    }
+    .nav-actions{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn{
+      appearance:none;
+      border:1px solid transparent;
+      border-radius:16px;
+      font-weight:700;
+      font-size:15px;
+      line-height:1;
+      cursor:pointer;
+      transition:180ms ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{
+      min-width:176px;height:48px;padding:0 22px;
+      color:#fff;
+      background:linear-gradient(90deg,#20adff 0%,#23d0b1 100%);
+      box-shadow:0 10px 28px rgba(16,178,232,.22);
+    }
+    .btn-secondary{
+      min-width:138px;height:48px;padding:0 20px;
+      border-color:rgba(27,172,255,.42);
+      background:rgba(5,16,34,.72);
+      color:#1db6ff;
+      box-shadow:inset 0 0 0 1px rgba(7,24,54,.42);
+    }
+    .btn-ghost{
+      min-width:auto;height:42px;padding:0 14px;
+      background:rgba(8,16,30,.56);
+      border:1px solid var(--line);
+      color:#fff;
+    }
+    .btn-full{width:100%}
+    .btn-small{height:40px;padding:0 14px;font-size:14px;border-radius:14px}
+
+    /* ============================================================
+       PAGE WRAPPER
+    ============================================================ */
+    .page{display:none}
+    .page.active{display:block}
+    .section{padding:58px 0 70px}
+    .section-head{text-align:center;margin-bottom:46px}
+    .section-head h2{
+      font-size:clamp(28px,2.6vw,40px);
+      line-height:1.08;
+      letter-spacing:-.04em;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+    .section-head p{font-size:16px;color:var(--muted);line-height:1.7}
+    .page-hero{
+      padding:46px 0 24px;
+    }
+    .page-hero h1{
+      font-size:clamp(30px,3vw,46px);
+      line-height:1.06;
+      letter-spacing:-.045em;
+      font-weight:900;
+      margin:10px 0 12px;
+    }
+    .page-hero p{color:var(--muted);font-size:16px;line-height:1.7;max-width:860px}
+    .badge{
+      display:inline-flex;align-items:center;gap:10px;
+      min-height:34px;padding:0 18px;border-radius:999px;
+      color:#1eb6ff;font-weight:700;font-size:13px;
+      border:1px solid rgba(26,182,255,.42);
+      background:rgba(7,19,40,.68);
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero{
+      min-height:740px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:40px 0 80px;
+    }
+    .hero-inner{
+      width:min(980px,100%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:22px;
+      margin-top:-18px;
+    }
+    .hero h1{
+      font-size:clamp(46px,5.1vw,72px);
+      line-height:.98;
+      letter-spacing:-.055em;
+      font-weight:900;
+      max-width:920px;
+      background:linear-gradient(90deg,#f6f9fc 0%,#dfeefa 44%,#1ea9ff 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      text-wrap:balance;
+    }
+    .hero-copy{
+      max-width:980px;
+      font-size:18px;
+      line-height:1.72;
+      color:var(--muted);
+      letter-spacing:-.02em;
+      margin-top:6px;
+    }
+    .hero-actions{
+      display:flex;gap:18px;align-items:center;justify-content:center;
+      margin-top:8px;flex-wrap:wrap;
+    }
+
+    /* ============================================================
+       CARDS
+    ============================================================ */
+    .panel{
+      background:linear-gradient(180deg,rgba(12,22,44,.96),rgba(10,20,40,.94));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.02);
+    }
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:26px;
+    }
+    .feature-card{
+      padding:30px 30px 28px;
+      min-height:220px;
+    }
+    .feature-card .emoji{
+      font-size:36px;line-height:1;margin-bottom:18px;display:block;
+    }
+    .feature-card h3{
+      font-size:18px;line-height:1.2;letter-spacing:-.03em;
+      font-weight:800;margin-bottom:16px;
+    }
+    .feature-card p{font-size:16px;line-height:1.62;color:var(--muted)}
+
+    .compare-box{padding:28px 28px 18px}
+    .compare-head,.compare-row{
+      display:grid;
+      grid-template-columns:1.65fr .55fr .55fr;
+      gap:16px;align-items:center;
+    }
+    .compare-head{
+      padding-bottom:12px;
+      color:var(--muted-2);
+      font-size:14px;font-weight:700;
+    }
+    .compare-row{
+      min-height:64px;
+      border-top:1px solid rgba(117,141,181,.12);
+      font-size:17px;
+      line-height:1.35;
+    }
+    .compare-feature{font-weight:700;padding-right:14px}
+    .compare-cell{text-align:center;color:var(--muted);font-size:19px;font-weight:700}
+    .compare-cell.yes{color:#98f3d4}
+
+    .pricing-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:34px;
+      align-items:start;
+    }
+    .price-card{
+      position:relative;
+      padding:34px;
+    }
+    .price-card.plus{
+      border-color:rgba(26,182,255,.9);
+      box-shadow:var(--glow);
+    }
+    .recommend{
+      position:absolute;top:-16px;left:50%;transform:translateX(-50%);
+      min-width:198px;height:30px;border-radius:999px;
+      display:inline-flex;align-items:center;justify-content:center;
+      background:linear-gradient(90deg,#1fafff 0%,#21ceb2 100%);
+      color:#fff;font-size:14px;font-weight:800;
+      box-shadow:0 10px 26px rgba(19,183,223,.22);
+    }
+    .plan-name{font-size:22px;line-height:1.2;letter-spacing:-.04em;font-weight:800;margin-bottom:22px}
+    .price-line{display:flex;align-items:flex-end;gap:14px;margin-bottom:24px}
+    .price{
+      font-size:62px;line-height:.95;letter-spacing:-.06em;font-weight:900;
+    }
+    .price-card.plus .price{color:#1eaaff}
+    .per{font-size:18px;color:var(--muted);margin-bottom:8px}
+    .feature-list{list-style:none;margin:0 0 30px}
+    .feature-list li{
+      display:flex;align-items:center;gap:14px;min-height:54px;
+      border-bottom:1px solid rgba(117,141,181,.14);
+      color:var(--muted);font-size:18px;line-height:1.4;
+    }
+    .feature-list li:last-child{border-bottom:none}
+    .feature-list li.available{color:var(--text)}
+    .tick,.minus{
+      width:16px;flex:0 0 16px;text-align:center;font-size:24px;line-height:1;
+      transform:translateY(-1px)
+    }
+    .tick{color:var(--success)}
+    .minus{color:#788ca7}
+
+    .benefits{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:22px;
+    }
+    .benefit-card{padding:24px}
+    .benefit-card h4{
+      font-size:20px;line-height:1.2;letter-spacing:-.03em;
+      font-weight:800;margin-bottom:10px;
+    }
+    .benefit-card p{color:var(--muted);font-size:15px;line-height:1.65}
+
+    /* ============================================================
+       AUTH / FORMS
+    ============================================================ */
+    .auth-layout{
+      min-height:calc(100vh - 76px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 0 70px;
+    }
+    .auth-box{
+      width:min(100%,560px);
+      padding:30px;
+      background:linear-gradient(180deg,rgba(12,22,44,.98),rgba(10,18,36,.98));
+      border:1px solid rgba(117,141,181,.2);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+    }
+    .muted{color:var(--muted);line-height:1.7}
+    .form-grid{display:grid;gap:16px}
+    .form-row-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+    .field label{
+      display:block;margin-bottom:8px;font-size:14px;font-weight:600;color:#cedced;
+    }
+    .field input,.field select, .field textarea{
+      width:100%;
+      min-height:52px;
+      border-radius:14px;
+      border:1px solid rgba(117,141,181,.18);
+      background:rgba(7,16,31,.66);
+      color:#fff;
+      padding:12px 16px;
+      font-size:16px;
+      outline:none;
+    }
+    .field textarea{min-height:120px;resize:vertical}
+    .field input:focus,.field select:focus,.field textarea:focus{
+      border-color:rgba(26,182,255,.64);
+      box-shadow:0 0 0 4px rgba(26,182,255,.08);
+    }
+    .check-row{
+      display:flex;gap:12px;align-items:flex-start;
+      color:var(--muted);font-size:14px;line-height:1.6;
+    }
+    .check-row input{
+      width:18px;height:18px;margin-top:2px;accent-color:#1eb6ff;flex:0 0 auto;
+    }
+
+    .error-box,.success-box,.info-box{
+      display:none;
+      margin:0 0 18px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-size:14px;
+      line-height:1.55;
+    }
+    .error-box{background:rgba(255,75,75,.12);color:#ffb6b6;border:1px solid rgba(255,87,87,.22)}
+    .success-box{background:rgba(31,226,176,.12);color:#9cf6da;border:1px solid rgba(31,226,176,.22)}
+    .info-box{display:block;background:rgba(30,168,255,.12);color:#b8e9ff;border:1px solid rgba(30,168,255,.22)}
+
+    /* ============================================================
+       APP PAGES
+    ============================================================ */
+    .analysis-grid,.watch-grid,.detail-grid{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:24px;
+      margin:20px 0 70px;
+    }
+    .analysis-card,.watch-card,.table-card,.detail-card{
+      padding:26px;
+    }
+    .analysis-card h3,.watch-card h3,.table-card h3,.detail-card h3{
+      font-size:22px;line-height:1.15;letter-spacing:-.03em;font-weight:800;margin-bottom:18px;
+    }
+
+    .feed-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:22px;
+      margin:18px 0 70px;
+    }
+    .chance-card{
+      padding:24px;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .chance-card:hover{
+      transform:translateY(-2px);
+      border-color:var(--line-strong);
+      box-shadow:var(--glow);
+    }
+    .chance-top{
+      display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px;
+    }
+    .pill{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:28px;padding:0 12px;border-radius:999px;font-size:12px;font-weight:800;
+      background:rgba(30,168,255,.12);border:1px solid rgba(30,168,255,.18);color:#9dddff;
+    }
+    .pill.plus{background:rgba(40,208,177,.10);border-color:rgba(40,208,177,.18);color:#9df2df}
+    .pill.warn{background:rgba(255,203,91,.10);border-color:rgba(255,203,91,.18);color:#ffe09d}
+    .chance-title{font-size:22px;font-weight:800;line-height:1.1;letter-spacing:-.03em}
+    .chance-sub{margin-top:6px;font-size:14px;color:var(--muted)}
+    .chance-copy{font-size:15px;line-height:1.7;color:var(--muted);margin:14px 0}
+    .meta-list{display:grid;gap:8px;margin-top:12px;font-size:14px;color:var(--muted)}
+    .meta-list strong{color:var(--text)}
+    .table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .table th,.table td{
+      text-align:left;
+      padding:14px 10px;
+      border-bottom:1px solid rgba(117,141,181,.12);
+    }
+    .table th{color:#d9e8f6;font-weight:700}
+    .table td strong{color:#fff}
+    .empty{
+      padding:18px;border:1px dashed rgba(117,141,181,.18);border-radius:16px;color:var(--muted)
+    }
+
+    .detail-hero{
+      padding:28px;
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:24px;
+    }
+    .detail-hero h1{
+      font-size:clamp(30px,3.4vw,52px);
+      line-height:1.02;
+      letter-spacing:-.05em;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+    .detail-hero .sub{
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.7;
+      margin-bottom:18px;
+    }
+    .stat-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .stat-box{
+      padding:16px;border-radius:18px;background:rgba(7,16,31,.46);border:1px solid rgba(117,141,181,.12)
+    }
+    .stat-box .k{font-size:12px;color:var(--muted-2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+    .stat-box .v{font-size:18px;font-weight:800}
+    .detail-sections{
+      display:grid;gap:22px;margin:24px 0 70px;
+    }
+    .chart-wrap{
+      padding:18px;background:rgba(7,16,31,.42);border:1px solid rgba(117,141,181,.12);border-radius:18px;
+    }
+    .upsell{
+      margin:28px 0 70px;padding:28px;text-align:center
+    }
+    .footer-note{
+      padding:0 0 70px;
+      color:var(--muted-2);
+      font-size:13px;
+      line-height:1.8;
+    }
+
+    .user-chip{
+      display:inline-flex;align-items:center;gap:10px;
+      background:rgba(8,16,30,.56);
+      border:1px solid var(--line);
+      border-radius:999px;
+      height:44px;padding:0 14px;
+      color:#fff;font-size:14px;font-weight:700;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;background:var(--success);
+      box-shadow:0 0 18px rgba(31,226,176,.36);
+    }
+
+    @media (max-width:1100px){
+      .feature-grid,.feed-grid,.benefits{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .analysis-grid,.watch-grid,.detail-grid,.detail-hero{grid-template-columns:1fr}
+    }
+    @media (max-width:820px){
+      .container{width:min(100% - 28px,100%)}
+      .nav{height:auto;padding:14px 0;align-items:flex-start;flex-direction:column}
+      .nav-middle,.nav-actions{width:100%}
+      .hero{min-height:auto;padding:54px 0 68px}
+      .hero h1{font-size:clamp(38px,10vw,56px)}
+      .hero-copy{font-size:16px}
+      .feature-grid,.pricing-grid,.benefits,.feed-grid,.form-row-2{grid-template-columns:1fr}
+      .compare-box{padding:18px 18px 10px}
+      .compare-head,.compare-row{grid-template-columns:1.5fr .5fr .5fr;gap:10px}
+      .compare-row{min-height:54px;font-size:14px}
+      .compare-cell{font-size:16px}
+      .price{font-size:52px}
+      .btn-primary,.btn-secondary{width:100%}
+      .hero-actions{width:100%}
     }
   </style>
 </head>
 <body>
-  <!-- Hauptnavigation im Stil der Referenzseite -->
+
+  <!-- ============================================================
+       NAVIGATION
+       - Öffentliche Navigation auf Startseite
+       - Analyse erst nach Login
+       - Watchlist und Premium-Chancen nur Plus
+  ============================================================ -->
   <div class="nav-wrap">
     <div class="container nav">
-      <a class="brand" href="#top" aria-label="AnlageKompass Startseite">
+      <a class="brand" href="#/">
         <span class="brand-mark"></span>
         <span class="brand-text">AnlageKompass</span>
       </a>
-      <div class="nav-actions">
-        <button class="btn btn-top-secondary" type="button" onclick="openAuthModal('login')">Anmelden</button>
-        <button class="btn btn-top-primary" type="button" onclick="openAuthModal('register')">Kostenlos starten</button>
-      </div>
+
+      <div class="nav-middle" id="navLinks"></div>
+      <div class="nav-actions" id="navActions"></div>
     </div>
   </div>
 
-  <main id="top">
-    <!-- Hero bewusst sehr nah an der Referenz: Badge, Headline, Text und zwei CTAs -->
-    <section class="hero container">
-      <div class="hero-inner">
-        <div class="hero-pill">⚡ Tagesaktuelle Investment-Ideen</div>
-        <h1>Mehr Chancen.<br>Mehr Ideen.<br>Mehr Orientierung.</h1>
-        <p class="hero-copy">
-          Erhalte täglich neue datenbasierte Investment-Ideen für Aktien, ETFs und Krypto – passend<br>
-          zu deinem Risikoprofil, verständlich erklärt.
+  <!-- ============================================================
+       SEITE: LANDING
+  ============================================================ -->
+  <section class="page active" id="page-home">
+    <main>
+      <section class="hero container">
+        <div class="hero-inner">
+          <div class="badge">⚡ Tagesaktuelle Investment-Ideen</div>
+          <h1>Mehr Chancen.<br>Mehr Ideen.<br>Mehr Orientierung.</h1>
+          <p class="hero-copy">
+            Erhalte täglich neue datenbasierte Investment-Ideen für Aktien, ETFs und Krypto – passend
+            zu deinem Risikoprofil, verständlich erklärt.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#/registrieren">Kostenlos starten →</a>
+            <a class="btn btn-secondary" href="#/anmelden">Anmelden</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Alles was du brauchst</h2>
+            <p>AnlageKompass bringt dir Investment-Ideen, die du sonst verpassen würdest.</p>
+          </div>
+          <div class="feature-grid">
+            <article class="panel feature-card">
+              <span class="emoji">💡</span>
+              <h3>Konkrete Investment-Ideen</h3>
+              <p>Keine vagen Tipps – jede Idee kommt mit Ticker, Preis, Begründung und Risikoeinschätzung.</p>
+            </article>
+            <article class="panel feature-card">
+              <span class="emoji">⚡</span>
+              <h3>Tagesaktuelle Chancen</h3>
+              <p>Der Chancen-Feed zeigt dir laufend neue Marktideen, die du sonst leicht verpassen würdest.</p>
+            </article>
+            <article class="panel feature-card">
+              <span class="emoji">📬</span>
+              <h3>E-Mail Alerts</h3>
+              <p>Plus-Mitglieder können neue Chancen direkt per Mail erhalten und sofort auf die Detailseite springen.</p>
+            </article>
+            <article class="panel feature-card">
+              <span class="emoji">🧭</span>
+              <h3>Verständliche Sprache</h3>
+              <p>Keine trockene Analystensprache. Klar erklärt, warum etwas interessant sein könnte und wo Risiken liegen.</p>
+            </article>
+            <article class="panel feature-card">
+              <span class="emoji">🏷️</span>
+              <h3>Watchlist & Alerts</h3>
+              <p>Nur für Plus: Werte speichern, Preisalarme setzen und die wichtigsten Dinge gebündelt sehen.</p>
+            </article>
+            <article class="panel feature-card">
+              <span class="emoji">🚫</span>
+              <h3>Keine Werbung</h3>
+              <p>Im Plus-Bereich liegt der Fokus komplett auf Inhalten, Einordnung und konkreten Chancen.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Was Free kann – und was Plus zusätzlich bringt</h2>
+            <p>Free bleibt kostenlos. Plus lohnt sich dann, wenn du AnlageKompass regelmäßig im Alltag nutzen willst.</p>
+          </div>
+
+          <div class="panel compare-box">
+            <div class="compare-head">
+              <div></div>
+              <div class="center">Free</div>
+              <div class="center">Plus</div>
+            </div>
+
+            <div class="compare-row">
+              <div class="compare-feature">Dauerhaft kostenlos nutzbar</div>
+              <div class="compare-cell yes">✓</div>
+              <div class="compare-cell">–</div>
+            </div>
+            <div class="compare-row">
+              <div class="compare-feature">2–3 Ideen pro Analyse</div>
+              <div class="compare-cell yes">✓</div>
+              <div class="compare-cell yes">✓</div>
+            </div>
+            <div class="compare-row">
+              <div class="compare-feature">5–10 Ideen pro Analyse</div>
+              <div class="compare-cell">–</div>
+              <div class="compare-cell yes">✓</div>
+            </div>
+            <div class="compare-row">
+              <div class="compare-feature">Analyse nach Anmeldung</div>
+              <div class="compare-cell yes">✓</div>
+              <div class="compare-cell yes">✓</div>
+            </div>
+            <div class="compare-row">
+              <div class="compare-feature">Watchlist & Preisalarme</div>
+              <div class="compare-cell">–</div>
+              <div class="compare-cell yes">✓</div>
+            </div>
+            <div class="compare-row">
+              <div class="compare-feature">Premium-Chancen und Detailseiten</div>
+              <div class="compare-cell">–</div>
+              <div class="compare-cell yes">✓</div>
+            </div>
+            <div class="compare-row">
+              <div class="compare-feature">E-Mail-Alerts zu neuen Chancen</div>
+              <div class="compare-cell">–</div>
+              <div class="compare-cell yes">✓</div>
+            </div>
+            <div class="compare-row">
+              <div class="compare-feature">Werbefrei</div>
+              <div class="compare-cell">–</div>
+              <div class="compare-cell yes">✓</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Preise</h2>
+            <p>Starte kostenlos und schalte Plus frei, wenn du mehr Ideen, mehr Aktualität und mehr Alltagstauglichkeit willst.</p>
+          </div>
+          <div class="pricing-grid">
+            <article class="panel price-card">
+              <div class="plan-name">Free</div>
+              <div class="price-line">
+                <div class="price">0€</div>
+                <div class="per">/ Monat</div>
+              </div>
+              <ul class="feature-list">
+                <li class="available"><span class="tick">✓</span>Analyse nach Anmeldung</li>
+                <li class="available"><span class="tick">✓</span>2–3 Investment-Ideen</li>
+                <li class="available"><span class="tick">✓</span>Basis-Auswertung</li>
+                <li><span class="minus">–</span>Watchlist</li>
+                <li><span class="minus">–</span>Preisalarme</li>
+                <li><span class="minus">–</span>Premium-Chancen</li>
+              </ul>
+              <a class="btn btn-secondary btn-full" href="#/registrieren">Kostenlos starten</a>
+            </article>
+
+            <article class="panel price-card plus">
+              <div class="recommend">⭐ Empfohlen</div>
+              <div class="plan-name">AnlageKompass Plus</div>
+              <div class="price-line">
+                <div class="price">9,99€</div>
+                <div class="per">/ Monat</div>
+              </div>
+              <ul class="feature-list">
+                <li class="available"><span class="tick">✓</span>5–10 Ideen pro Analyse</li>
+                <li class="available"><span class="tick">✓</span>Premium-Chancen mit Detailseiten</li>
+                <li class="available"><span class="tick">✓</span>Watchlist & Preisalarme</li>
+                <li class="available"><span class="tick">✓</span>E-Mail-Alerts mit Direktlink</li>
+                <li class="available"><span class="tick">✓</span>Chart, Unternehmensprofil und Markteinordnung</li>
+                <li class="available"><span class="tick">✓</span>Werbefrei</li>
+              </ul>
+              <button class="btn btn-primary btn-full" onclick="showUpgradeHint()">Plus vorbereiten</button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Warum sich Plus im Alltag lohnt</h2>
+            <p>Plus ist nicht einfach nur mehr Daten. Es ist die Version, die dich regelmäßig zurück auf die Plattform holt.</p>
+          </div>
+          <div class="benefits">
+            <article class="panel benefit-card">
+              <h4>Free bleibt als Einstieg stark</h4>
+              <p>Du kannst dich kostenlos registrieren, deine erste Analyse machen und ein Gefühl für die Plattform bekommen.</p>
+            </article>
+            <article class="panel benefit-card">
+              <h4>Plus liefert laufend neue Chancen</h4>
+              <p>Mit Plus siehst du neue Chancen im Feed, kannst Mails direkt öffnen und auf echte Detailseiten springen.</p>
+            </article>
+            <article class="panel benefit-card">
+              <h4>Mehr Orientierung statt nur mehr Zahlen</h4>
+              <p>Du bekommst strukturierte Ideen mit Einordnung, Risiken, Alternativen und besserer Nutzbarkeit im Alltag.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-note container">
+        Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen, aber keine Anlageberatung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten.
+      </div>
+    </main>
+  </section>
+
+  <!-- ============================================================
+       SEITE: ANMELDEN
+  ============================================================ -->
+  <section class="page" id="page-login">
+    <main class="auth-layout container">
+      <section class="auth-box">
+        <h1 style="font-size:34px;line-height:1.05;letter-spacing:-.04em;margin-bottom:10px;">Willkommen zurück</h1>
+        <p class="muted" style="margin-bottom:22px;">Melde dich an, damit du deine Analyse starten kannst. Analyse und Ergebnisse sind erst nach dem Login sichtbar.</p>
+        <div class="error-box" id="loginError"></div>
+        <div class="success-box" id="loginSuccess"></div>
+        <form class="form-grid" onsubmit="event.preventDefault(); handleLogin();">
+          <div class="field">
+            <label for="loginEmail">E-Mail</label>
+            <input id="loginEmail" type="email" placeholder="deine@email.de" autocomplete="email">
+          </div>
+          <div class="field">
+            <label for="loginPassword">Passwort</label>
+            <input id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <button class="btn btn-primary btn-full" id="loginBtn" type="submit">Anmelden</button>
+        </form>
+        <p class="muted" style="margin-top:18px;">Noch kein Konto? <a href="#/registrieren" style="color:#24bcff;">Jetzt registrieren</a></p>
+      </section>
+    </main>
+  </section>
+
+  <!-- ============================================================
+       SEITE: REGISTRIEREN
+       WICHTIG: profiles.csv Struktur wird exakt eingehalten
+  ============================================================ -->
+  <section class="page" id="page-register">
+    <main class="auth-layout container">
+      <section class="auth-box">
+        <h1 style="font-size:34px;line-height:1.05;letter-spacing:-.04em;margin-bottom:10px;">Konto erstellen</h1>
+        <p class="muted" style="margin-bottom:22px;">Starte kostenlos. Analyse wird erst nach erfolgreicher Anmeldung freigeschaltet.</p>
+        <div class="error-box" id="registerError"></div>
+        <div class="success-box" id="registerSuccess"></div>
+
+        <form class="form-grid" onsubmit="event.preventDefault(); handleRegister();">
+          <div class="form-row-2">
+            <div class="field">
+              <label for="firstName">Vorname</label>
+              <input id="firstName" type="text" placeholder="Max">
+            </div>
+            <div class="field">
+              <label for="lastName">Nachname</label>
+              <input id="lastName" type="text" placeholder="Mustermann">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="registerEmail">E-Mail</label>
+            <input id="registerEmail" type="email" placeholder="deine@email.de" autocomplete="email">
+          </div>
+
+          <div class="field">
+            <label for="registerPassword">Passwort</label>
+            <input id="registerPassword" type="password" placeholder="Mindestens 6 Zeichen" autocomplete="new-password">
+          </div>
+
+          <label class="check-row">
+            <input id="termsAccepted" type="checkbox">
+            <span>Ich bestätige die AGB und Datenschutzhinweise.</span>
+          </label>
+
+          <button class="btn btn-primary btn-full" id="registerBtn" type="submit">Kostenlos registrieren</button>
+        </form>
+
+        <p class="muted" style="margin-top:18px;">Schon registriert? <a href="#/anmelden" style="color:#24bcff;">Jetzt anmelden</a></p>
+      </section>
+    </main>
+  </section>
+
+  <!-- ============================================================
+       SEITE: ANALYSE
+       Nur nach Login
+       Free und Plus bekommen unterschiedliche Hinweise
+  ============================================================ -->
+  <section class="page" id="page-analyse">
+    <main class="container">
+      <section class="page-hero">
+        <span class="badge">🔍 Analyse</span>
+        <h1>Deine Analyse</h1>
+        <p>Diese Seite ist nur nach Anmeldung sichtbar. Free- und Plus-Kunden können hier ihre Analyse starten. Die Auswertung unterscheidet sich später je nach Plan.</p>
+      </section>
+
+      <div class="error-box" id="analyseError"></div>
+      <div class="success-box" id="analyseSuccess"></div>
+
+      <section class="analysis-grid">
+        <article class="panel analysis-card">
+          <h3>Profil und Risikowunsch</h3>
+          <form class="form-grid" onsubmit="event.preventDefault(); saveAnalysis();">
+            <div class="field">
+              <label for="riskLevel">Risikolevel</label>
+              <select id="riskLevel">
+                <option value="defensiv">Defensiv</option>
+                <option value="ausgewogen">Ausgewogen</option>
+                <option value="wachstum">Wachstum</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="investmentBudget">Investment-Budget</label>
+              <input id="investmentBudget" type="number" min="0" step="100" placeholder="5000">
+            </div>
+
+            <div class="field">
+              <label for="investmentHorizon">Anlagehorizont</label>
+              <select id="investmentHorizon">
+                <option value="kurz">Kurzfristig</option>
+                <option value="mittel">Mittelfristig</option>
+                <option value="lang">Langfristig</option>
+              </select>
+            </div>
+
+            <label class="check-row">
+              <input id="wantsCrypto" type="checkbox">
+              <span>Ich möchte auch Krypto-Ideen berücksichtigen.</span>
+            </label>
+
+            <button class="btn btn-primary btn-full" type="submit">Analyse speichern</button>
+          </form>
+        </article>
+
+        <article class="panel analysis-card">
+          <h3>Planabhängige Auswertung</h3>
+          <div id="analysisPlanInfo" class="muted"></div>
+        </article>
+      </section>
+    </main>
+  </section>
+
+  <!-- ============================================================
+       SEITE: WATCHLIST
+       Nur Plus
+  ============================================================ -->
+  <section class="page" id="page-watchlist">
+    <main class="container">
+      <section class="page-hero">
+        <span class="badge">🔔 Plus</span>
+        <h1>Watchlist & Preisalarme</h1>
+        <p>Diese Seite ist nur für Plus-Kunden sichtbar. Hier kannst du Werte speichern, Preisalarme definieren und später serverseitig überwachen lassen.</p>
+      </section>
+
+      <div class="error-box" id="watchlistError"></div>
+      <div class="success-box" id="watchlistSuccess"></div>
+      <div class="info-box">Preisalarme sollten serverseitig in festen Intervallen gegen aktuelle Kursdaten geprüft werden.</div>
+
+      <section class="watch-grid">
+        <article class="panel watch-card">
+          <h3>Neuen Wert hinzufügen</h3>
+          <form class="form-grid" onsubmit="event.preventDefault(); addWatchItem();">
+            <div class="form-row-2">
+              <div class="field">
+                <label for="watchTicker">Ticker</label>
+                <input id="watchTicker" type="text" placeholder="NVDA">
+              </div>
+              <div class="field">
+                <label for="watchName">Name</label>
+                <input id="watchName" type="text" placeholder="NVIDIA">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="field">
+                <label for="alertAbove">Alert oberhalb von</label>
+                <input id="alertAbove" type="number" step="0.01" placeholder="1000">
+              </div>
+              <div class="field">
+                <label for="alertBelow">Alert unterhalb von</label>
+                <input id="alertBelow" type="number" step="0.01" placeholder="850">
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-full" type="submit">Zur Watchlist hinzufügen</button>
+          </form>
+        </article>
+
+        <article class="panel table-card">
+          <h3>Deine Watchlist</h3>
+          <div id="watchlistTable"></div>
+        </article>
+      </section>
+    </main>
+  </section>
+
+  <!-- ============================================================
+       SEITE: PREMIUM CHANCEN FEED
+       Nur Plus
+  ============================================================ -->
+  <section class="page" id="page-premium-feed">
+    <main class="container">
+      <section class="page-hero">
+        <span class="badge">⚡ Plus</span>
+        <h1>Premium-Chancen</h1>
+        <p>Hier erscheinen die Chancen, die du auch per E-Mail verlinken kannst. Jede Karte führt auf eine Detailseite mit mehr Kontext, Chart und zusätzlicher Einordnung.</p>
+      </section>
+
+      <div class="error-box" id="feedError"></div>
+      <div class="success-box" id="feedSuccess"></div>
+
+      <section class="feed-grid" id="opportunityGrid"></section>
+    </main>
+  </section>
+
+  <!-- ============================================================
+       SEITE: PREMIUM DETAIL
+       Nur Plus
+       Datenquelle:
+       - Supabase opportunities
+       - Alpha Vantage für Quote, Overview und Daily Chart
+       - Analysten bevorzugt aus opportunities.analyst_summary
+       HINWEIS:
+       Echte Analysten-API braucht zusätzliche Quelle wie Finnhub/FMP.
+  ============================================================ -->
+  <section class="page" id="page-premium-detail">
+    <main class="container">
+      <div class="error-box" id="detailError"></div>
+      <div class="success-box" id="detailSuccess"></div>
+
+      <section class="panel detail-hero">
+        <div>
+          <div class="badge" id="detailBadge">Premium-Chance</div>
+          <h1 id="detailTitle">Chance wird geladen…</h1>
+          <p class="sub" id="detailDescription">Bitte warten…</p>
+
+          <div class="meta-list">
+            <div><strong>Ticker:</strong> <span id="detailTicker">–</span></div>
+            <div><strong>Asset:</strong> <span id="detailAssetType">–</span></div>
+            <div><strong>Land:</strong> <span id="detailCountry">–</span></div>
+            <div><strong>Sektor / Branche:</strong> <span id="detailSector">–</span></div>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="k">Aktueller Kurs (USD)</div>
+            <div class="v" id="detailPrice">–</div>
+          </div>
+          <div class="stat-box">
+            <div class="k">Tagesveränderung</div>
+            <div class="v" id="detailChange">–</div>
+          </div>
+          <div class="stat-box">
+            <div class="k">Analysten / Einordnung</div>
+            <div class="v" id="detailAnalystHeadline">–</div>
+          </div>
+          <div class="stat-box">
+            <div class="k">Opportunity-ID</div>
+            <div class="v" id="detailOpportunityId">–</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-sections">
+        <article class="panel detail-card">
+          <h3>Aktueller Chart</h3>
+          <div class="chart-wrap">
+            <canvas id="detailChart" height="120"></canvas>
+          </div>
+        </article>
+
+        <section class="detail-grid">
+          <article class="panel detail-card">
+            <h3>Warum könnte das gerade interessant sein?</h3>
+            <p class="muted" id="detailWhyNow">–</p>
+          </article>
+
+          <article class="panel detail-card">
+            <h3>Was ist passiert?</h3>
+            <p class="muted" id="detailWhatHappened">–</p>
+          </article>
+        </section>
+
+        <section class="detail-grid">
+          <article class="panel detail-card">
+            <h3>Unternehmensprofil</h3>
+            <div class="muted" id="detailOverview">–</div>
+          </article>
+
+          <article class="panel detail-card">
+            <h3>Analysten / Markteinordnung</h3>
+            <div class="muted" id="detailAnalysts">
+              Falls keine externe Analysten-API vorhanden ist, wird hier die Einordnung aus Supabase angezeigt.
+            </div>
+          </article>
+        </section>
+
+        <section class="detail-grid">
+          <article class="panel detail-card">
+            <h3>Chancen</h3>
+            <div class="muted" id="detailChances">–</div>
+          </article>
+
+          <article class="panel detail-card">
+            <h3>Risiken</h3>
+            <div class="muted" id="detailRisks">–</div>
+          </article>
+        </section>
+
+        <article class="panel detail-card">
+          <h3>Für wen könnte das passen?</h3>
+          <p class="muted" id="detailFit">–</p>
+        </article>
+
+        <article class="panel detail-card">
+          <h3>Alternative Ideen</h3>
+          <div class="muted" id="detailAlternatives">–</div>
+        </article>
+      </section>
+
+      <div class="footer-note">
+        Hinweis: Diese Seite dient ausschließlich Informationszwecken. Sie stellt keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten dar.
+      </div>
+    </main>
+  </section>
+
+  <!-- ============================================================
+       SEITE: KONTO / PLAN
+  ============================================================ -->
+  <section class="page" id="page-account">
+    <main class="container">
+      <section class="page-hero">
+        <span class="badge">👤 Konto</span>
+        <h1>Dein Konto</h1>
+        <p>Hier siehst du deinen aktuellen Plan und deine gespeicherten Profileinstellungen.</p>
+      </section>
+
+      <section class="analysis-grid">
+        <article class="panel analysis-card">
+          <h3>Profil</h3>
+          <div class="meta-list">
+            <div><strong>Name:</strong> <span id="accountName">–</span></div>
+            <div><strong>E-Mail:</strong> <span id="accountEmail">–</span></div>
+            <div><strong>Plan:</strong> <span id="accountPlan">–</span></div>
+            <div><strong>Alert-Frequenz:</strong> <span id="accountAlerts">–</span></div>
+          </div>
+        </article>
+
+        <article class="panel analysis-card">
+          <h3>Planwechsel</h3>
+          <p class="muted" style="margin-bottom:18px;">Im Live-Betrieb sollte hier dein Stripe-Flow eingebunden werden. Für die Ansicht steuert aktuell das Feld <strong>profiles.plan</strong>, ob jemand Free oder Plus ist.</p>
+          <button class="btn btn-primary btn-full" onclick="showUpgradeHint()">Plus-Flow vorbereiten</button>
+          <button class="btn btn-secondary btn-full" style="margin-top:12px" onclick="handleLogout()">Abmelden</button>
+        </article>
+      </section>
+    </main>
+  </section>
+
+  <!-- ============================================================
+       GATE / UPSELL
+  ============================================================ -->
+  <section class="page" id="page-gate">
+    <main class="container">
+      <div class="panel upsell">
+        <div class="badge" id="gateBadge">🔒 Zugriff eingeschränkt</div>
+        <h1 style="font-size:42px;line-height:1.04;letter-spacing:-.045em;font-weight:900;margin:16px 0 12px;">Dieser Bereich ist aktuell nicht verfügbar</h1>
+        <p class="muted" id="gateText" style="max-width:760px;margin:0 auto 22px;">
+          Bitte melde dich an oder schalte Plus frei.
         </p>
-        <div class="hero-actions">
-          <button class="btn btn-hero-primary" type="button" onclick="openAuthModal('register')">Kostenlos starten →</button>
-          <button class="btn btn-hero-secondary" type="button" onclick="openAuthModal('login')">Anmelden</button>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a class="btn btn-primary" href="#/anmelden">Anmelden</a>
+          <a class="btn btn-secondary" href="#/registrieren">Registrieren</a>
         </div>
       </div>
-    </section>
-
-    <!-- Features exakt im dunklen Karten-Look mit 3x2 Raster -->
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <h2>Alles was du brauchst</h2>
-          <p>AnlageKompass bringt dir Investment-Ideen, die du sonst verpassen würdest.</p>
-        </div>
-        <div class="feature-grid">
-          <article class="feature-card">
-            <span class="emoji">💡</span>
-            <h3>Konkrete Investment-Ideen</h3>
-            <p>Keine vagen Tipps – jede Idee kommt mit Ticker, Preis, Begründung und Risikoeinschätzung.</p>
-          </article>
-          <article class="feature-card">
-            <span class="emoji">⚡</span>
-            <h3>Tagesaktuelle Chancen</h3>
-            <p>Der "Chancen nutzen"-Feed zeigt dir täglich aktualisierte Marktchancen – bevor sie alle sehen.</p>
-          </article>
-          <article class="feature-card">
-            <span class="emoji">📬</span>
-            <h3>E-Mail Alerts</h3>
-            <p>Werde per E-Mail benachrichtigt, sobald neue Chancen entdeckt werden – täglich oder nach Bedarf.</p>
-          </article>
-          <article class="feature-card">
-            <span class="emoji">🧭</span>
-            <h3>Verständliche Sprache</h3>
-            <p>Kein Börsenjargon. Jede Idee erklärt, warum sie aktuell spannend sein könnte – klar und direkt.</p>
-          </article>
-          <article class="feature-card">
-            <span class="emoji">🏷️</span>
-            <h3>Watchlist &amp; Alerts</h3>
-            <p>Speichere Aktien, verfolge Preisänderungen und lass dich bei wichtigen Bewegungen benachrichtigen.</p>
-          </article>
-          <article class="feature-card">
-            <span class="emoji">🚫</span>
-            <h3>Keine Werbung</h3>
-            <p>Premium ist komplett werbefrei. Fokus auf das Wesentliche: deine Investment-Ideen.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Vergleichsblock vor den Preisen: was Free kann und was Plus zusätzlich bringt -->
-    <section class="section compare-wrap">
-      <div class="container">
-        <div class="section-head">
-          <h2>Was Free kann – und was Plus zusätzlich bringt</h2>
-          <p>Free ist ein guter Einstieg. Plus ist die Version für echte, regelmäßige Nutzung.</p>
-        </div>
-
-        <div class="compare-box">
-          <div class="compare-head">
-            <div></div>
-            <div style="text-align:center">Free</div>
-            <div style="text-align:center">Plus</div>
-          </div>
-
-          <div class="compare-row">
-            <div class="compare-feature">2–3 Ideen pro Analyse</div>
-            <div class="compare-cell yes">✓</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">5–10 Ideen pro Analyse</div>
-            <div class="compare-cell">–</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Dauerhaft kostenlos nutzbar</div>
-            <div class="compare-cell yes">✓</div>
-            <div class="compare-cell">–</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Chancen-Feed mit aktuellen Ideen</div>
-            <div class="compare-cell">–</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">E-Mail-Benachrichtigungen</div>
-            <div class="compare-cell">–</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Watchlist &amp; Alerts</div>
-            <div class="compare-cell">–</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Alternative Strategien &amp; mehr Orientierung</div>
-            <div class="compare-cell">–</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Werbefrei</div>
-            <div class="compare-cell">–</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Pricing-Look sehr nah am Screenshot, zusätzlich sauberer Free-vs-Plus-Vergleich -->
-    <section class="section pricing-wrap">
-      <div class="container">
-        <div class="section-head">
-          <h2>Preise</h2>
-          <p>Starte kostenlos und upgrade wenn du mehr Ideen möchtest.</p>
-        </div>
-
-        <div class="pricing-grid">
-          <article class="price-card">
-            <div class="plan-name">Free</div>
-            <div class="price-line">
-              <div class="price">0€</div>
-              <div class="per">/ Monat</div>
-            </div>
-            <ul class="feature-list">
-              <li class="available"><span class="tick">✓</span><strong>2–3 Investment-Ideen</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Basis-Analyse</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Risikoeinschätzung</strong></li>
-              <li><span class="minus">–</span>Tagesaktuelle Chancen</li>
-              <li><span class="minus">–</span>E-Mail Alerts</li>
-              <li><span class="minus">–</span>Watchlist</li>
-              <li><span class="minus">–</span>Strategie-Ideen</li>
-              <li><span class="minus">–</span>Werbefrei</li>
-            </ul>
-            <button class="btn btn-card-secondary" type="button" onclick="openAuthModal('register')">Kostenlos starten</button>
-          </article>
-
-          <article class="price-card plus">
-            <div class="recommend">⭐ Empfohlen</div>
-            <div class="plan-name">AnlageKompass Plus</div>
-            <div class="price-line">
-              <div class="price">9,99€</div>
-              <div class="per">/ Monat</div>
-            </div>
-            <ul class="feature-list">
-              <li class="available"><span class="tick">✓</span><strong>5–10 Investment-Ideen</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Vollständige Analyse</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Tagesaktuelle Chancen</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>E-Mail Alerts (täglich)</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Watchlist + Kurs-Alerts</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Strategie-Ideen</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Marktübersicht</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Komplett werbefrei</strong></li>
-            </ul>
-            <button class="btn btn-card-primary" type="button" onclick="openPremiumModal()">Plus freischalten</button>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Zusätzlicher Nutzenblock, von dir gewünscht: was Free kann, was Plus mehr bringt, warum es sich im Alltag lohnt -->
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <h2>Warum sich Plus im Alltag lohnt</h2>
-          <p>Free bleibt dauerhaft kostenlos. Plus lohnt sich dann, wenn du regelmäßig neue Ideen sehen und schneller reagieren willst.</p>
-        </div>
-        <div class="benefits">
-          <article class="benefit-card">
-            <h4>Free bleibt kostenlos</h4>
-            <p>Du kannst AnlageKompass kostenlos nutzen, dein Profil anlegen und dir erste passende Investment-Ideen anzeigen lassen – ohne Zeitdruck und ohne Zwang zum Upgrade.</p>
-          </article>
-          <article class="benefit-card">
-            <h4>Plus bringt mehr Aktualität</h4>
-            <p>Mit Plus bekommst du neue Chancen, weitere passende Ideen, E-Mail Alerts und Watchlist-Funktionen. So wird AnlageKompass zu einer laufenden Ideenquelle statt nur zu einer einmaligen Analyse.</p>
-          </article>
-          <article class="benefit-card">
-            <h4>Mehr Nutzen im echten Alltag</h4>
-            <p>Wenn du Märkte nicht ständig selbst beobachten willst, hilft dir Plus dabei, relevante Chancen kompakt, verständlich und regelmäßig aufbereitet zu sehen – ohne den Eindruck von Anlageberatung.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <div class="disclaimer container">
-      Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen, aber keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten. Investitionen sind mit Risiken verbunden.
-    </div>
-  </main>
-
-  <!-- Login/Registrierung mit Vorname, Nachname und Pflicht-Checkbox -->
-  <div class="modal-overlay" id="authModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-      <button class="close" type="button" aria-label="Schließen" onclick="closeAuthModal()">×</button>
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tabLogin" type="button" onclick="switchAuth('login')">Anmelden</button>
-        <button class="auth-tab" id="tabRegister" type="button" onclick="switchAuth('register')">Registrieren</button>
-      </div>
-
-      <div class="auth-message error" id="authError"></div>
-      <div class="auth-message success" id="authSuccess"></div>
-
-      <section id="panelLogin">
-        <h3 id="authTitle">Willkommen zurück</h3>
-        <p class="intro">Melde dich an, um deine Investment-Ideen zu sehen.</p>
-        <div class="field">
-          <label for="loginEmail">E-Mail</label>
-          <input id="loginEmail" type="email" placeholder="deine@email.de" autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="loginPassword">Passwort</label>
-          <input id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password">
-        </div>
-        <button class="submit-btn" id="loginBtn" type="button" onclick="handleLogin()">Anmelden</button>
-      </section>
-
-      <section id="panelRegister" class="hidden">
-        <h3>Konto erstellen</h3>
-        <p class="intro">Starte kostenlos – keine Kreditkarte nötig.</p>
-        <div class="field-grid">
-          <div class="field">
-            <label for="registerFirstName">Vorname</label>
-            <input id="registerFirstName" type="text" placeholder="Max" autocomplete="given-name">
-          </div>
-          <div class="field">
-            <label for="registerLastName">Nachname</label>
-            <input id="registerLastName" type="text" placeholder="Mustermann" autocomplete="family-name">
-          </div>
-        </div>
-        <div class="field">
-          <label for="registerEmail">E-Mail</label>
-          <input id="registerEmail" type="email" placeholder="deine@email.de" autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="registerPassword">Passwort</label>
-          <input id="registerPassword" type="password" placeholder="Mindestens 6 Zeichen" autocomplete="new-password">
-        </div>
-        <label class="check-row">
-          <input id="registerTerms" type="checkbox">
-          <span>Ich bestätige die <button class="linklike" type="button" onclick="openLegalModal('agb')">AGB</button> und habe die <button class="linklike" type="button" onclick="openLegalModal('datenschutz')">Datenschutzhinweise</button> gelesen.</span>
-        </label>
-        <button class="submit-btn" id="registerBtn" type="button" onclick="handleRegister()">Konto erstellen</button>
-      </section>
-    </div>
-  </div>
-
-  <!-- Premium Modal als vorbereiteter Hook für den späteren Stripe-Flow -->
-  <div class="modal-overlay" id="premiumModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="premiumTitle">
-      <button class="close" type="button" aria-label="Schließen" onclick="closePremiumModal()">×</button>
-      <h3 id="premiumTitle">AnlageKompass Plus</h3>
-      <p class="intro">Erhalte täglich neue datenbasierte Investment-Ideen, Chancen-Alerts und mehr Orientierung im Alltag.</p>
-      <ul class="feature-list" style="margin-top:8px; margin-bottom:22px;">
-        <li class="available"><span class="tick">✓</span><strong>5–10 Investment-Ideen pro Analyse</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>Tagesaktuelle Chancen</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>E-Mail Alerts für Premium-Mitglieder</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>Watchlist + Kurs-Alerts</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>Werbefrei</strong></li>
-      </ul>
-      <button class="submit-btn" type="button" onclick="showSuccess('Stripe-Checkout ist hier vorbereitet. Für Live-Zahlungen muss dein serverseitiger Stripe-Endpoint verbunden sein.')">Plus freischalten</button>
-    </div>
-  </div>
-
-  <!-- AGB / Datenschutz als Platzhalter, damit die Pflicht-Checkbox sinnvoll nutzbar ist -->
-  <div class="modal-overlay" id="legalModal" aria-hidden="true">
-    <div class="modal legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
-      <button class="close" type="button" aria-label="Schließen" onclick="closeLegalModal()">×</button>
-      <h3 id="legalTitle">Rechtliche Hinweise</h3>
-      <div id="legalContent"></div>
-    </div>
-  </div>
+    </main>
+  </section>
 
   <script>
-    // Öffentliche Frontend-Konfiguration. Secret Keys gehören NICHT in diese Datei.
+    /* ============================================================
+       KONFIGURATION
+       WICHTIG:
+       - Nur öffentlicher Supabase-Key im Frontend
+       - Registrierung schreibt exakt passend zu profiles.csv
+       - Alpha Vantage darf im Frontend für Demo / Start genutzt werden
+    ============================================================ */
     const CONFIG = {
-      supabaseUrl: 'https://wksfnfhlnynrkqzjcqxb.supabase.co',
-      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrc2ZuZmhsbnlucmtxempjcXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNjQ1MjcsImV4cCI6MjA4OTg0MDUyN30.hs-9YKdo-vjzR9EIxYzCqalDc90CiRhcH6ALOvd_WXsn'
+      supabase: {
+        url: 'https://wksfnfhlnynrkqzjcqxb.supabase.co',
+        anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrc2ZuZmhsbnlucmtxempjcXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNjQ1MjcsImV4cCI6MjA4OTg0MDUyN30.hs-9YKdo-vjzR9EIxYzCqalDc90CiRhcH6ALOvd_WXsn'
+      },
+      alphaVantage: {
+        key: 'DNT3MXCDYZ54C5PR',
+        baseUrl: 'https://www.alphavantage.co/query'
+      }
     };
 
-    let supabaseClient = null;
-    try {
-      if (window.supabase?.createClient) {
-        supabaseClient = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey);
-      }
-    } catch (e) {
-      console.error('Supabase konnte nicht initialisiert werden:', e);
+    const supabase = window.supabase.createClient(CONFIG.supabase.url, CONFIG.supabase.anonKey);
+
+    const state = {
+      user: null,
+      profile: null,
+      chart: null,
+      opportunities: []
+    };
+
+    /* ============================================================
+       HELPERS
+    ============================================================ */
+    function $(id){ return document.getElementById(id); }
+
+    function showBox(id, message){
+      const el = $(id);
+      if(!el) return;
+      el.textContent = message;
+      el.style.display = 'block';
     }
 
-    function openAuthModal(tab = 'login') {
-      document.getElementById('authModal').classList.add('open');
-      document.getElementById('authModal').setAttribute('aria-hidden', 'false');
-      switchAuth(tab);
+    function hideBox(id){
+      const el = $(id);
+      if(!el) return;
+      el.style.display = 'none';
+      el.textContent = '';
     }
 
-    function closeAuthModal() {
-      document.getElementById('authModal').classList.remove('open');
-      document.getElementById('authModal').setAttribute('aria-hidden', 'true');
-      clearMessages();
+    function hideAllMessages(){
+      [
+        'loginError','loginSuccess',
+        'registerError','registerSuccess',
+        'analyseError','analyseSuccess',
+        'watchlistError','watchlistSuccess',
+        'feedError','feedSuccess',
+        'detailError','detailSuccess'
+      ].forEach(hideBox);
     }
 
-    function switchAuth(mode) {
-      const login = mode === 'login';
-      document.getElementById('tabLogin').classList.toggle('active', login);
-      document.getElementById('tabRegister').classList.toggle('active', !login);
-      document.getElementById('panelLogin').classList.toggle('hidden', !login);
-      document.getElementById('panelRegister').classList.toggle('hidden', login);
-      clearMessages();
+    function setBtnLoading(id, isLoading, label){
+      const btn = $(id);
+      if(!btn) return;
+      btn.disabled = isLoading;
+      btn.textContent = isLoading ? 'Bitte warten…' : label;
     }
 
-    function openPremiumModal() {
-      document.getElementById('premiumModal').classList.add('open');
-      document.getElementById('premiumModal').setAttribute('aria-hidden', 'false');
-    }
-
-    function closePremiumModal() {
-      document.getElementById('premiumModal').classList.remove('open');
-      document.getElementById('premiumModal').setAttribute('aria-hidden', 'true');
-    }
-
-    function openLegalModal(type) {
-      const title = document.getElementById('legalTitle');
-      const content = document.getElementById('legalContent');
-      if (type === 'agb') {
-        title.textContent = 'Allgemeine Geschäftsbedingungen';
-        content.innerHTML = `
-          <p>Diese Platzhalter-AGB sind für den Registrierungsflow vorbereitet. Du kannst hier später deine finalen AGB einfügen.</p>
-          <h4>1. Leistungsbeschreibung</h4>
-          <p>AnlageKompass stellt Informationen, Einordnungen und datenbasierte Investment-Ideen bereit. Die Inhalte dienen ausschließlich Informationszwecken.</p>
-          <h4>2. Kein Beratungsverhältnis</h4>
-          <p>Es wird keine Anlageberatung, Finanzberatung oder individuelle Empfehlung erbracht.</p>
-          <h4>3. Nutzung von Free und Plus</h4>
-          <p>Ein Teil der Funktionen ist dauerhaft kostenlos nutzbar. Zusätzliche Funktionen können im Rahmen eines kostenpflichtigen Plus-Zugangs bereitgestellt werden.</p>
-        `;
-      } else {
-        title.textContent = 'Datenschutzhinweise';
-        content.innerHTML = `
-          <p>Diese Platzhalter-Datenschutzhinweise sind für den Registrierungsflow vorbereitet. Du kannst hier später deine finalen Datenschutzhinweise einfügen.</p>
-          <h4>1. Verarbeitete Daten</h4>
-          <p>Bei der Registrierung werden insbesondere Name, E-Mail-Adresse und technische Nutzungsdaten verarbeitet.</p>
-          <h4>2. Zweck</h4>
-          <p>Die Daten werden zur Kontoverwaltung, Authentifizierung und Nutzung der Plattform verarbeitet.</p>
-          <h4>3. Hinweise</h4>
-          <p>Bitte ergänze hier später deine rechtsverbindlichen Angaben zu Verantwortlichen, Speicherfristen und Betroffenenrechten.</p>
-        `;
-      }
-      document.getElementById('legalModal').classList.add('open');
-      document.getElementById('legalModal').setAttribute('aria-hidden', 'false');
-    }
-
-    function closeLegalModal() {
-      document.getElementById('legalModal').classList.remove('open');
-      document.getElementById('legalModal').setAttribute('aria-hidden', 'true');
-    }
-
-    function showError(message) {
-      const box = document.getElementById('authError');
-      const ok = document.getElementById('authSuccess');
-      ok.style.display = 'none';
-      box.textContent = message;
-      box.style.display = 'block';
-    }
-
-    function showSuccess(message) {
-      const box = document.getElementById('authSuccess');
-      const err = document.getElementById('authError');
-      err.style.display = 'none';
-      box.textContent = message;
-      box.style.display = 'block';
-    }
-
-    function clearMessages() {
-      document.getElementById('authError').style.display = 'none';
-      document.getElementById('authSuccess').style.display = 'none';
-    }
-
-    function setLoading(button, loading, text) {
-      if (!button) return;
-      button.disabled = loading;
-      button.textContent = loading ? 'Bitte warten…' : text;
-    }
-
-    function mapAuthError(message) {
+    function authMessage(error){
       const known = {
         'Invalid login credentials': 'Falsche E-Mail oder falsches Passwort.',
         'Email not confirmed': 'Bitte bestätige zuerst deine E-Mail-Adresse.',
         'User already registered': 'Diese E-Mail-Adresse ist bereits registriert.',
         'Password should be at least 6 characters': 'Das Passwort muss mindestens 6 Zeichen lang sein.'
       };
-      return known[message] || 'Die Anmeldung konnte gerade nicht abgeschlossen werden.';
+      return known[error] || 'Vorgang aktuell nicht möglich.';
     }
 
-    async function handleLogin() {
-      clearMessages();
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      if (!email || !password) {
-        showError('Bitte fülle E-Mail und Passwort aus.');
+    function isPlus(){
+      return (state.profile?.plan || 'free').toLowerCase() === 'plus';
+    }
+
+    function getHashRoute(){
+      const raw = location.hash || '#/';
+      const [path, queryString] = raw.slice(1).split('?');
+      return {
+        path: path || '/',
+        params: new URLSearchParams(queryString || '')
+      };
+    }
+
+    function navigate(path){
+      location.hash = path;
+    }
+
+    function formatMoneyUsd(value){
+      if(value === null || value === undefined || value === '') return '–';
+      const num = Number(value);
+      if(Number.isNaN(num)) return '–';
+      return new Intl.NumberFormat('de-DE', { style:'currency', currency:'USD' }).format(num);
+    }
+
+    function formatPercent(value){
+      if(value === null || value === undefined || value === '') return '–';
+      const num = Number(value);
+      if(Number.isNaN(num)) return '–';
+      return `${num > 0 ? '+' : ''}${num.toFixed(2)}%`;
+    }
+
+    function tryJson(val){
+      if(!val) return [];
+      if(Array.isArray(val)) return val;
+      try { return JSON.parse(val); } catch { return [String(val)]; }
+    }
+
+    function renderListHTML(items){
+      const arr = tryJson(items);
+      if(!arr.length) return '–';
+      return '<ul style="padding-left:18px;display:grid;gap:10px;">' + arr.map(item => `<li>${item}</li>`).join('') + '</ul>';
+    }
+
+    function showUpgradeHint(){
+      alert('Der Plus-Flow sollte später über Stripe serverseitig umgesetzt werden. Für die Sichtbarkeit in der App steuert aktuell profiles.plan den Zugang.');
+    }
+
+    /* ============================================================
+       NAV RENDER
+    ============================================================ */
+    function renderNav(){
+      const navLinks = $('navLinks');
+      const navActions = $('navActions');
+      const current = getHashRoute().path;
+
+      if(!state.user){
+        navLinks.innerHTML = '';
+        navActions.innerHTML = `
+          <a class="btn btn-secondary" href="#/anmelden">Anmelden</a>
+          <a class="btn btn-primary" href="#/registrieren">Kostenlos starten</a>
+        `;
         return;
       }
-      if (!supabaseClient) {
-        showError('Supabase ist nicht verfügbar. Bitte prüfe die Frontend-Konfiguration.');
+
+      const links = [
+        { path:'/analyse', label:'Analyse', requiresPlus:false },
+        { path:'/watchlist', label:'Watchlist', requiresPlus:true },
+        { path:'/premium/chancen', label:'Premium-Chancen', requiresPlus:true },
+        { path:'/konto', label:'Konto', requiresPlus:false }
+      ];
+
+      navLinks.innerHTML = links
+        .filter(link => !link.requiresPlus || isPlus())
+        .map(link => `<a class="nav-link ${current === link.path ? 'active' : ''}" href="#${link.path}">${link.label}</a>`)
+        .join('');
+
+      navActions.innerHTML = `
+        <div class="user-chip">
+          <span class="dot"></span>
+          <span>${state.profile?.name || state.user.email}</span>
+          <span style="opacity:.65;">·</span>
+          <span>${isPlus() ? 'Plus' : 'Free'}</span>
+        </div>
+        <button class="btn btn-ghost btn-small" onclick="handleLogout()">Abmelden</button>
+      `;
+    }
+
+    /* ============================================================
+       AUTH / PROFILE
+       PROFILE-STRUKTUR passend zu deiner CSV:
+       id, email, name, plan, risk_level, investment_budget,
+       investment_horizon, wants_crypto, alert_frequency,
+       email_alerts_enabled, created_at
+    ============================================================ */
+    async function getSessionAndProfile(){
+      const { data: { session } } = await supabase.auth.getSession();
+      state.user = session?.user || null;
+      state.profile = null;
+
+      if(!state.user){
+        renderNav();
         return;
       }
-      const button = document.getElementById('loginBtn');
-      setLoading(button, true, 'Anmelden');
-      try {
-        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) {
-          showError(mapAuthError(error.message));
-        } else {
-          showSuccess('Anmeldung erfolgreich. Dein Konto ist jetzt verbunden.');
-          setTimeout(() => closeAuthModal(), 900);
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', state.user.id)
+        .maybeSingle();
+
+      if(error){
+        console.error('Profil konnte nicht geladen werden:', error);
+      }
+
+      if(data){
+        state.profile = data;
+      }
+
+      renderNav();
+    }
+
+    async function handleLogin(){
+      hideAllMessages();
+      const email = $('loginEmail')?.value?.trim();
+      const password = $('loginPassword')?.value;
+
+      if(!email || !password){
+        showBox('loginError', 'Bitte fülle E-Mail und Passwort aus.');
+        return;
+      }
+
+      setBtnLoading('loginBtn', true, 'Anmelden');
+
+      try{
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if(error){
+          showBox('loginError', authMessage(error.message));
+          return;
         }
-      } catch (error) {
-        showError('Die Anmeldung konnte nicht ausgeführt werden.');
-      } finally {
-        setLoading(button, false, 'Anmelden');
+
+        await getSessionAndProfile();
+        showBox('loginSuccess', 'Anmeldung erfolgreich.');
+        setTimeout(() => navigate('/analyse'), 500);
+      }catch(err){
+        console.error(err);
+        showBox('loginError', 'Registrierung aktuell nicht möglich.');
+      }finally{
+        setBtnLoading('loginBtn', false, 'Anmelden');
       }
     }
 
-    async function handleRegister() {
-      clearMessages();
-      const firstName = document.getElementById('registerFirstName').value.trim();
-      const lastName = document.getElementById('registerLastName').value.trim();
-      const email = document.getElementById('registerEmail').value.trim();
-      const password = document.getElementById('registerPassword').value;
-      const terms = document.getElementById('registerTerms').checked;
+    async function handleRegister(){
+      hideAllMessages();
 
-      if (!firstName || !lastName || !email || !password) {
-        showError('Bitte fülle alle Felder aus.');
+      const firstName = $('firstName')?.value?.trim();
+      const lastName = $('lastName')?.value?.trim();
+      const email = $('registerEmail')?.value?.trim();
+      const password = $('registerPassword')?.value;
+      const terms = $('termsAccepted')?.checked;
+
+      if(!firstName || !lastName || !email || !password){
+        showBox('registerError', 'Bitte fülle alle Felder aus.');
         return;
       }
-      if (!terms) {
-        showError('Bitte bestätige die AGB und Datenschutzhinweise.');
+      if(password.length < 6){
+        showBox('registerError', 'Das Passwort muss mindestens 6 Zeichen lang sein.');
         return;
       }
-      if (password.length < 6) {
-        showError('Das Passwort muss mindestens 6 Zeichen lang sein.');
-        return;
-      }
-      if (!supabaseClient) {
-        showError('Supabase ist nicht verfügbar. Bitte prüfe die Frontend-Konfiguration.');
+      if(!terms){
+        showBox('registerError', 'Bitte bestätige die AGB und Datenschutzhinweise.');
         return;
       }
 
-      const button = document.getElementById('registerBtn');
-      setLoading(button, true, 'Konto erstellen');
+      setBtnLoading('registerBtn', true, 'Kostenlos registrieren');
 
-      try {
-        const { data, error } = await supabaseClient.auth.signUp({
+      try{
+        const fullName = `${firstName} ${lastName}`;
+
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             data: {
-              first_name: firstName,
-              last_name: lastName,
-              full_name: `${firstName} ${lastName}`
+              name: fullName
             }
           }
         });
 
-        if (error) {
-          showError(mapAuthError(error.message));
+        if(error){
+          showBox('registerError', authMessage(error.message));
           return;
         }
 
         const userId = data?.user?.id;
-        if (userId) {
-          try {
-            await supabaseClient.from('profiles').upsert({
-              id: userId,
-              email,
-              name: `${firstName} ${lastName}`,
-              first_name: firstName,
-              last_name: lastName,
-              is_premium: false,
-              created_at: new Date().toISOString()
-            });
-          } catch (profileError) {
-            console.warn('Profil konnte nicht direkt angelegt werden:', profileError);
+        if(userId){
+          // Exakt passend zur profiles.csv Struktur
+          const profilePayload = {
+            id: userId,
+            email,
+            name: fullName,
+            plan: 'free',
+            risk_level: null,
+            investment_budget: null,
+            investment_horizon: null,
+            wants_crypto: false,
+            alert_frequency: 'important',
+            email_alerts_enabled: false,
+            created_at: new Date().toISOString()
+          };
+
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .upsert(profilePayload, { onConflict: 'id' });
+
+          if(profileError){
+            console.error('Profilfehler:', profileError);
+            showBox('registerError', 'Registrierung war teilweise erfolgreich, aber das Profil konnte nicht gespeichert werden. Bitte prüfe deine Supabase-Policies.');
+            return;
           }
         }
 
-        showSuccess('Konto erstellt. Bitte prüfe dein E-Mail-Postfach und bestätige deine Adresse, falls Supabase die Bestätigung verlangt.');
-      } catch (error) {
-        showError('Die Registrierung konnte nicht abgeschlossen werden.');
-      } finally {
-        setLoading(button, false, 'Konto erstellen');
+        showBox('registerSuccess', 'Konto erstellt. Bitte prüfe dein E-Mail-Postfach, falls eine Bestätigung erforderlich ist.');
+      }catch(err){
+        console.error(err);
+        showBox('registerError', 'Registrierung aktuell nicht möglich.');
+      }finally{
+        setBtnLoading('registerBtn', false, 'Kostenlos registrieren');
       }
     }
 
-    document.querySelectorAll('.modal-overlay').forEach((overlay) => {
-      overlay.addEventListener('click', (event) => {
-        if (event.target !== overlay) return;
-        overlay.classList.remove('open');
-        overlay.setAttribute('aria-hidden', 'true');
-      });
+    async function handleLogout(){
+      await supabase.auth.signOut();
+      state.user = null;
+      state.profile = null;
+      renderNav();
+      navigate('/');
+    }
+
+    /* ============================================================
+       ROUTER / GATES
+    ============================================================ */
+    function showPage(pageId){
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      const page = $(pageId);
+      if(page) page.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function showGate(text, isPlusGate = false){
+      showPage('page-gate');
+      $('gateBadge').textContent = isPlusGate ? '💎 Nur für Plus' : '🔐 Anmeldung erforderlich';
+      $('gateText').textContent = text;
+    }
+
+    async function router(){
+      hideAllMessages();
+      await getSessionAndProfile();
+
+      const { path, params } = getHashRoute();
+
+      if(path === '/' || path === ''){
+        showPage('page-home');
+        return;
+      }
+
+      if(path === '/anmelden'){
+        showPage('page-login');
+        return;
+      }
+
+      if(path === '/registrieren'){
+        showPage('page-register');
+        return;
+      }
+
+      if(path === '/analyse'){
+        if(!state.user){
+          showGate('Die Analyse ist erst nach der Anmeldung sichtbar.');
+          return;
+        }
+        showPage('page-analyse');
+        renderAnalysisPage();
+        return;
+      }
+
+      if(path === '/watchlist'){
+        if(!state.user){
+          showGate('Die Watchlist ist erst nach der Anmeldung sichtbar.');
+          return;
+        }
+        if(!isPlus()){
+          showGate('Die Watchlist ist nur für Plus-Kunden verfügbar.', true);
+          return;
+        }
+        showPage('page-watchlist');
+        await renderWatchlist();
+        return;
+      }
+
+      if(path === '/premium/chancen'){
+        if(!state.user){
+          showGate('Premium-Chancen sind erst nach der Anmeldung sichtbar.');
+          return;
+        }
+        if(!isPlus()){
+          showGate('Premium-Chancen sind nur für Plus-Kunden verfügbar.', true);
+          return;
+        }
+        showPage('page-premium-feed');
+        await loadOpportunities();
+        return;
+      }
+
+      if(path === '/premium/chancen/detail'){
+        if(!state.user){
+          showGate('Die Premium-Detailseite ist erst nach der Anmeldung sichtbar.');
+          return;
+        }
+        if(!isPlus()){
+          showGate('Die Premium-Detailseite ist nur für Plus-Kunden verfügbar.', true);
+          return;
+        }
+        showPage('page-premium-detail');
+        await loadOpportunityDetail(params.get('id'));
+        return;
+      }
+
+      if(path === '/konto'){
+        if(!state.user){
+          showGate('Das Konto ist erst nach der Anmeldung sichtbar.');
+          return;
+        }
+        showPage('page-account');
+        renderAccountPage();
+        return;
+      }
+
+      showPage('page-home');
+    }
+
+    /* ============================================================
+       ANALYSE
+    ============================================================ */
+    function renderAnalysisPage(){
+      const planText = isPlus()
+        ? 'Du bist Plus-Kunde. Du solltest hier später 5–10 Ideen, mehr Kategorien und zusätzliche Chancen sehen.'
+        : 'Du bist Free-Kunde. Du solltest hier später eine schlankere Auswertung mit 2–3 Ideen sehen. Watchlist und Premium-Chancen bleiben gesperrt.';
+      $('analysisPlanInfo').innerHTML = `
+        <p>${planText}</p>
+        <div class="meta-list" style="margin-top:16px;">
+          <div><strong>Aktueller Plan:</strong> ${state.profile?.plan || 'free'}</div>
+          <div><strong>Gespeichertes Risikolevel:</strong> ${state.profile?.risk_level || '–'}</div>
+          <div><strong>Budget:</strong> ${state.profile?.investment_budget || '–'}</div>
+          <div><strong>Anlagehorizont:</strong> ${state.profile?.investment_horizon || '–'}</div>
+        </div>
+      `;
+
+      $('riskLevel').value = state.profile?.risk_level || 'defensiv';
+      $('investmentBudget').value = state.profile?.investment_budget || '';
+      $('investmentHorizon').value = state.profile?.investment_horizon || 'mittel';
+      $('wantsCrypto').checked = !!state.profile?.wants_crypto;
+    }
+
+    async function saveAnalysis(){
+      hideBox('analyseError'); hideBox('analyseSuccess');
+
+      const payload = {
+        risk_level: $('riskLevel').value,
+        investment_budget: Number($('investmentBudget').value || 0) || null,
+        investment_horizon: $('investmentHorizon').value,
+        wants_crypto: $('wantsCrypto').checked
+      };
+
+      const { error } = await supabase
+        .from('profiles')
+        .update(payload)
+        .eq('id', state.user.id);
+
+      if(error){
+        console.error(error);
+        showBox('analyseError', 'Analyse konnte nicht gespeichert werden.');
+        return;
+      }
+
+      state.profile = { ...state.profile, ...payload };
+      renderNav();
+      renderAnalysisPage();
+      showBox('analyseSuccess', 'Analyse gespeichert.');
+    }
+
+    /* ============================================================
+       WATCHLIST
+       Erwartete Tabelle:
+       watchlist(id uuid default gen_random_uuid(), user_id uuid, ticker text, name text, alert_above numeric, alert_below numeric, created_at timestamptz)
+    ============================================================ */
+    async function renderWatchlist(){
+      hideBox('watchlistError'); hideBox('watchlistSuccess');
+
+      const { data, error } = await supabase
+        .from('watchlist')
+        .select('*')
+        .eq('user_id', state.user.id)
+        .order('created_at', { ascending: false });
+
+      if(error){
+        console.error(error);
+        $('watchlistTable').innerHTML = `<div class="empty">Watchlist konnte nicht geladen werden. Bitte prüfe die Tabelle und Policies.</div>`;
+        return;
+      }
+
+      if(!data || data.length === 0){
+        $('watchlistTable').innerHTML = `<div class="empty">Noch keine Werte gespeichert.</div>`;
+        return;
+      }
+
+      $('watchlistTable').innerHTML = `
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Wert</th>
+              <th>Ticker</th>
+              <th>Alert ↑</th>
+              <th>Alert ↓</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.map(row => `
+              <tr>
+                <td><strong>${row.name || '–'}</strong></td>
+                <td>${row.ticker || '–'}</td>
+                <td>${row.alert_above ?? '–'}</td>
+                <td>${row.alert_below ?? '–'}</td>
+                <td><button class="btn btn-ghost btn-small" onclick="removeWatchItem('${row.id}')">Entfernen</button></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    async function addWatchItem(){
+      hideBox('watchlistError'); hideBox('watchlistSuccess');
+
+      const ticker = $('watchTicker').value.trim().toUpperCase();
+      const name = $('watchName').value.trim();
+      const alertAbove = $('alertAbove').value ? Number($('alertAbove').value) : null;
+      const alertBelow = $('alertBelow').value ? Number($('alertBelow').value) : null;
+
+      if(!ticker || !name){
+        showBox('watchlistError', 'Bitte Ticker und Name ausfüllen.');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('watchlist')
+        .insert({
+          user_id: state.user.id,
+          ticker,
+          name,
+          alert_above: alertAbove,
+          alert_below: alertBelow,
+          created_at: new Date().toISOString()
+        });
+
+      if(error){
+        console.error(error);
+        showBox('watchlistError', 'Wert konnte nicht zur Watchlist hinzugefügt werden.');
+        return;
+      }
+
+      $('watchTicker').value = '';
+      $('watchName').value = '';
+      $('alertAbove').value = '';
+      $('alertBelow').value = '';
+
+      showBox('watchlistSuccess', 'Wert zur Watchlist hinzugefügt.');
+      await renderWatchlist();
+    }
+
+    async function removeWatchItem(id){
+      const { error } = await supabase.from('watchlist').delete().eq('id', id);
+      if(error){
+        console.error(error);
+        showBox('watchlistError', 'Wert konnte nicht entfernt werden.');
+        return;
+      }
+      showBox('watchlistSuccess', 'Wert entfernt.');
+      await renderWatchlist();
+    }
+
+    /* ============================================================
+       OPPORTUNITIES / PREMIUM FEED
+       Erwartete Tabelle opportunities mit Feldern wie:
+       id, title, asset_name, ticker, asset_type, country, sector, industry,
+       short_description, why_now, what_happened, chances, risks, fit_for,
+       alternative_ideas, analyst_summary, is_published, published_at
+    ============================================================ */
+    async function loadOpportunities(){
+      hideBox('feedError'); hideBox('feedSuccess');
+
+      const { data, error } = await supabase
+        .from('opportunities')
+        .select('*')
+        .eq('is_published', true)
+        .order('published_at', { ascending: false });
+
+      if(error){
+        console.error(error);
+        $('opportunityGrid').innerHTML = `<div class="empty">Chancen konnten nicht geladen werden. Bitte prüfe Tabelle/Policies.</div>`;
+        return;
+      }
+
+      state.opportunities = data || [];
+
+      if(!state.opportunities.length){
+        $('opportunityGrid').innerHTML = `<div class="empty">Noch keine veröffentlichten Chancen vorhanden.</div>`;
+        return;
+      }
+
+      $('opportunityGrid').innerHTML = state.opportunities.map(opp => `
+        <article class="panel chance-card" onclick="navigate('/premium/chancen/detail?id=${opp.id}')">
+          <div class="chance-top">
+            <div>
+              <div class="chance-title">${opp.asset_name || opp.title || 'Chance'}</div>
+              <div class="chance-sub">${opp.ticker || '–'} · ${(opp.country || '–')} · ${(opp.industry || opp.sector || '–')}</div>
+            </div>
+            <span class="pill plus">Plus</span>
+          </div>
+          <div class="chance-copy">${opp.short_description || opp.why_now || 'Keine Beschreibung vorhanden.'}</div>
+          <div class="meta-list">
+            <div><strong>Warum jetzt:</strong> ${(opp.why_now || '–').toString().slice(0, 110)}${(opp.why_now || '').length > 110 ? '…' : ''}</div>
+            <div><strong>Analysten / Markt:</strong> ${(opp.analyst_summary || 'Einordnung vorhanden').toString().slice(0, 90)}</div>
+          </div>
+          <div style="margin-top:18px;">
+            <span class="pill">Chance ansehen →</span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    /* ============================================================
+       PREMIUM DETAIL
+       - Opportunity aus Supabase
+       - Kurs + Overview + Daily Chart via Alpha Vantage
+       - Analysten vorerst aus opportunities.analyst_summary
+    ============================================================ */
+    async function loadOpportunityDetail(id){
+      hideBox('detailError'); hideBox('detailSuccess');
+
+      if(!id){
+        showBox('detailError', 'Keine Opportunity-ID gefunden.');
+        return;
+      }
+
+      const { data: opp, error } = await supabase
+        .from('opportunities')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+
+      if(error || !opp){
+        console.error(error);
+        showBox('detailError', 'Chance konnte nicht geladen werden.');
+        return;
+      }
+
+      $('detailBadge').textContent = `⚡ Premium-Chance`;
+      $('detailTitle').textContent = opp.asset_name || opp.title || 'Premium-Chance';
+      $('detailDescription').textContent = opp.short_description || opp.why_now || '–';
+      $('detailTicker').textContent = opp.ticker || '–';
+      $('detailAssetType').textContent = opp.asset_type || 'Aktie';
+      $('detailCountry').textContent = opp.country || '–';
+      $('detailSector').textContent = [opp.sector, opp.industry].filter(Boolean).join(' / ') || '–';
+      $('detailOpportunityId').textContent = opp.id || '–';
+      $('detailWhyNow').innerHTML = (opp.why_now || '–').replace(/\n/g, '<br>');
+      $('detailWhatHappened').innerHTML = (opp.what_happened || '–').replace(/\n/g, '<br>');
+      $('detailChances').innerHTML = renderListHTML(opp.chances);
+      $('detailRisks').innerHTML = renderListHTML(opp.risks);
+      $('detailFit').innerHTML = (opp.fit_for || '–').replace(/\n/g, '<br>');
+      $('detailAlternatives').innerHTML = renderListHTML(opp.alternative_ideas);
+      $('detailAnalysts').innerHTML = (opp.analyst_summary || 'Keine Analysten-Zusammenfassung in Supabase hinterlegt.').replace(/\n/g, '<br>');
+      $('detailAnalystHeadline').textContent = opp.analyst_summary ? 'Einordnung vorhanden' : 'Keine Daten';
+
+      await Promise.all([
+        loadAlphaQuote(opp.ticker),
+        loadAlphaOverview(opp.ticker),
+        loadAlphaChart(opp.ticker)
+      ]);
+    }
+
+    async function loadAlphaQuote(ticker){
+      if(!ticker) return;
+      try{
+        const res = await fetch(`${CONFIG.alphaVantage.baseUrl}?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(ticker)}&apikey=${CONFIG.alphaVantage.key}`);
+        const data = await res.json();
+        const q = data['Global Quote'];
+        if(!q) return;
+
+        const price = q['05. price'];
+        const changePct = q['10. change percent']?.replace('%','');
+
+        $('detailPrice').textContent = formatMoneyUsd(price);
+        $('detailChange').textContent = formatPercent(changePct);
+      }catch(err){
+        console.error('Quote Fehler', err);
+      }
+    }
+
+    async function loadAlphaOverview(ticker){
+      if(!ticker) return;
+      try{
+        const res = await fetch(`${CONFIG.alphaVantage.baseUrl}?function=OVERVIEW&symbol=${encodeURIComponent(ticker)}&apikey=${CONFIG.alphaVantage.key}`);
+        const data = await res.json();
+        if(!data || !data.Symbol) return;
+
+        const html = `
+          <div class="meta-list">
+            <div><strong>Name:</strong> ${data.Name || '–'}</div>
+            <div><strong>Land:</strong> ${data.Country || '–'}</div>
+            <div><strong>Sektor:</strong> ${data.Sector || '–'}</div>
+            <div><strong>Branche:</strong> ${data.Industry || '–'}</div>
+            <div><strong>Marktkapitalisierung:</strong> ${data.MarketCapitalization || '–'}</div>
+            <div><strong>KGV:</strong> ${data.PERatio || '–'}</div>
+          </div>
+          <p style="margin-top:16px;">${data.Description || 'Keine Beschreibung verfügbar.'}</p>
+        `;
+        $('detailOverview').innerHTML = html;
+
+        if(!$('detailCountry').textContent || $('detailCountry').textContent === '–'){
+          $('detailCountry').textContent = data.Country || '–';
+        }
+        if($('detailSector').textContent === '–'){
+          $('detailSector').textContent = [data.Sector, data.Industry].filter(Boolean).join(' / ') || '–';
+        }
+      }catch(err){
+        console.error('Overview Fehler', err);
+      }
+    }
+
+    async function loadAlphaChart(ticker){
+      if(!ticker) return;
+      try{
+        const res = await fetch(`${CONFIG.alphaVantage.baseUrl}?function=TIME_SERIES_DAILY&symbol=${encodeURIComponent(ticker)}&outputsize=compact&apikey=${CONFIG.alphaVantage.key}`);
+        const data = await res.json();
+        const series = data['Time Series (Daily)'];
+        if(!series) return;
+
+        const entries = Object.entries(series)
+          .slice(0, 30)
+          .reverse();
+
+        const labels = entries.map(([date]) => date);
+        const values = entries.map(([, point]) => Number(point['4. close']));
+
+        const ctx = $('detailChart').getContext('2d');
+        if(state.chart) state.chart.destroy();
+
+        state.chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [{
+              label: `${ticker} USD`,
+              data: values,
+              borderColor: '#22b8ff',
+              backgroundColor: 'rgba(34,184,255,.12)',
+              fill: true,
+              tension: 0.35,
+              pointRadius: 0,
+              pointHoverRadius: 3
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { labels: { color: '#dbeafe' } }
+            },
+            scales: {
+              x: {
+                ticks: { color: '#91a2bc', maxTicksLimit: 6 },
+                grid: { color: 'rgba(117,141,181,.08)' }
+              },
+              y: {
+                ticks: { color: '#91a2bc' },
+                grid: { color: 'rgba(117,141,181,.08)' }
+              }
+            }
+          }
+        });
+      }catch(err){
+        console.error('Chart Fehler', err);
+      }
+    }
+
+    /* ============================================================
+       ACCOUNT
+    ============================================================ */
+    function renderAccountPage(){
+      $('accountName').textContent = state.profile?.name || '–';
+      $('accountEmail').textContent = state.profile?.email || state.user?.email || '–';
+      $('accountPlan').textContent = state.profile?.plan || 'free';
+      $('accountAlerts').textContent = state.profile?.alert_frequency || 'important';
+    }
+
+    /* ============================================================
+       INIT
+    ============================================================ */
+    supabase.auth.onAuthStateChange(async () => {
+      await router();
     });
 
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        closeAuthModal();
-        closePremiumModal();
-        closeLegalModal();
-      }
-    });
+    window.addEventListener('hashchange', router);
+    window.addEventListener('load', router);
   </script>
+
+  <!-- ============================================================
+       SUPABASE SQL HINWEISE
+       DIESE STRUKTUREN PASSEN ZU DIESER EINZELNEN HTML-DATEI:
+
+       profiles  (passt zu deiner CSV)
+       ------------------------------------------------------------
+       create table if not exists profiles (
+         id uuid primary key references auth.users(id) on delete cascade,
+         email text,
+         name text,
+         plan text default 'free',
+         risk_level text,
+         investment_budget numeric,
+         investment_horizon text,
+         wants_crypto boolean default false,
+         alert_frequency text default 'important',
+         email_alerts_enabled boolean default false,
+         created_at timestamptz default now()
+       );
+
+       watchlist
+       ------------------------------------------------------------
+       create table if not exists watchlist (
+         id uuid default gen_random_uuid() primary key,
+         user_id uuid references auth.users(id) on delete cascade,
+         ticker text,
+         name text,
+         alert_above numeric,
+         alert_below numeric,
+         created_at timestamptz default now()
+       );
+
+       opportunities
+       ------------------------------------------------------------
+       create table if not exists opportunities (
+         id uuid default gen_random_uuid() primary key,
+         title text,
+         asset_name text,
+         ticker text,
+         asset_type text,
+         country text,
+         sector text,
+         industry text,
+         short_description text,
+         why_now text,
+         what_happened text,
+         chances jsonb,
+         risks jsonb,
+         fit_for text,
+         alternative_ideas jsonb,
+         analyst_summary text,
+         is_published boolean default false,
+         published_at timestamptz default now(),
+         created_at timestamptz default now()
+       );
+
+       RLS + POLICIES
+       ------------------------------------------------------------
+       alter table profiles enable row level security;
+       alter table watchlist enable row level security;
+       alter table opportunities enable row level security;
+
+       create policy "profiles select own"
+       on profiles for select
+       using (auth.uid() = id);
+
+       create policy "profiles insert own"
+       on profiles for insert
+       with check (auth.uid() = id);
+
+       create policy "profiles update own"
+       on profiles for update
+       using (auth.uid() = id);
+
+       create policy "watchlist own all"
+       on watchlist for all
+       using (auth.uid() = user_id)
+       with check (auth.uid() = user_id);
+
+       create policy "opportunities read authenticated"
+       on opportunities for select
+       using (auth.role() = 'authenticated');
+
+       WICHTIG ZUR REGISTRIERUNG:
+       Falls die Registrierung weiterhin scheitert, liegt es meist an:
+       - Auth Email/Password nicht aktiviert
+       - Confirm Email aktiv und Mail nicht bestätigt
+       - profiles RLS/Policies fehlen
+       - profiles Tabelle existiert nicht
+  ============================================================ -->
 </body>
 </html>
