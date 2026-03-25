@@ -445,24 +445,6 @@
       box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
     }
 
-    .benefits {
-      width: min(980px, 100%);
-      margin: 14px auto 110px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-    }
-    .benefit-card { padding: 24px; }
-    .benefit-card h4 {
-      font-size: 20px;
-      line-height: 1.2;
-      letter-spacing: -0.03em;
-      font-weight: 800;
-      margin-bottom: 10px;
-      color: #f4f8fe;
-    }
-    .benefit-card p { color: var(--text-muted); font-size: 15px; line-height: 1.65; }
-
     .disclaimer {
       width: min(980px, 100%);
       margin: 0 auto 72px;
@@ -856,21 +838,6 @@
       font-family: inherit;
     }
 
-    .premium-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 180px;
-      padding: 0 22px;
-      height: 48px;
-      border-radius: 24px;
-      background: linear-gradient(90deg, #1fafff 0%, #20cfb1 100%);
-      color: white;
-      font-size: 15px;
-      font-weight: 800;
-      box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
-    }
-
     .chips {
       display: flex;
       gap: 10px;
@@ -1171,7 +1138,7 @@
       padding: 10px 0;
     }
 
-    .opportunity-list { display: grid; gap: 12px; margin-top: 16px; }
+    .opportunity-list { display: grid; gap: 12px; margin-top: 0; }
     .opportunity-item {
       width: 100%;
       text-align: left;
@@ -1210,6 +1177,16 @@
     }
     .banner.show { display: block; }
 
+    .loader-card {
+      padding: 24px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
+      border: 1px solid rgba(117, 141, 181, 0.16);
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
     @media (max-width: 1180px) {
       .app-layout, .content-split { grid-template-columns: 1fr; }
       .facts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1218,7 +1195,7 @@
 
     @media (max-width: 820px) {
       .container { width: min(100% - 28px, 100%); }
-      .feature-grid, .pricing-grid, .benefits, .field-grid, .stats-grid, .grid-3, .toolbar-grid, .facts-grid {
+      .feature-grid, .pricing-grid, .field-grid, .stats-grid, .grid-3, .toolbar-grid, .facts-grid {
         grid-template-columns: 1fr;
       }
       .compare-box { padding: 18px 18px 10px; border-radius: 22px; }
@@ -1295,8 +1272,8 @@
           </article>
           <article class="feature-card">
             <span class="emoji">📬</span>
-            <h3>E-Mail Alerts</h3>
-            <p>Lege Preisregeln fest und verwalte deine Beobachtungen an einem Ort.</p>
+            <h3>Kursregeln & Hinweise</h3>
+            <p>Lege Preisregeln fest und erhalte im Browser Benachrichtigungen, sobald eine Regel ausgelöst wird.</p>
           </article>
           <article class="feature-card">
             <span class="emoji">🧭</span>
@@ -1498,7 +1475,15 @@
           </section>
 
           <section class="content-card">
-            <h3>Aktive Kursregeln</h3>
+            <div class="row-head" style="margin-bottom: 18px;">
+              <div>
+                <h3>Aktive Kursregeln</h3>
+                <p class="muted">Die Regeln bleiben im Browser erhalten und können Benachrichtigungen auslösen.</p>
+              </div>
+              <div class="inline-actions">
+                <button class="mini-btn" type="button" onclick="enableBrowserNotifications()">Benachrichtigungen aktivieren</button>
+              </div>
+            </div>
             <div class="alert-list" id="watchAlertList">
               <div class="alert-item">
                 <strong>Noch keine Kursregeln</strong>
@@ -1674,10 +1659,10 @@
 
       <section class="app-layout">
         <aside class="sidebar-card">
-          <div class="premium-badge">Nach Login verfügbar</div>
-          <h3 style="margin-top:18px;">Chancen der letzten 5 Tage</h3>
-          <p class="muted">Alle Chancen sind jetzt nach Anmeldung sichtbar – ohne separates Plus-Gate.</p>
-          <div class="opportunity-list" id="opportunityList"></div>
+          <h3>Chancen der letzten 5 Tage</h3>
+          <div class="opportunity-list" id="opportunityList">
+            <div class="search-empty">Chancen werden geladen …</div>
+          </div>
         </aside>
 
         <div class="content-grid">
@@ -1689,9 +1674,6 @@
 
                 <h3 style="margin-top:24px;">Warum könnte das gerade interessant sein?</h3>
                 <p class="body-copy" id="premiumWhyText"></p>
-
-                <h3 style="margin-top:24px;">Was Analysten und Marktbeobachter sehen</h3>
-                <p class="body-copy" id="premiumAnalystText"></p>
               </div>
 
               <div>
@@ -1719,9 +1701,9 @@
 
           <section class="content-card">
             <div class="notice">
-              Diese Seite ist aktuell bewusst nach Login frei zugänglich gemacht.
-              Falls du später wieder ein echtes Premium-Gate willst, kann man das sauber mit `plan`
-              bzw. `is_premium` im Profil zurückschalten.
+              Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen,
+              aber keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf
+              von Finanzinstrumenten. Investitionen sind mit Risiken verbunden.
             </div>
           </section>
         </div>
@@ -1819,177 +1801,36 @@
     const CONFIG = {
       supabaseUrl: 'https://wksfnfhlnynrkqzjcqxb.supabase.co',
       supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrc2ZuZmhsbnlucmtxempjcXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNjQ1MjcsImV4cCI6MjA4OTg0MDUyN30.hs-9YKdo-vjzR9EIxYzCqalDc90CiRhcH6ALOvd_WXs',
-      finnhubApiKey: 'd13dvc9r01qs7glh0ijgd13dvc9r01qs7glh0ik0'
+      finnhubApiKey: 'd13dvc9r01qs7glh0ijgd13dvc9r01qs7glh0ik0',
+      opportunitiesTables: ['opportunities', 'Opportunities', 'opportunitis', 'Opportunitis']
     };
 
     let supabaseClient = null;
+    let currentUser = null;
+    let currentProfile = null;
+    let currentFavorite = null;
+    let currentOpportunity = null;
+    let currentOpportunityDays = [];
+    let tradingViewWidget = null;
+    let pendingConfirmationEmail = '';
+    let authInitialized = false;
+    let searchState = { query: '', results: [] };
+    let premiumRefreshTimer = null;
+    let alertMonitorTimer = null;
+
     try {
       if (window.supabase?.createClient) {
-        supabaseClient = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey);
+        supabaseClient = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        });
       }
     } catch (e) {
       console.error('Supabase konnte nicht initialisiert werden:', e);
     }
-
-    const SAMPLE_DAYS = [
-      {
-        date: "2026-03-24",
-        opportunities: [
-          {
-            id: "nvda-20260324",
-            name: "NVIDIA",
-            ticker: "NVDA",
-            symbol: "NASDAQ:NVDA",
-            price: 942.10,
-            changePct: 2.1,
-            currency: "USD",
-            country: "USA",
-            sector: "Technologie",
-            industry: "Halbleiter",
-            theme: "KI-Infrastruktur",
-            exchange: "NASDAQ",
-            marketCap: "Large Cap",
-            description: "NVIDIA entwickelt Hochleistungs-Chips und Plattformen für KI, Rechenzentren, Grafik und industrielle Anwendungen. Das Unternehmen profitiert stark vom Aufbau neuer KI-Infrastruktur.",
-            whyNow: "Die Aktie ist nach einer starken Bewegung nicht billig, aber der operative Rückenwind bleibt hoch. Wenn Umsatzwachstum und Margen stabil bleiben, kann das Chancen-Risiko-Verhältnis weiterhin interessant sein.",
-            analystView: "Der Markt fokussiert sich auf Datacenter-Wachstum, neue Produktzyklen und die Frage, wie nachhaltig die KI-Nachfrage bleibt.",
-            chance: "Dominante Marktstellung im KI-Stack, hohe Datacenter-Nachfrage, neue Produktgenerationen und starke operative Hebel.",
-            risk: "Hohe Bewertung, stärkere Schwankungen und Abhängigkeit vom Investitionszyklus großer Kunden.",
-            alternative: "Microsoft als defensivere Qualitätsidee oder ein breiter Technologie-/KI-ETF.",
-            source: "Premium-Analyse 24.03.2026"
-          },
-          {
-            id: "asml-20260324",
-            name: "ASML",
-            ticker: "ASML",
-            symbol: "EURONEXT:ASML",
-            price: 894.50,
-            changePct: 1.3,
-            currency: "EUR",
-            country: "Niederlande",
-            sector: "Technologie",
-            industry: "Lithographiesysteme",
-            theme: "Chip-Produktion",
-            exchange: "EURONEXT",
-            marketCap: "Large Cap",
-            description: "ASML ist zentral für die weltweite Halbleiterproduktion und liefert Schlüsseltechnologie für fortgeschrittene Chipfertigung.",
-            whyNow: "Der Markt achtet stark auf Investitionspläne im Halbleitersektor. ASML profitiert von struktureller Nachfrage, bleibt aber zyklisch.",
-            analystView: "Entscheidend sind Orderlage, geopolitische Risiken und die Ausbauraten großer Halbleiterkunden.",
-            chance: "Strukturelle Knappheit bei High-End-Fertigungskapazität und hohe technologische Eintrittsbarrieren.",
-            risk: "Zyklik im Sektor, Exportbeschränkungen und einzelne größere Kunden als Treiber.",
-            alternative: "TSMC als Infrastruktur-Profiteur oder Semiconductor-ETF als breitere Alternative.",
-            source: "Premium-Analyse 24.03.2026"
-          }
-        ]
-      },
-      {
-        date: "2026-03-23",
-        opportunities: [
-          {
-            id: "msft-20260323",
-            name: "Microsoft",
-            ticker: "MSFT",
-            symbol: "NASDAQ:MSFT",
-            price: 428.70,
-            changePct: 0.8,
-            currency: "USD",
-            country: "USA",
-            sector: "Technologie",
-            industry: "Software / Cloud",
-            theme: "KI-Ökosystem",
-            exchange: "NASDAQ",
-            marketCap: "Mega Cap",
-            description: "Microsoft verbindet Cloud, Unternehmenssoftware und KI-Produkte in einem breit diversifizierten Qualitätsprofil.",
-            whyNow: "Cloud und KI-Monetarisierung treiben die Story. Die Aktie gilt oft als defensivere KI-Idee als reine Halbleiterwerte.",
-            analystView: "Wichtig sind Azure-Wachstum, KI-Preisgestaltung und die operative Hebelwirkung im Enterprise-Geschäft.",
-            chance: "Breite Plattform, starke Cashflows und gute Positionierung bei KI-Anwendungen.",
-            risk: "Hohe Erwartungen, starker Wettbewerb und bei Enttäuschungen schneller Bewertungsdruck.",
-            alternative: "Alphabet oder Nasdaq-100-ETF.",
-            source: "Premium-Analyse 23.03.2026"
-          }
-        ]
-      },
-      {
-        date: "2026-03-22",
-        opportunities: [
-          {
-            id: "novo-20260322",
-            name: "Novo Nordisk",
-            ticker: "NOVO-B",
-            symbol: "OMXCOP:NOVO_B",
-            price: 875.20,
-            changePct: -1.2,
-            currency: "DKK",
-            country: "Dänemark",
-            sector: "Gesundheit",
-            industry: "Pharma",
-            theme: "Adipositas / Diabetes",
-            exchange: "OMXCOP",
-            marketCap: "Large Cap",
-            description: "Novo Nordisk ist führend in Diabetes- und Adipositas-Therapien und profitiert von strukturellem Gesundheitswachstum.",
-            whyNow: "Die Nachfrage nach Adipositas-Medikamenten bleibt ein zentraler Kurstreiber, gleichzeitig ist das Thema stark im Markt eingepreist.",
-            analystView: "Entscheidend sind Produktionskapazitäten, Wettbewerb und langfristige Margenentwicklung.",
-            chance: "Starkes Produktprofil, struktureller Nachfragepfad und hohe Qualität.",
-            risk: "Bewertung, regulatorische Entwicklungen und Wettbewerb im GLP-1-Markt.",
-            alternative: "Eli Lilly oder Healthcare-ETF.",
-            source: "Premium-Analyse 22.03.2026"
-          }
-        ]
-      },
-      {
-        date: "2026-03-21",
-        opportunities: [
-          {
-            id: "ko-20260321",
-            name: "Coca-Cola",
-            ticker: "KO",
-            symbol: "NYSE:KO",
-            price: 63.45,
-            changePct: 0.4,
-            currency: "USD",
-            country: "USA",
-            sector: "Konsum",
-            industry: "Getränke",
-            theme: "Defensiv / Qualität",
-            exchange: "NYSE",
-            marketCap: "Large Cap",
-            description: "Coca-Cola steht für globale Markenstärke, relativ stabile Nachfrage und defensives Profil.",
-            whyNow: "In unsicheren Marktphasen rücken defensive Qualitätswerte oft stärker in den Fokus.",
-            analystView: "Themen sind Pricing Power, Margenqualität und globale Nachfrageentwicklung.",
-            chance: "Stabile Cashflows, starke Marke, defensiver Charakter.",
-            risk: "Begrenztes Wachstum, Währungsbewegungen und Bewertungsniveau.",
-            alternative: "PepsiCo oder Consumer Staples ETF.",
-            source: "Premium-Analyse 21.03.2026"
-          }
-        ]
-      },
-      {
-        date: "2026-03-20",
-        opportunities: [
-          {
-            id: "coin-20260320",
-            name: "Coinbase",
-            ticker: "COIN",
-            symbol: "NASDAQ:COIN",
-            price: 228.10,
-            changePct: 3.4,
-            currency: "USD",
-            country: "USA",
-            sector: "Finanzen",
-            industry: "Krypto-Infrastruktur",
-            theme: "Krypto / Volatilität",
-            exchange: "NASDAQ",
-            marketCap: "Mid/Large Cap",
-            description: "Coinbase ist eine zentrale Plattform für Krypto-Handel und Infrastruktur in den USA.",
-            whyNow: "Steigende Krypto-Aktivität, Zuflüsse in den Sektor und stärkere Risikobereitschaft stützen das Setup.",
-            analystView: "Wichtig sind Handelsvolumen, Regulierung und die Nachhaltigkeit der Marktaktivität.",
-            chance: "Hebel auf steigende Krypto-Aktivität und Infrastrukturrolle im Ökosystem.",
-            risk: "Sehr hohe Volatilität, Regulierungsrisiken und starke Stimmungsabhängigkeit.",
-            alternative: "Bitcoin-ETF oder breiter Krypto-Proxy mit kleinerer Positionsgröße.",
-            source: "Premium-Analyse 20.03.2026"
-          }
-        ]
-      }
-    ];
 
     const chartDefaults = {
       symbol: "NASDAQ:AAPL",
@@ -2014,24 +1855,30 @@
       { value: "below_price", label: "Benachrichtige mich, wenn der Kurs unter einen Preis fällt" }
     ];
 
-    let currentUser = null;
-    let currentProfile = null;
-    let currentFavorite = null;
-    let currentOpportunity = null;
-    let tradingViewWidget = null;
-    let pendingConfirmationEmail = '';
-
     function getEl(id) {
       return document.getElementById(id);
     }
 
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     function formatMoney(value, currency = 'USD') {
-      if (value === null || value === undefined || value === '') return '—';
-      return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency,
-        maximumFractionDigits: 2
-      }).format(Number(value));
+      if (value === null || value === undefined || value === '' || Number.isNaN(Number(value))) return '—';
+      try {
+        return new Intl.NumberFormat('de-DE', {
+          style: 'currency',
+          currency,
+          maximumFractionDigits: 2
+        }).format(Number(value));
+      } catch {
+        return `${Number(value).toFixed(2)} ${currency}`;
+      }
     }
 
     function formatDateLabel(dateStr) {
@@ -2052,6 +1899,10 @@
     function clearBanner() {
       getEl('globalBanner').classList.remove('show');
       getEl('globalBanner').textContent = '';
+    }
+
+    function cryptoRandomId() {
+      return Math.random().toString(36).slice(2) + Date.now().toString(36);
     }
 
     function getStorageKey(base) {
@@ -2091,17 +1942,36 @@
       return loadFavorites().some(item => item.symbol === symbol);
     }
 
+    function getTickerFromSymbol(symbol = '') {
+      if (!symbol) return '';
+      return symbol.includes(':') ? symbol.split(':').pop().trim() : symbol.trim();
+    }
+
+    function normalizeExchangeToTradingView(exchange = '', displaySymbol = '') {
+      const map = {
+        US: 'NASDAQ',
+        NASDAQ: 'NASDAQ',
+        NYSE: 'NYSE',
+        XETRA: 'XETR',
+        EURONEXT: 'EURONEXT',
+        FWB: 'FWB',
+        OMXCOP: 'OMXCOP',
+        SIX: 'SIX',
+        LSE: 'LSE'
+      };
+      const upper = String(exchange || '').toUpperCase();
+      if (displaySymbol?.includes(':')) return displaySymbol;
+      if (!displaySymbol) return '';
+      return `${map[upper] || upper || 'NASDAQ'}:${displaySymbol}`;
+    }
+
     function normalizeFinnhubResult(item) {
       const displaySymbol = item.displaySymbol || item.symbol || '';
       const exchange = (item.exchange || '').toUpperCase();
       const country = item.country || '—';
       const currency = item.currency || 'USD';
       const description = item.description || displaySymbol || 'Unbekannt';
-
-      let symbol = displaySymbol;
-      if (exchange && displaySymbol && !displaySymbol.includes(':')) {
-        symbol = `${exchange}:${displaySymbol}`;
-      }
+      const symbol = normalizeExchangeToTradingView(exchange, displaySymbol);
 
       return {
         id: `${exchange || 'EX'}-${displaySymbol}`.replace(/\s+/g, '-'),
@@ -2116,6 +1986,70 @@
         price: null,
         changePct: null
       };
+    }
+
+    function normalizeOpportunityRow(row) {
+      const symbolRaw = row.symbol || '';
+      const assetName = row.asset_name || getTickerFromSymbol(symbolRaw) || 'Unbekannt';
+      const tradingViewSymbol = symbolRaw.includes(':') ? symbolRaw : normalizeExchangeToTradingView(row.exchange || row.region || '', symbolRaw);
+      const ticker = getTickerFromSymbol(symbolRaw);
+      const createdAt = row.created_at || new Date().toISOString();
+      const region = row.region || '—';
+      const assetType = row.asset_type || 'Aktie';
+      const strategyTag = row.strategy_tag || 'Marktchance';
+      const currency = row.currency || 'USD';
+      const currentPrice = row.current_price !== null && row.current_price !== undefined && row.current_price !== '' ? Number(row.current_price) : null;
+      const changePercent = row.change_percent !== null && row.change_percent !== undefined && row.change_percent !== '' ? Number(row.change_percent) : null;
+
+      return {
+        id: String(row.id || cryptoRandomId()),
+        name: assetName,
+        ticker,
+        symbol: tradingViewSymbol || ticker,
+        displaySymbol: symbolRaw,
+        price: currentPrice,
+        changePct: changePercent,
+        currency,
+        country: region,
+        sector: strategyTag,
+        industry: assetType,
+        theme: strategyTag,
+        exchange: tradingViewSymbol?.includes(':') ? tradingViewSymbol.split(':')[0] : '—',
+        marketCap: '—',
+        description: '',
+        whyNow: row.reason_text || 'Der Opportunity-Eintrag liefert aktuell einen relevanten Marktkontext für diese Aktie.',
+        chance: '',
+        risk: row.risk_text || 'Bitte beachte die allgemeinen Markt- und Unternehmensrisiken.',
+        alternative: '',
+        source: `Opportunity-Eintrag vom ${new Date(createdAt).toLocaleString('de-DE')}`,
+        contextText: row.context_text || '',
+        reasonText: row.reason_text || '',
+        riskText: row.risk_text || '',
+        score: row.score || null,
+        strategyTag,
+        assetType,
+        region,
+        isPremium: row.is_premium,
+        status: row.status,
+        createdAt,
+        createdDate: new Date(createdAt).toISOString().slice(0, 10)
+      };
+    }
+
+    function groupOpportunitiesByDate(items) {
+      const grouped = {};
+      items.forEach(item => {
+        if (!grouped[item.createdDate]) grouped[item.createdDate] = [];
+        grouped[item.createdDate].push(item);
+      });
+
+      return Object.keys(grouped)
+        .sort((a, b) => new Date(b) - new Date(a))
+        .slice(0, 5)
+        .map(date => ({
+          date,
+          opportunities: grouped[date].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        }));
     }
 
     function showView(viewId) {
@@ -2238,7 +2172,7 @@
 
     function handlePremiumInterest() {
       closePremiumModal();
-      showBanner('Der Upgrade-Bereich ist jetzt klar vorbereitet. Für echte Zahlungen brauchst du als Nächstes einen serverseitigen Stripe-Checkout-Endpunkt.');
+      showBanner('Der Upgrade-Bereich ist vorbereitet. Für echte Zahlungen brauchst du als Nächstes einen serverseitigen Stripe-Checkout-Endpunkt.');
       goToRoute('/#preise');
     }
 
@@ -2369,8 +2303,8 @@
 
         setTimeout(() => {
           closeAuthModal();
-          goToRoute('/watchlist');
           refreshNavUI();
+          goToRoute('/watchlist');
         }, 700);
       } catch (error) {
         console.error(error);
@@ -2443,8 +2377,8 @@
           showSuccess('Konto erstellt und direkt angemeldet.');
           setTimeout(() => {
             closeAuthModal();
-            goToRoute('/watchlist');
             refreshNavUI();
+            goToRoute('/watchlist');
           }, 700);
           return;
         }
@@ -2500,6 +2434,10 @@
       currentUser = null;
       currentProfile = null;
       currentFavorite = null;
+      currentOpportunity = null;
+      currentOpportunityDays = [];
+      stopPremiumAutoRefresh();
+      stopAlertMonitoring();
       refreshNavUI();
       clearBanner();
       goToRoute('/');
@@ -2622,6 +2560,7 @@
     }
 
     function renderSearchResults(results) {
+      searchState.results = results || [];
       const root = getEl('searchResults');
 
       if (!results || !results.length) {
@@ -2636,13 +2575,13 @@
           <div class="search-result-card">
             <div class="search-result-top">
               <div>
-                <strong>${normalized.name}</strong>
+                <strong>${escapeHtml(normalized.name)}</strong>
                 <div class="symbol-meta">
-                  ${normalized.ticker || '—'} · ${normalized.exchange || '—'} · ${normalized.country || '—'}<br>
-                  Symbol für Chart: ${normalized.symbol || '—'}
+                  ${escapeHtml(normalized.ticker || '—')} · ${escapeHtml(normalized.exchange || '—')} · ${escapeHtml(normalized.country || '—')}<br>
+                  Symbol für Chart: ${escapeHtml(normalized.symbol || '—')}
                 </div>
               </div>
-              <button class="star-btn ${fav ? 'active' : ''}" data-symbol="${normalized.symbol}" data-item='${encodeURIComponent(JSON.stringify(normalized))}' title="Zu Favoriten hinzufügen">★</button>
+              <button class="star-btn ${fav ? 'active' : ''}" data-symbol="${escapeHtml(normalized.symbol)}" data-item='${encodeURIComponent(JSON.stringify(normalized))}' title="Zu Favoriten hinzufügen">★</button>
             </div>
             <div class="inline-actions">
               <button class="mini-btn" data-open='${encodeURIComponent(JSON.stringify(normalized))}'>Im Chart öffnen</button>
@@ -2668,6 +2607,8 @@
 
     async function searchStocks() {
       const query = getEl('stockSearchInput').value.trim();
+      searchState.query = query;
+
       if (!query) {
         renderSearchResults([]);
         return;
@@ -2689,6 +2630,12 @@
       }
     }
 
+    function rerenderSearchResultsIfNeeded() {
+      if (searchState.query && searchState.results.length) {
+        renderSearchResults(searchState.results);
+      }
+    }
+
     function toggleFavorite(item) {
       if (!requireLogin()) return;
 
@@ -2696,20 +2643,25 @@
       const exists = favorites.findIndex(f => f.symbol === item.symbol);
 
       if (exists >= 0) {
+        const removed = favorites[exists];
         favorites.splice(exists, 1);
         saveFavorites(favorites);
 
         const alerts = loadAlerts();
-        delete alerts[item.id];
+        delete alerts[removed.id];
         saveAlerts(alerts);
 
-        if (currentFavorite?.symbol === item.symbol) {
-          currentFavorite = null;
-          renderEmptyFavoriteState();
+        if (currentFavorite?.symbol === removed.symbol) {
+          currentFavorite = favorites[0] || null;
+          if (currentFavorite) {
+            renderFavoriteDetail(currentFavorite);
+          } else {
+            renderEmptyFavoriteState();
+          }
         }
 
         renderFavoritesList();
-        searchStocks();
+        rerenderSearchResultsIfNeeded();
         return;
       }
 
@@ -2718,11 +2670,19 @@
         return;
       }
 
-      favorites.unshift(item);
+      const finalItem = {
+        ...item,
+        id: item.id || cryptoRandomId()
+      };
+
+      favorites.unshift(finalItem);
       saveFavorites(favorites);
+      currentFavorite = finalItem;
+
       renderFavoritesList();
-      renderFavoriteDetail(item);
-      searchStocks();
+      renderFavoriteDetail(finalItem);
+      rerenderSearchResultsIfNeeded();
+      startAlertMonitoring();
     }
 
     function removeFavorite(id) {
@@ -2734,12 +2694,16 @@
       saveAlerts(alerts);
 
       if (currentFavorite?.id === id) {
-        currentFavorite = null;
-        renderEmptyFavoriteState();
+        currentFavorite = favorites[0] || null;
+        if (currentFavorite) {
+          renderFavoriteDetail(currentFavorite);
+        } else {
+          renderEmptyFavoriteState();
+        }
       }
 
       renderFavoritesList();
-      searchStocks();
+      rerenderSearchResultsIfNeeded();
     }
 
     function renderFavoritesList() {
@@ -2757,12 +2721,12 @@
         <div class="favorite-card">
           <div class="favorite-top">
             <div>
-              <strong>${item.name}</strong>
-              <div class="symbol-meta">${item.ticker || '—'} · ${item.exchange || '—'} · ${item.country || '—'}<br>${item.symbol}</div>
+              <strong>${escapeHtml(item.name)}</strong>
+              <div class="symbol-meta">${escapeHtml(item.ticker || '—')} · ${escapeHtml(item.exchange || '—')} · ${escapeHtml(item.country || '—')}<br>${escapeHtml(item.symbol)}</div>
             </div>
             <div class="inline-actions">
-              <button class="mini-btn" data-open-id="${item.id}">Öffnen</button>
-              <button class="danger-btn" data-remove-id="${item.id}">Entfernen</button>
+              <button class="mini-btn" data-open-id="${escapeHtml(item.id)}">Öffnen</button>
+              <button class="danger-btn" data-remove-id="${escapeHtml(item.id)}">Entfernen</button>
             </div>
           </div>
 
@@ -2770,14 +2734,13 @@
             <div class="field-inline">
               <label>Neue Kursregel hinzufügen</label>
               <div class="alert-builder-row">
-                <select data-alert-type="${item.id}">
-                  ${ALERT_TEMPLATES.map(t => `<option value="${t.value}">${t.label}</option>`).join('')}
+                <select data-alert-type="${escapeHtml(item.id)}">
+                  ${ALERT_TEMPLATES.map(t => `<option value="${escapeHtml(t.value)}">${escapeHtml(t.label)}</option>`).join('')}
                 </select>
-                <input data-alert-price="${item.id}" type="number" step="0.01" placeholder="Preis (nur falls nötig)" />
-                <button class="mini-btn" data-save-alert="${item.id}">Speichern</button>
+                <input data-alert-price="${escapeHtml(item.id)}" type="number" step="0.01" placeholder="Preis (nur falls nötig)" />
+                <button class="mini-btn" data-save-alert="${escapeHtml(item.id)}">Speichern</button>
               </div>
             </div>
-            <div class="muted">Hinweis: Regeln werden aktuell im Browser gespeichert. Für echte E-Mail-Auslösung brauchst du später einen serverseitigen Job oder Edge Function.</div>
           </div>
         </div>
       `).join('');
@@ -2796,8 +2759,8 @@
       root.querySelectorAll('[data-save-alert]').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.dataset.saveAlert;
-          const type = root.querySelector(`[data-alert-type="${id}"]`).value;
-          const targetPrice = root.querySelector(`[data-alert-price="${id}"]`).value;
+          const type = root.querySelector(`[data-alert-type="${CSS.escape(id)}"]`).value;
+          const targetPrice = root.querySelector(`[data-alert-price="${CSS.escape(id)}"]`).value;
           saveAlertRule(id, type, targetPrice);
         });
       });
@@ -2805,13 +2768,32 @@
 
     function getAlertLabel(rule) {
       switch (rule.type) {
-        case 'drop_pct_2': return 'Benachrichtige mich, wenn der Kurs um 2 % fällt';
-        case 'drop_pct_5': return 'Benachrichtige mich, wenn der Kurs um 5 % fällt';
-        case 'rise_pct_3': return 'Benachrichtige mich, wenn der Kurs um 3 % steigt';
-        case 'rise_pct_5': return 'Benachrichtige mich, wenn der Kurs um 5 % steigt';
-        case 'target_price': return `Benachrichtige mich, wenn der Kurs ${rule.targetPrice || '—'} erreicht`;
-        case 'below_price': return `Benachrichtige mich, wenn der Kurs unter ${rule.targetPrice || '—'} fällt`;
+        case 'drop_pct_2': return 'Kurs fällt um 2 % oder mehr';
+        case 'drop_pct_5': return 'Kurs fällt um 5 % oder mehr';
+        case 'rise_pct_3': return 'Kurs steigt um 3 % oder mehr';
+        case 'rise_pct_5': return 'Kurs steigt um 5 % oder mehr';
+        case 'target_price': return `Kurs erreicht ${rule.targetPrice || '—'}`;
+        case 'below_price': return `Kurs fällt unter ${rule.targetPrice || '—'}`;
         default: return 'Benachrichtigung';
+      }
+    }
+
+    async function enableBrowserNotifications() {
+      if (!('Notification' in window)) {
+        showBanner('Dieser Browser unterstützt keine Benachrichtigungen.');
+        return;
+      }
+
+      if (Notification.permission === 'granted') {
+        showBanner('Browser-Benachrichtigungen sind bereits aktiviert.');
+        return;
+      }
+
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        showBanner('Browser-Benachrichtigungen wurden aktiviert.');
+      } else {
+        showBanner('Benachrichtigungen wurden nicht freigegeben.');
       }
     }
 
@@ -2830,9 +2812,10 @@
       alerts[favoriteId].push({
         id: cryptoRandomId(),
         type,
-        targetPrice: targetPrice || null,
-        email: currentUser?.email || currentProfile?.email || null,
-        createdAt: new Date().toISOString()
+        targetPrice: targetPrice ? Number(targetPrice) : null,
+        createdAt: new Date().toISOString(),
+        lastTriggeredAt: null,
+        cooldownMinutes: 180
       });
 
       saveAlerts(alerts);
@@ -2842,6 +2825,8 @@
       }
 
       showBanner('Kursregel gespeichert.');
+      enableBrowserNotifications();
+      startAlertMonitoring();
     }
 
     function deleteAlertRule(favoriteId, alertId) {
@@ -2868,10 +2853,10 @@
       root.innerHTML = alerts.map((rule, idx) => `
         <div class="alert-item">
           <strong>Kursregel ${idx + 1}</strong>
-          <p>${getAlertLabel(rule)}</p>
-          <p style="margin-top:8px;">Empfänger: ${rule.email || '—'}</p>
+          <p>${escapeHtml(getAlertLabel(rule))}</p>
+          <p style="margin-top:8px;">Erstellt: ${new Date(rule.createdAt).toLocaleString('de-DE')}</p>
           <div class="inline-actions" style="margin-top:12px;">
-            <button class="danger-btn" data-delete-alert="${rule.id}">Löschen</button>
+            <button class="danger-btn" data-delete-alert="${escapeHtml(rule.id)}">Löschen</button>
           </div>
         </div>
       `).join('');
@@ -2879,6 +2864,118 @@
       root.querySelectorAll('[data-delete-alert]').forEach(btn => {
         btn.addEventListener('click', () => deleteAlertRule(favoriteId, btn.dataset.deleteAlert));
       });
+    }
+
+    async function fetchQuoteForSymbol(symbol) {
+      const ticker = getTickerFromSymbol(symbol);
+      if (!ticker) return null;
+
+      try {
+        const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(ticker)}&token=${CONFIG.finnubApiKey || CONFIG.finnhubApiKey}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!data || typeof data !== 'object') return null;
+
+        return {
+          current: Number(data.c || 0),
+          previousClose: Number(data.pc || 0),
+          changePercent: data.pc ? ((Number(data.c || 0) - Number(data.pc || 0)) / Number(data.pc || 1)) * 100 : 0
+        };
+      } catch (error) {
+        console.error('quote fetch error', error);
+        return null;
+      }
+    }
+
+    function shouldTriggerAlert(rule, quote) {
+      if (!quote || !quote.current) return false;
+
+      switch (rule.type) {
+        case 'drop_pct_2': return quote.changePercent <= -2;
+        case 'drop_pct_5': return quote.changePercent <= -5;
+        case 'rise_pct_3': return quote.changePercent >= 3;
+        case 'rise_pct_5': return quote.changePercent >= 5;
+        case 'target_price': return Number(rule.targetPrice) && quote.current >= Number(rule.targetPrice);
+        case 'below_price': return Number(rule.targetPrice) && quote.current <= Number(rule.targetPrice);
+        default: return false;
+      }
+    }
+
+    function isRuleOnCooldown(rule) {
+      if (!rule.lastTriggeredAt) return false;
+      const diffMs = Date.now() - new Date(rule.lastTriggeredAt).getTime();
+      const cooldownMinutes = Number(rule.cooldownMinutes || 180);
+      return diffMs < cooldownMinutes * 60 * 1000;
+    }
+
+    function fireBrowserNotification(title, body) {
+      if (!('Notification' in window)) return;
+      if (Notification.permission !== 'granted') return;
+
+      try {
+        new Notification(title, { body });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function checkAlertsNow() {
+      if (!currentUser) return;
+
+      const favorites = loadFavorites();
+      const alerts = loadAlerts();
+      if (!favorites.length) return;
+
+      for (const favorite of favorites) {
+        const rules = alerts[favorite.id] || [];
+        if (!rules.length) continue;
+
+        const quote = await fetchQuoteForSymbol(favorite.symbol);
+        if (!quote) continue;
+
+        let changed = false;
+
+        rules.forEach(rule => {
+          if (isRuleOnCooldown(rule)) return;
+          if (!shouldTriggerAlert(rule, quote)) return;
+
+          rule.lastTriggeredAt = new Date().toISOString();
+          changed = true;
+
+          const message = `${favorite.name} (${favorite.ticker || getTickerFromSymbol(favorite.symbol)}) hat eine Kursregel ausgelöst. Aktueller Kurs: ${formatMoney(quote.current, favorite.currency || 'USD')}`;
+          showBanner(message);
+          fireBrowserNotification('AnlageKompass Kursregel ausgelöst', message);
+        });
+
+        if (changed) {
+          alerts[favorite.id] = rules;
+        }
+      }
+
+      saveAlerts(alerts);
+
+      if (currentFavorite?.id) {
+        renderAlertList(currentFavorite.id);
+      }
+    }
+
+    function startAlertMonitoring() {
+      stopAlertMonitoring();
+
+      if (!currentUser) return;
+      const alerts = loadAlerts();
+      const hasRules = Object.values(alerts).some(arr => Array.isArray(arr) && arr.length);
+      if (!hasRules) return;
+
+      checkAlertsNow();
+      alertMonitorTimer = setInterval(checkAlertsNow, 120000);
+    }
+
+    function stopAlertMonitoring() {
+      if (alertMonitorTimer) {
+        clearInterval(alertMonitorTimer);
+        alertMonitorTimer = null;
+      }
     }
 
     function renderEmptyFavoriteState() {
@@ -2898,48 +2995,150 @@
       loadTradingViewChart();
     }
 
-    function renderFavoriteDetail(item) {
-      currentFavorite = item;
+    async function hydrateFavoriteWithQuote(item) {
+      const quote = await fetchQuoteForSymbol(item.symbol);
+      if (!quote) return item;
 
-      getEl('watchTitle').textContent = `${item.name}${item.ticker ? ' (' + item.ticker + ')' : ''}`;
+      return {
+        ...item,
+        price: quote.current || item.price,
+        changePct: typeof quote.changePercent === 'number' ? quote.changePercent : item.changePct
+      };
+    }
+
+    async function renderFavoriteDetail(item) {
+      currentFavorite = item;
+      const liveItem = await hydrateFavoriteWithQuote(item);
+
+      getEl('watchTitle').textContent = `${liveItem.name}${liveItem.ticker ? ' (' + liveItem.ticker + ')' : ''}`;
       getEl('watchSubtitle').innerHTML = `
-        ${item.country || '—'} · ${item.exchange || '—'} ·
+        ${escapeHtml(liveItem.country || '—')} · ${escapeHtml(liveItem.exchange || '—')} ·
         <button class="linklike" type="button" onclick="goToRoute('/premium/chancen')">Chancen öffnen</button>
       `;
 
-      getEl('watchPrice').textContent = item.price ? formatMoney(item.price, item.currency || 'USD') : 'Livekurs extern';
+      getEl('watchPrice').textContent = liveItem.price ? formatMoney(liveItem.price, liveItem.currency || 'USD') : 'Livekurs extern';
       const changeEl = getEl('watchChange');
-      if (typeof item.changePct === 'number') {
-        const sign = item.changePct >= 0 ? '+' : '';
-        changeEl.textContent = `${sign}${item.changePct.toFixed(1)} % heute`;
-        changeEl.className = `change ${item.changePct >= 0 ? 'pos' : 'neg'}`;
+      if (typeof liveItem.changePct === 'number' && !Number.isNaN(liveItem.changePct)) {
+        const sign = liveItem.changePct >= 0 ? '+' : '';
+        changeEl.textContent = `${sign}${liveItem.changePct.toFixed(1)} % heute`;
+        changeEl.className = `change ${liveItem.changePct >= 0 ? 'pos' : 'neg'}`;
       } else {
         changeEl.textContent = 'Chart aktiv';
         changeEl.className = 'change';
       }
 
       getEl('watchFactsGrid').innerHTML = `
-        <div class="fact-card"><div class="label">Name</div><div class="value">${item.name || '—'}</div></div>
-        <div class="fact-card"><div class="label">Ticker</div><div class="value">${item.ticker || '—'}</div></div>
-        <div class="fact-card"><div class="label">Börse</div><div class="value">${item.exchange || '—'}</div></div>
-        <div class="fact-card"><div class="label">Land</div><div class="value">${item.country || '—'}</div></div>
+        <div class="fact-card"><div class="label">Name</div><div class="value">${escapeHtml(liveItem.name || '—')}</div></div>
+        <div class="fact-card"><div class="label">Ticker</div><div class="value">${escapeHtml(liveItem.ticker || '—')}</div></div>
+        <div class="fact-card"><div class="label">Börse</div><div class="value">${escapeHtml(liveItem.exchange || '—')}</div></div>
+        <div class="fact-card"><div class="label">Land</div><div class="value">${escapeHtml(liveItem.country || '—')}</div></div>
       `;
 
-      renderAlertList(item.id);
-      getEl('symbol').value = item.symbol || chartDefaults.symbol;
+      renderAlertList(liveItem.id);
+      getEl('symbol').value = liveItem.symbol || chartDefaults.symbol;
       loadTradingViewChart();
     }
 
-    function cryptoRandomId() {
-      return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    async function fetchCompanyProfile(symbol) {
+      const ticker = getTickerFromSymbol(symbol);
+      if (!ticker) return null;
+
+      try {
+        const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${encodeURIComponent(ticker)}&token=${CONFIG.finnhubApiKey}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!data || !Object.keys(data).length) return null;
+        return data;
+      } catch (error) {
+        console.error('profile fetch error', error);
+        return null;
+      }
     }
 
-    function getAvailableDays() {
-      return SAMPLE_DAYS.slice(0, 5);
+    function buildAssetDescription(opportunity, profile) {
+      const company = opportunity.name || profile?.name || opportunity.ticker || 'Dieses Unternehmen';
+      const industry = profile?.finnhubIndustry || opportunity.industry || 'seinem Marktsegment';
+      const exchange = profile?.exchange || opportunity.exchange || 'dem Markt';
+      const country = profile?.country || opportunity.country || 'dem jeweiligen Markt';
+
+      let text = `${company} ist in ${industry} aktiv und wird über ${exchange} gehandelt. `;
+      text += `Der Fokus liegt aktuell auf ${opportunity.assetType || 'dem Unternehmen'} in ${country}. `;
+
+      if (opportunity.contextText) {
+        text += opportunity.contextText.trim();
+      } else if (profile?.weburl) {
+        text += `Das Unternehmen gehört zu den Titeln, die aktuell wegen ihrer Marktsituation und ihres strategischen Umfelds näher beobachtet werden.`;
+      } else {
+        text += `Der Titel wird derzeit im Chancen-Feed geführt und gehört damit zu den Werten, die wir aktuell besonders beobachten.`;
+      }
+
+      return text;
+    }
+
+    function buildChanceText(opportunity) {
+      if (opportunity.contextText) {
+        return opportunity.contextText;
+      }
+
+      const parts = [];
+      if (opportunity.strategyTag) parts.push(`Passend zum Thema ${opportunity.strategyTag}`);
+      if (opportunity.reasonText) parts.push(opportunity.reasonText);
+      if (!parts.length) parts.push('Die Chance ergibt sich aus dem aktuellen Markt-Setup und der Einordnung im Chancen-Feed.');
+      return parts.join(' ');
+    }
+
+    function buildRiskText(opportunity) {
+      return opportunity.riskText || 'Neben allgemeinen Marktrisiken spielen bei diesem Wert insbesondere Timing, Volatilität und das Ausbleiben des erwarteten Szenarios eine Rolle.';
+    }
+
+    function buildAlternativeIdea(opportunity) {
+      const assetType = String(opportunity.assetType || '').toLowerCase();
+      const region = String(opportunity.region || '').toLowerCase();
+      const tag = opportunity.strategyTag || 'die gleiche Marktidee';
+
+      if (assetType.includes('etf')) {
+        return `Als Alternative kann ein breiter diversifizierter ETF aus ${opportunity.region || 'dem gleichen Markt'} sinnvoll sein, wenn du ${tag} breiter und weniger einzelwertabhängig abbilden möchtest.`;
+      }
+
+      if (assetType.includes('crypto')) {
+        return `Als Alternative kann ein breiter Krypto-Ansatz oder ein kleiner gewichteter Proxy auf das gleiche Thema sinnvoll sein, wenn du die Volatilität eines Einzelwerts reduzieren möchtest.`;
+      }
+
+      if (region.includes('usa') || region.includes('us')) {
+        return `Als Alternative kann statt des Einzelwerts auch ein breiter US-Markt-ETF oder ein thematisch passender Qualitätswert genutzt werden, um die gleiche Idee defensiver umzusetzen.`;
+      }
+
+      if (region.includes('de') || region.includes('eu') || region.includes('euro')) {
+        return `Als Alternative kann ein breiter Europa-ETF oder ein anderer Qualitätswert aus dem gleichen Sektor genutzt werden, wenn du die Idee breiter streuen möchtest.`;
+      }
+
+      return `Als Alternative kann ein breiter Markt- oder Sektor-ETF sinnvoll sein, wenn du ${tag} mit geringerer Einzelwertrisiko-Abhängigkeit umsetzen möchtest.`;
+    }
+
+    async function loadOpportunitiesFromSupabase() {
+      if (!supabaseClient) return [];
+
+      for (const tableName of CONFIG.opportunitiesTables) {
+        try {
+          const { data, error } = await supabaseClient
+            .from(tableName)
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(300);
+
+          if (!error && Array.isArray(data)) {
+            return data;
+          }
+        } catch (error) {
+          console.error(`Opportunities load error on table ${tableName}:`, error);
+        }
+      }
+
+      return [];
     }
 
     function findOpportunityById(opportunityId) {
-      for (const day of getAvailableDays()) {
+      for (const day of currentOpportunityDays) {
         const found = day.opportunities.find(item => item.id === opportunityId);
         if (found) return { day, opportunity: found };
       }
@@ -2948,90 +3147,194 @@
 
     function populateDaySelect(days) {
       const select = getEl('daySelect');
+
+      if (!days.length) {
+        select.innerHTML = `<option value="">Keine Daten</option>`;
+        return;
+      }
+
       select.innerHTML = days.map((day) => `
-        <option value="${day.date}">${formatDateLabel(day.date)}</option>
+        <option value="${escapeHtml(day.date)}">${escapeHtml(formatDateLabel(day.date))}</option>
       `).join('');
     }
 
     function populateOpportunitySelect(day, selectedId = null) {
       const select = getEl('opportunitySelect');
+
+      if (!day?.opportunities?.length) {
+        select.innerHTML = `<option value="">Keine Chancen verfügbar</option>`;
+        return;
+      }
+
       select.innerHTML = day.opportunities.map(op => `
-        <option value="${op.id}" ${selectedId === op.id ? 'selected' : ''}>
-          ${op.name} (${op.ticker})
+        <option value="${escapeHtml(op.id)}" ${selectedId === op.id ? 'selected' : ''}>
+          ${escapeHtml(op.name)} (${escapeHtml(op.ticker || getTickerFromSymbol(op.symbol))})
         </option>
       `).join('');
     }
 
     function renderOpportunityList(day, selectedId) {
       const list = getEl('opportunityList');
+
+      if (!day?.opportunities?.length) {
+        list.innerHTML = `<div class="search-empty">Keine Chancen verfügbar.</div>`;
+        return;
+      }
+
       list.innerHTML = day.opportunities.map(op => `
-        <button class="opportunity-item ${op.id === selectedId ? 'active' : ''}" data-id="${op.id}">
-          <strong>${op.name} (${op.ticker})</strong>
-          <span>${op.country} · ${op.industry}</span>
-          <span>${formatMoney(op.price, op.currency)} · ${op.changePct >= 0 ? '+' : ''}${op.changePct.toFixed(1)} % heute</span>
+        <button class="opportunity-item ${op.id === selectedId ? 'active' : ''}" data-id="${escapeHtml(op.id)}">
+          <strong>${escapeHtml(op.name)} (${escapeHtml(op.ticker || getTickerFromSymbol(op.symbol))})</strong>
+          <span>${escapeHtml(op.country || '—')} · ${escapeHtml(op.industry || '—')}</span>
+          <span>${formatMoney(op.price, op.currency)} · ${typeof op.changePct === 'number' && !Number.isNaN(op.changePct) ? (op.changePct >= 0 ? '+' : '') + op.changePct.toFixed(1) + ' % heute' : 'Kursdaten folgen'}</span>
         </button>
       `).join('');
 
       list.querySelectorAll('.opportunity-item').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.dataset.id;
-          goToRoute('/premium/chancen/' + id);
+          goToRoute('/premium/chancen/' + encodeURIComponent(id));
         });
       });
     }
 
-    function renderPremiumFacts(opportunity) {
+    function renderPremiumFacts(opportunity, profile) {
       const facts = [
-        { label: 'Ticker', value: opportunity.ticker },
-        { label: 'Land', value: opportunity.country },
-        { label: 'Sektor', value: opportunity.sector },
-        { label: 'Branche', value: opportunity.industry },
-        { label: 'Börse', value: opportunity.exchange },
-        { label: 'Marktkapitalisierung', value: opportunity.marketCap },
-        { label: 'Währung', value: opportunity.currency },
-        { label: 'Quelle', value: opportunity.source }
+        { label: 'Ticker', value: opportunity.ticker || '—' },
+        { label: 'Markt', value: opportunity.exchange || profile?.exchange || '—' },
+        { label: 'Region', value: opportunity.country || profile?.country || '—' },
+        { label: 'Kategorie', value: opportunity.assetType || '—' },
+        { label: 'Thema', value: opportunity.strategyTag || '—' },
+        { label: 'Score', value: opportunity.score || '—' },
+        { label: 'Währung', value: opportunity.currency || '—' },
+        { label: 'Erfasst am', value: new Date(opportunity.createdAt).toLocaleString('de-DE') }
       ];
 
       getEl('premiumFactsGrid').innerHTML = facts.map(item => `
         <div class="fact-card">
-          <div class="label">${item.label}</div>
-          <div class="value">${item.value}</div>
+          <div class="label">${escapeHtml(item.label)}</div>
+          <div class="value">${escapeHtml(item.value)}</div>
         </div>
       `).join('');
     }
 
-    function renderPremiumOpportunity(opportunity, day) {
+    async function renderPremiumOpportunity(opportunity, day) {
       currentOpportunity = opportunity;
 
-      getEl('premiumHeroTitle').textContent = `${opportunity.name} (${opportunity.ticker})`;
-      getEl('premiumHeroPrice').textContent = formatMoney(opportunity.price, opportunity.currency);
+      const profile = await fetchCompanyProfile(opportunity.symbol);
+      const quote = await fetchQuoteForSymbol(opportunity.symbol);
+
+      const finalOpportunity = {
+        ...opportunity,
+        price: quote?.current || opportunity.price,
+        changePct: typeof quote?.changePercent === 'number' ? quote.changePercent : opportunity.changePct
+      };
+
+      getEl('premiumHeroTitle').textContent = `${finalOpportunity.name} (${finalOpportunity.ticker || getTickerFromSymbol(finalOpportunity.symbol)})`;
+      getEl('premiumHeroPrice').textContent = finalOpportunity.price ? formatMoney(finalOpportunity.price, finalOpportunity.currency) : '—';
 
       const changeEl = getEl('premiumHeroChange');
-      const sign = opportunity.changePct >= 0 ? '+' : '';
-      changeEl.textContent = `${sign}${opportunity.changePct.toFixed(1)} % heute · ${opportunity.currency}`;
-      changeEl.className = `change ${opportunity.changePct >= 0 ? 'pos' : 'neg'}`;
+      if (typeof finalOpportunity.changePct === 'number' && !Number.isNaN(finalOpportunity.changePct)) {
+        const sign = finalOpportunity.changePct >= 0 ? '+' : '';
+        changeEl.textContent = `${sign}${finalOpportunity.changePct.toFixed(1)} % heute · ${finalOpportunity.currency}`;
+        changeEl.className = `change ${finalOpportunity.changePct >= 0 ? 'pos' : 'neg'}`;
+      } else {
+        changeEl.textContent = finalOpportunity.currency || '—';
+        changeEl.className = 'change';
+      }
 
       getEl('premiumHeroChips').innerHTML = `
-        <span class="chip">${opportunity.country}</span>
-        <span class="chip">${opportunity.sector}</span>
-        <span class="chip">${opportunity.industry}</span>
-        <span class="chip">${opportunity.theme}</span>
+        <span class="chip">${escapeHtml(finalOpportunity.country || '—')}</span>
+        <span class="chip">${escapeHtml(finalOpportunity.assetType || '—')}</span>
+        <span class="chip">${escapeHtml(finalOpportunity.strategyTag || '—')}</span>
+        <span class="chip">${escapeHtml(finalOpportunity.symbol || '—')}</span>
       `;
 
-      getEl('premiumAboutText').textContent = opportunity.description;
-      getEl('premiumWhyText').textContent = opportunity.whyNow;
-      getEl('premiumAnalystText').textContent = opportunity.analystView;
-      getEl('premiumChanceText').textContent = opportunity.chance;
-      getEl('premiumRiskText').textContent = opportunity.risk;
-      getEl('premiumAlternativeText').textContent = opportunity.alternative;
+      getEl('premiumAboutText').textContent = buildAssetDescription(finalOpportunity, profile);
+      getEl('premiumWhyText').textContent = finalOpportunity.reasonText || finalOpportunity.whyNow || 'Für diesen Wert liegt aktuell ein relevanter Eintrag im Chancen-Feed vor.';
+      getEl('premiumChanceText').textContent = buildChanceText(finalOpportunity);
+      getEl('premiumRiskText').textContent = buildRiskText(finalOpportunity);
+      getEl('premiumAlternativeText').textContent = buildAlternativeIdea(finalOpportunity);
 
-      renderPremiumFacts(opportunity);
+      renderPremiumFacts(finalOpportunity, profile);
       getEl('daySelect').value = day.date;
-      populateOpportunitySelect(day, opportunity.id);
-      renderOpportunityList(day, opportunity.id);
+      populateOpportunitySelect(day, finalOpportunity.id);
+      renderOpportunityList(day, finalOpportunity.id);
 
-      getEl('symbol').value = opportunity.symbol;
+      getEl('symbol').value = finalOpportunity.symbol || chartDefaults.symbol;
       loadTradingViewChart();
+    }
+
+    function renderPremiumEmptyState() {
+      showView('view-premium');
+      getEl('premiumHeroTitle').textContent = 'Noch keine Chancen verfügbar';
+      getEl('premiumHeroCopy').textContent = 'Sobald in Supabase neue Opportunities angelegt werden, erscheinen sie hier automatisch nach Datum.';
+      getEl('premiumHeroPrice').textContent = '—';
+      getEl('premiumHeroChange').textContent = '—';
+      getEl('premiumHeroChips').innerHTML = '';
+      getEl('premiumAboutText').textContent = 'Der Bereich ist live an Supabase angebunden. Aktuell wurden noch keine Einträge gefunden.';
+      getEl('premiumWhyText').textContent = 'Lege Datensätze in deiner Opportunities-Tabelle an. Die created_at-Spalte wird automatisch zur Tageszuordnung verwendet.';
+      getEl('premiumChanceText').textContent = 'Sobald Daten vorhanden sind, erscheinen hier die Chancen je Aktie.';
+      getEl('premiumRiskText').textContent = 'Sobald Daten vorhanden sind, erscheinen hier die Risiken je Aktie.';
+      getEl('premiumAlternativeText').textContent = 'Sobald Daten vorhanden sind, erscheint hier die alternative Idee je Aktie.';
+      getEl('premiumFactsGrid').innerHTML = `
+        <div class="fact-card"><div class="label">Status</div><div class="value">Keine Daten</div></div>
+        <div class="fact-card"><div class="label">Quelle</div><div class="value">Supabase</div></div>
+        <div class="fact-card"><div class="label">Tabelle</div><div class="value">Opportunities / Opportunitis</div></div>
+        <div class="fact-card"><div class="label">created_at</div><div class="value">Wird für Tage verwendet</div></div>
+      `;
+      getEl('opportunityList').innerHTML = `<div class="search-empty">Keine Chancen verfügbar.</div>`;
+      getEl('daySelect').innerHTML = `<option value="">Keine Daten</option>`;
+      getEl('opportunitySelect').innerHTML = `<option value="">Keine Daten</option>`;
+    }
+
+    async function refreshPremiumData(keepCurrent = true) {
+      const raw = await loadOpportunitiesFromSupabase();
+      const normalized = raw.map(normalizeOpportunityRow).filter(item => {
+        const status = String(item.status || '').toLowerCase();
+        return !status || status === 'active' || status === 'live' || status === 'published';
+      });
+
+      currentOpportunityDays = groupOpportunitiesByDate(normalized);
+
+      if (!currentOpportunityDays.length) {
+        renderPremiumEmptyState();
+        return null;
+      }
+
+      const route = parseRoute();
+      const routeId = route.startsWith('/premium/chancen/') ? decodeURIComponent(route.replace('/premium/chancen/', '').trim()) : null;
+
+      let resolved = routeId ? findOpportunityById(routeId) : null;
+      if (!resolved && keepCurrent && currentOpportunity?.id) {
+        resolved = findOpportunityById(currentOpportunity.id);
+      }
+      if (!resolved) {
+        resolved = {
+          day: currentOpportunityDays[0],
+          opportunity: currentOpportunityDays[0].opportunities[0]
+        };
+      }
+
+      populateDaySelect(currentOpportunityDays);
+      populateOpportunitySelect(resolved.day, resolved.opportunity.id);
+      await renderPremiumOpportunity(resolved.opportunity, resolved.day);
+      return resolved;
+    }
+
+    function startPremiumAutoRefresh() {
+      stopPremiumAutoRefresh();
+      premiumRefreshTimer = setInterval(async () => {
+        if (parseRoute().startsWith('/premium/chancen')) {
+          await refreshPremiumData(true);
+        }
+      }, 60000);
+    }
+
+    function stopPremiumAutoRefresh() {
+      if (premiumRefreshTimer) {
+        clearInterval(premiumRefreshTimer);
+        premiumRefreshTimer = null;
+      }
     }
 
     async function renderPremiumRoute(opportunityIdFromRoute = null) {
@@ -3041,29 +3344,30 @@
       }
 
       showView('view-premium');
+      const resolved = await refreshPremiumData(true);
+      if (!resolved) return;
 
-      const days = getAvailableDays();
-      populateDaySelect(days);
-
-      const resolved = opportunityIdFromRoute ? findOpportunityById(opportunityIdFromRoute) : null;
-      const initialDay = resolved?.day || days[0];
-      const initialOpportunity = resolved?.opportunity || initialDay.opportunities[0];
-
-      populateOpportunitySelect(initialDay, initialOpportunity.id);
-      renderPremiumOpportunity(initialOpportunity, initialDay);
-
-      getEl('daySelect').onchange = (event) => {
-        const selectedDay = days.find(day => day.date === event.target.value) || days[0];
+      getEl('daySelect').onchange = async (event) => {
+        const selectedDay = currentOpportunityDays.find(day => day.date === event.target.value) || currentOpportunityDays[0];
         const firstOpportunity = selectedDay.opportunities[0];
         populateOpportunitySelect(selectedDay, firstOpportunity.id);
-        renderPremiumOpportunity(firstOpportunity, selectedDay);
+        await renderPremiumOpportunity(firstOpportunity, selectedDay);
       };
 
-      getEl('opportunitySelect').onchange = (event) => {
-        const selectedDay = days.find(day => day.date === getEl('daySelect').value) || days[0];
+      getEl('opportunitySelect').onchange = async (event) => {
+        const selectedDay = currentOpportunityDays.find(day => day.date === getEl('daySelect').value) || currentOpportunityDays[0];
         const selectedOpportunity = selectedDay.opportunities.find(item => item.id === event.target.value) || selectedDay.opportunities[0];
-        renderPremiumOpportunity(selectedOpportunity, selectedDay);
+        await renderPremiumOpportunity(selectedOpportunity, selectedDay);
       };
+
+      if (opportunityIdFromRoute) {
+        const found = findOpportunityById(opportunityIdFromRoute);
+        if (found) {
+          await renderPremiumOpportunity(found.opportunity, found.day);
+        }
+      }
+
+      startPremiumAutoRefresh();
     }
 
     async function renderWatchlistRoute() {
@@ -3077,29 +3381,36 @@
 
       const favorites = loadFavorites();
       if (currentFavorite) {
-        renderFavoriteDetail(currentFavorite);
+        await renderFavoriteDetail(currentFavorite);
       } else if (favorites.length) {
-        renderFavoriteDetail(favorites[0]);
+        await renderFavoriteDetail(favorites[0]);
       } else {
         renderEmptyFavoriteState();
       }
+
+      startAlertMonitoring();
     }
 
     async function handleRoute() {
+      if (!authInitialized) return;
+
       const route = parseRoute();
 
       if (route === '/' || route === '') {
+        stopPremiumAutoRefresh();
         showView('view-landing');
         return;
       }
 
       if (route === '/email-bestaetigt') {
+        stopPremiumAutoRefresh();
         showView('view-landing');
         showBanner('Deine E-Mail-Adresse wurde erfolgreich bestätigt. Du kannst dich jetzt anmelden bzw. bist – falls bereits eine Session aktiv ist – direkt eingeloggt.');
         return;
       }
 
       if (route === '/watchlist') {
+        stopPremiumAutoRefresh();
         await renderWatchlistRoute();
         return;
       }
@@ -3115,6 +3426,7 @@
         return;
       }
 
+      stopPremiumAutoRefresh();
       showView('view-landing');
     }
 
@@ -3192,14 +3504,28 @@
           await loadCurrentProfile();
           refreshNavUI();
           updateFavoritesCounter();
-          handleRoute();
+
+          if (currentUser) {
+            startAlertMonitoring();
+          } else {
+            stopAlertMonitoring();
+          }
+
+          if (authInitialized) {
+            handleRoute();
+          }
         });
       }
 
       refreshNavUI();
       updateFavoritesCounter();
       loadTradingViewChart();
+      authInitialized = true;
       await handleRoute();
+
+      if (currentUser) {
+        startAlertMonitoring();
+      }
     });
   </script>
 </body>
