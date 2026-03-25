@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AnlageKompass – Investment-Ideen mit Orientierung</title>
+  <title>AnlageKompass</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -14,6 +14,8 @@
       --bg-soft: #071226;
       --card: #0c162c;
       --card-2: #0e1830;
+      --panel: #171a21;
+      --panel-2: #1f2430;
       --border: rgba(119, 144, 185, 0.18);
       --border-strong: rgba(26, 182, 255, 0.72);
       --text: #eef4fb;
@@ -21,12 +23,16 @@
       --text-soft: #7890ad;
       --brand-a: #1ea8ff;
       --brand-b: #28d0b1;
-      --brand-c: #0fb4ff;
       --success: #1fe2b0;
+      --danger: #ff7c91;
+      --warning: #ffd56b;
       --radius: 22px;
       --radius-sm: 14px;
       --shadow: 0 18px 60px rgba(0, 0, 0, 0.32);
       --glow: 0 0 0 1px rgba(22,169,255,0.18), 0 18px 60px rgba(0,0,0,0.24), 0 0 36px rgba(12,163,255,0.10);
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --input-bg: #0f1115;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,6 +48,8 @@
       overflow-x: hidden;
     }
 
+    .hidden { display: none !important; }
+
     .container {
       width: min(1280px, calc(100% - 48px));
       margin: 0 auto;
@@ -50,17 +58,19 @@
     .nav-wrap {
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 100;
       backdrop-filter: blur(18px);
       background: rgba(3, 8, 23, 0.84);
       border-bottom: 1px solid rgba(133, 157, 196, 0.12);
     }
 
     .nav {
-      height: 76px;
+      min-height: 76px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 18px;
+      padding: 14px 0;
     }
 
     .brand {
@@ -72,26 +82,35 @@
       font-weight: 800;
       font-size: 22px;
       letter-spacing: -0.03em;
+      cursor: pointer;
     }
 
     .brand-mark {
       width: 22px;
       height: 28px;
       background: linear-gradient(180deg, #1da7ff 0%, #1ebeff 100%);
-      border-radius: 0;
       box-shadow: 0 0 22px rgba(29, 167, 255, 0.24);
       flex: 0 0 auto;
     }
 
-    .brand-text {
-      color: #20c4ea;
-      text-shadow: 0 0 22px rgba(34, 198, 213, 0.05);
-    }
+    .brand-text { color: #20c4ea; }
 
     .nav-actions {
       display: flex;
       gap: 12px;
       align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill-user {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(117, 141, 181, 0.18);
+      background: rgba(7, 16, 31, 0.58);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
     }
 
     .btn {
@@ -108,7 +127,10 @@
       align-items: center;
       justify-content: center;
       white-space: nowrap;
+      font-family: inherit;
     }
+
+    .btn:hover { transform: translateY(-1px); }
 
     .btn-top-secondary {
       min-width: 138px;
@@ -118,12 +140,6 @@
       background: rgba(5, 16, 34, 0.72);
       color: #1db6ff;
       box-shadow: inset 0 0 0 1px rgba(7, 24, 54, 0.42);
-    }
-
-    .btn-top-secondary:hover {
-      transform: translateY(-1px);
-      border-color: rgba(27, 172, 255, 0.65);
-      background: rgba(7, 22, 42, 0.88);
     }
 
     .btn-top-primary,
@@ -136,10 +152,13 @@
       box-shadow: 0 10px 28px rgba(16, 178, 232, 0.22);
     }
 
-    .btn-top-primary:hover,
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.03);
+    .btn-ghost {
+      min-width: 120px;
+      height: 46px;
+      padding: 0 18px;
+      border-color: rgba(123, 143, 175, 0.18);
+      background: rgba(7, 16, 31, 0.45);
+      color: #f5f8fc;
     }
 
     .btn-hero-primary {
@@ -162,10 +181,8 @@
       color: #f5f8fc;
     }
 
-    .btn-hero-secondary:hover {
-      transform: translateY(-1px);
-      border-color: rgba(123, 143, 175, 0.28);
-    }
+    .page-view { display: none; }
+    .page-view.active { display: block; }
 
     .hero {
       min-height: 760px;
@@ -185,7 +202,8 @@
       margin-top: -20px;
     }
 
-    .hero-pill {
+    .hero-pill,
+    .kicker {
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -200,7 +218,8 @@
       box-shadow: inset 0 0 0 1px rgba(4, 13, 28, 0.55);
     }
 
-    .hero h1 {
+    .hero h1,
+    .page-hero h1 {
       font-size: clamp(46px, 5.1vw, 72px);
       line-height: 0.98;
       letter-spacing: -0.055em;
@@ -213,7 +232,8 @@
       text-wrap: balance;
     }
 
-    .hero-copy {
+    .hero-copy,
+    .page-hero-copy {
       max-width: 980px;
       font-size: 18px;
       line-height: 1.72;
@@ -264,13 +284,21 @@
       padding: 0 4px;
     }
 
-    .feature-card {
+    .feature-card,
+    .panel,
+    .price-card,
+    .benefit-card,
+    .sidebar-card,
+    .content-card {
       background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
       border: 1px solid rgba(117, 141, 181, 0.16);
       border-radius: 24px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .feature-card {
       min-height: 228px;
       padding: 30px 30px 28px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
 
     .feature-card .emoji {
@@ -295,10 +323,7 @@
       color: var(--text-muted);
     }
 
-    .compare-wrap {
-      padding-top: 12px;
-      padding-bottom: 18px;
-    }
+    .compare-wrap { padding-top: 12px; padding-bottom: 18px; }
 
     .compare-box {
       width: min(1120px, 100%);
@@ -310,10 +335,15 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
 
-    .compare-head {
+    .compare-head,
+    .compare-row {
       display: grid;
       grid-template-columns: 1.65fr 0.55fr 0.55fr;
       gap: 16px;
+      align-items: center;
+    }
+
+    .compare-head {
       padding: 0 0 12px;
       color: var(--text-soft);
       font-size: 14px;
@@ -322,10 +352,6 @@
     }
 
     .compare-row {
-      display: grid;
-      grid-template-columns: 1.65fr 0.55fr 0.55fr;
-      gap: 16px;
-      align-items: center;
       min-height: 64px;
       border-top: 1px solid rgba(117, 141, 181, 0.12);
       color: #eef4fb;
@@ -346,14 +372,9 @@
       font-weight: 700;
     }
 
-    .compare-cell.yes {
-      color: #98f3d4;
-    }
+    .compare-cell.yes { color: #98f3d4; }
 
-    .pricing-wrap {
-      padding-top: 36px;
-      padding-bottom: 90px;
-    }
+    .pricing-wrap { padding-top: 36px; padding-bottom: 90px; }
 
     .pricing-grid {
       display: grid;
@@ -366,11 +387,7 @@
 
     .price-card {
       position: relative;
-      background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(9,18,36,0.98));
-      border: 1px solid rgba(117, 141, 181, 0.18);
-      border-radius: 26px;
-      padding: 34px 34px 34px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+      padding: 34px;
     }
 
     .price-card.plus {
@@ -463,17 +480,7 @@
     .tick { color: var(--success); }
     .minus { color: #788ca7; }
 
-    .btn-card-secondary {
-      width: 100%;
-      height: 68px;
-      border-radius: 18px;
-      border-color: rgba(117, 141, 181, 0.16);
-      background: rgba(8, 16, 30, 0.56);
-      color: white;
-      font-size: 18px;
-      font-weight: 800;
-    }
-
+    .btn-card-secondary,
     .btn-card-primary {
       width: 100%;
       height: 68px;
@@ -481,6 +488,14 @@
       color: white;
       font-size: 18px;
       font-weight: 800;
+    }
+
+    .btn-card-secondary {
+      border-color: rgba(117, 141, 181, 0.16);
+      background: rgba(8, 16, 30, 0.56);
+    }
+
+    .btn-card-primary {
       background: linear-gradient(90deg, #1fafff 0%, #20cfb1 100%);
       box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
     }
@@ -493,12 +508,7 @@
       gap: 22px;
     }
 
-    .benefit-card {
-      background: linear-gradient(180deg, rgba(12,22,44,0.86), rgba(9,18,36,0.84));
-      border: 1px solid rgba(117, 141, 181, 0.14);
-      border-radius: 22px;
-      padding: 24px;
-    }
+    .benefit-card { padding: 24px; }
 
     .benefit-card h4 {
       font-size: 20px;
@@ -536,13 +546,13 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      z-index: 80;
+      z-index: 160;
     }
 
     .modal-overlay.open { display: flex; }
 
     .modal {
-      width: min(100%, 500px);
+      width: min(100%, 520px);
       background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(10,18,36,0.98));
       border: 1px solid rgba(117, 141, 181, 0.2);
       border-radius: 28px;
@@ -623,7 +633,8 @@
       color: #cedced;
     }
 
-    .field input {
+    .field input,
+    .field select {
       width: 100%;
       height: 52px;
       border-radius: 14px;
@@ -633,9 +644,11 @@
       padding: 0 16px;
       font-size: 16px;
       outline: none;
+      font-family: inherit;
     }
 
-    .field input:focus {
+    .field input:focus,
+    .field select:focus {
       border-color: rgba(26, 182, 255, 0.64);
       box-shadow: 0 0 0 4px rgba(26, 182, 255, 0.08);
     }
@@ -678,6 +691,7 @@
       border: none;
       cursor: pointer;
       box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
+      font-family: inherit;
     }
 
     .auth-message {
@@ -700,8 +714,6 @@
       color: #9cf6da;
       border: 1px solid rgba(31, 226, 176, 0.22);
     }
-
-    .hidden { display: none !important; }
 
     .legal-modal {
       width: min(100%, 780px);
@@ -726,63 +738,578 @@
 
     .legal-modal ul { padding-left: 20px; }
 
-    @media (max-width: 1100px) {
-      .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .benefits { grid-template-columns: 1fr; }
+    .app-shell {
+      padding: 30px 0 70px;
+    }
+
+    .page-hero {
+      padding: 34px;
+      border-radius: 28px;
+      border: 1px solid rgba(117, 141, 181, 0.16);
+      background: linear-gradient(180deg, rgba(12,22,44,0.92), rgba(10,18,36,0.96));
+      box-shadow: var(--glow);
+      margin-bottom: 24px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .mini-card {
+      padding: 24px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
+      border: 1px solid rgba(117, 141, 181, 0.16);
+    }
+
+    .mini-card h4 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.03em;
+    }
+
+    .mini-card p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .sidebar-card,
+    .content-card {
+      padding: 24px;
+    }
+
+    .sidebar-card h3,
+    .content-card h3,
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .watchlist-items,
+    .opportunity-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .watch-item,
+    .opportunity-item {
+      width: 100%;
+      text-align: left;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(117, 141, 181, 0.14);
+      background: rgba(8, 16, 30, 0.56);
+      color: var(--text);
+      cursor: pointer;
+      transition: 180ms ease;
+      font-family: inherit;
+    }
+
+    .watch-item:hover,
+    .watch-item.active,
+    .opportunity-item:hover,
+    .opportunity-item.active {
+      border-color: rgba(26, 182, 255, 0.64);
+      box-shadow: 0 0 0 1px rgba(22,169,255,0.18), 0 12px 26px rgba(0,0,0,0.18);
+    }
+
+    .watch-item strong,
+    .opportunity-item strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .watch-item span,
+    .opportunity-item span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .content-grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .row-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .row-head h2 {
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .price-box {
+      text-align: right;
+      min-width: 180px;
+    }
+
+    .price-box .price {
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .price-box .change {
+      margin-top: 8px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .price-box .change.pos { color: var(--success); }
+    .price-box .change.neg { color: var(--danger); }
+
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .fact-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(8, 16, 30, 0.56);
+      border: 1px solid rgba(117, 141, 181, 0.14);
+    }
+
+    .fact-card .label {
+      color: var(--text-soft);
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .fact-card .value {
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .alert-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .alert-item {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(8, 16, 30, 0.56);
+      border: 1px solid rgba(117, 141, 181, 0.14);
+    }
+
+    .alert-item strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .alert-item p {
+      color: var(--text-muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .toolbar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .toolbar-field {
+      padding: 18px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
+      border: 1px solid rgba(117, 141, 181, 0.16);
+    }
+
+    .toolbar-field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .toolbar-field select {
+      width: 100%;
+      height: 48px;
+      border-radius: 14px;
+      border: 1px solid rgba(117, 141, 181, 0.18);
+      background: rgba(7, 16, 31, 0.66);
+      color: white;
+      padding: 0 14px;
+      font-size: 15px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .premium-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 180px;
+      padding: 0 22px;
+      height: 48px;
+      border-radius: 24px;
+      background: linear-gradient(90deg, #1fafff 0%, #20cfb1 100%);
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(117, 141, 181, 0.14);
+      background: rgba(8, 16, 30, 0.56);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .content-split {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+    }
+
+    .body-copy {
+      color: var(--text-muted);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .chart-card {
+      background: var(--panel);
+      border: 1px solid rgba(117, 141, 181, 0.16);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .chart-header {
+      padding: 20px 20px 12px;
+      border-bottom: 1px solid rgba(117, 141, 181, 0.16);
+    }
+
+    .chart-title {
+      margin: 0 0 8px;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .chart-subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .controls {
+      padding: 20px;
+      border-bottom: 1px solid rgba(117, 141, 181, 0.16);
+      background: var(--panel-2);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field-inline {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-inline label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .field-inline input,
+    .field-inline select {
+      width: 100%;
+      height: 42px;
+      border-radius: 10px;
+      border: 1px solid rgba(117, 141, 181, 0.16);
+      background: var(--input-bg);
+      color: var(--text);
+      padding: 0 12px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .field-inline input:focus,
+    .field-inline select:focus {
+      border-color: var(--accent);
+    }
+
+    .checkbox-row-inline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 42px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(117, 141, 181, 0.16);
+      background: var(--input-bg);
+      color: var(--text);
+    }
+
+    .checkbox-row-inline input {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .chart-btn {
+      height: 42px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: 0.2s ease;
+      font-family: inherit;
+    }
+
+    .chart-btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .chart-btn-primary:hover { background: var(--accent-hover); }
+
+    .chart-btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(117, 141, 181, 0.16);
+    }
+
+    .chart-btn-secondary:hover { background: rgba(255, 255, 255, 0.04); }
+
+    .status {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--success);
+      min-height: 18px;
+    }
+
+    .chart-wrap { padding: 20px; }
+
+    .chart-box {
+      width: 100%;
+      border: 1px solid rgba(117, 141, 181, 0.16);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    #tv-chart-container {
+      width: 100%;
+      height: 700px;
+    }
+
+    .info-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 0 20px 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .info-chip {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(117, 141, 181, 0.14);
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+
+    .notice {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(12, 20, 38, 0.72);
+      border: 1px solid rgba(117, 141, 181, 0.14);
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .gate {
+      padding: 30px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(10,18,36,0.98));
+      border: 1px solid rgba(117, 141, 181, 0.2);
+      box-shadow: var(--shadow);
+      max-width: 720px;
+      margin: 60px auto 0;
+      text-align: center;
+    }
+
+    .gate h3 {
+      font-size: 30px;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .gate p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 22px;
+      font-size: 16px;
+    }
+
+    .gate-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    @media (max-width: 1180px) {
+      .app-layout,
+      .content-split {
+        grid-template-columns: 1fr;
+      }
+
+      .facts-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .controls-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 820px) {
       .container { width: min(100% - 28px, 100%); }
+      .feature-grid,
+      .pricing-grid,
+      .benefits,
+      .field-grid,
+      .stats-grid,
+      .grid-3,
+      .toolbar-grid,
+      .facts-grid {
+        grid-template-columns: 1fr;
+      }
+
       .compare-box { padding: 18px 18px 10px; border-radius: 22px; }
       .compare-head,
-      .compare-row {
-        grid-template-columns: 1.5fr 0.5fr 0.5fr;
-        gap: 10px;
-      }
+      .compare-row { grid-template-columns: 1.5fr 0.5fr 0.5fr; gap: 10px; }
       .compare-row { min-height: 54px; font-size: 14px; }
       .compare-cell { font-size: 16px; }
-      .nav { height: 72px; }
-      .brand { font-size: 22px; }
-      .nav-actions { gap: 10px; }
-      .btn-top-secondary,
-      .btn-top-primary { min-width: 128px; padding: 0 18px; font-size: 15px; }
       .hero { min-height: auto; padding: 54px 0 68px; }
-      .hero h1 { font-size: clamp(38px, 10vw, 56px); }
-      .hero-copy { font-size: 16px; }
-      .feature-grid,
-      .pricing-grid { grid-template-columns: 1fr; }
-      .field-grid { grid-template-columns: 1fr; }
-      .price { font-size: 52px; }
+      .hero h1,
+      .page-hero h1 { font-size: clamp(38px, 10vw, 56px); }
+      .hero-copy,
+      .page-hero-copy { font-size: 16px; }
+      .hero-actions,
+      .nav-actions { width: 100%; }
+      .hero-actions .btn,
       .btn-hero-primary,
       .btn-hero-secondary { width: 100%; }
-      .hero-actions { width: 100%; }
-      .hero-actions .btn { width: 100%; }
+      .controls-grid { grid-template-columns: 1fr; }
+      #tv-chart-container { height: 560px; }
+      .price { font-size: 52px; }
     }
   </style>
 </head>
 <body>
-  <!-- Hauptnavigation im Stil der Referenzseite -->
   <div class="nav-wrap">
     <div class="container nav">
-      <a class="brand" href="#top" aria-label="AnlageKompass Startseite">
+      <div class="brand" onclick="goToRoute('/')">
         <span class="brand-mark"></span>
         <span class="brand-text">AnlageKompass</span>
-      </a>
-      <div class="nav-actions">
+      </div>
+
+      <div class="nav-actions" id="navLoggedOut">
         <button class="btn btn-top-secondary" type="button" onclick="openAuthModal('login')">Anmelden</button>
         <button class="btn btn-top-primary" type="button" onclick="openAuthModal('register')">Kostenlos starten</button>
+      </div>
+
+      <div class="nav-actions hidden" id="navLoggedIn">
+        <div class="pill-user" id="navUserText">Eingeloggt</div>
+        <button class="btn btn-ghost" type="button" onclick="goToRoute('/watchlist')">Watchlist</button>
+        <button class="btn btn-top-secondary" type="button" onclick="goToRoute('/premium/chancen')">Premium Chancen</button>
+        <button class="btn btn-top-primary" type="button" onclick="logout()">Abmelden</button>
       </div>
     </div>
   </div>
 
-  <main id="top">
-    <!-- Hero bewusst sehr nah an der Referenz: Badge, Headline, Text und zwei CTAs -->
+  <!-- LANDING -->
+  <main id="view-landing" class="page-view active">
     <section class="hero container">
       <div class="hero-inner">
         <div class="hero-pill">⚡ Tagesaktuelle Investment-Ideen</div>
         <h1>Mehr Chancen.<br>Mehr Ideen.<br>Mehr Orientierung.</h1>
         <p class="hero-copy">
-          Erhalte täglich neue datenbasierte Investment-Ideen für Aktien, ETFs und Krypto – passend<br>
+          Erhalte täglich neue datenbasierte Investment-Ideen für Aktien, ETFs und Krypto – passend
           zu deinem Risikoprofil, verständlich erklärt.
         </p>
         <div class="hero-actions">
@@ -792,7 +1319,6 @@
       </div>
     </section>
 
-    <!-- Features exakt im dunklen Karten-Look mit 3x2 Raster -->
     <section class="section">
       <div class="container">
         <div class="section-head">
@@ -808,7 +1334,7 @@
           <article class="feature-card">
             <span class="emoji">⚡</span>
             <h3>Tagesaktuelle Chancen</h3>
-            <p>Der "Chancen nutzen"-Feed zeigt dir täglich aktualisierte Marktchancen – bevor sie alle sehen.</p>
+            <p>Der Chancen-Feed zeigt dir täglich aktualisierte Marktchancen – bevor sie alle sehen.</p>
           </article>
           <article class="feature-card">
             <span class="emoji">📬</span>
@@ -834,7 +1360,6 @@
       </div>
     </section>
 
-    <!-- Vergleichsblock vor den Preisen: was Free kann und was Plus zusätzlich bringt -->
     <section class="section compare-wrap">
       <div class="container">
         <div class="section-head">
@@ -893,8 +1418,7 @@
       </div>
     </section>
 
-    <!-- Pricing-Look sehr nah am Screenshot, zusätzlich sauberer Free-vs-Plus-Vergleich -->
-    <section class="section pricing-wrap">
+    <section class="section pricing-wrap" id="preise">
       <div class="container">
         <div class="section-head">
           <h2>Preise</h2>
@@ -936,7 +1460,7 @@
               <li class="available"><span class="tick">✓</span><strong>Watchlist + Kurs-Alerts</strong></li>
               <li class="available"><span class="tick">✓</span><strong>Strategie-Ideen</strong></li>
               <li class="available"><span class="tick">✓</span><strong>Marktübersicht</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Komplett werbefrei</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Premium Chance Detail</strong></li>
             </ul>
             <button class="btn btn-card-primary" type="button" onclick="openPremiumModal()">Plus freischalten</button>
           </article>
@@ -944,7 +1468,6 @@
       </div>
     </section>
 
-    <!-- Zusätzlicher Nutzenblock, von dir gewünscht: was Free kann, was Plus mehr bringt, warum es sich im Alltag lohnt -->
     <section class="section">
       <div class="container">
         <div class="section-head">
@@ -973,7 +1496,310 @@
     </div>
   </main>
 
-  <!-- Login/Registrierung mit Vorname, Nachname und Pflicht-Checkbox -->
+  <!-- WATCHLIST -->
+  <main id="view-watchlist" class="page-view">
+    <div class="container app-shell">
+      <section class="page-hero">
+        <div class="kicker">📌 Watchlist & Alerts</div>
+        <h1>Deine Watchlist mit Kursregeln und direktem Chart</h1>
+        <p class="page-hero-copy">
+          Hier sieht der Nutzer gespeicherte Werte, Preisregeln, Verknüpfungen zur Premium-Chance und den eingebauten TradingView-Chart.
+        </p>
+      </section>
+
+      <section class="stats-grid">
+        <article class="mini-card">
+          <h4>Gespeicherte Werte</h4>
+          <p>Behalte deine Favoriten im Blick und öffne passende Chancen direkt aus deiner Watchlist.</p>
+        </article>
+        <article class="mini-card">
+          <h4>Kursregeln</h4>
+          <p>Beispiel: Benachrichtige mich bei -5 % oder wenn eine neue Premium-Chance zum Wert auftaucht.</p>
+        </article>
+        <article class="mini-card">
+          <h4>E-Mail-Alerts</h4>
+          <p>Nur für Plus-Mitglieder aktivierbar und mit der Opportunity-Detailseite verknüpft.</p>
+        </article>
+      </section>
+
+      <section class="app-layout">
+        <aside class="sidebar-card">
+          <h3>Meine Watchlist</h3>
+          <p class="muted">Wähle einen Wert aus, um Details, Beispiel-Alerts und den passenden Chart zu sehen.</p>
+          <div class="watchlist-items" id="watchlistItems"></div>
+        </aside>
+
+        <div class="content-grid">
+          <section class="content-card">
+            <div class="row-head">
+              <div>
+                <h2 id="watchTitle">Aktie wird geladen …</h2>
+                <p class="muted" id="watchSubtitle">Beispielhafte Watchlist-Ansicht mit Alert-Logik und Verlinkung auf Premium-Chancen.</p>
+              </div>
+              <div class="price-box">
+                <div class="price" id="watchPrice">—</div>
+                <div class="change" id="watchChange">—</div>
+              </div>
+            </div>
+
+            <div class="facts-grid" id="watchFactsGrid"></div>
+          </section>
+
+          <section class="content-card">
+            <h3>Aktive Alert-Regeln</h3>
+            <div class="alert-list" id="watchAlertList"></div>
+          </section>
+
+          <section class="chart-card">
+            <div class="chart-header">
+              <h2 class="chart-title">Aktienchart</h2>
+              <p class="chart-subtitle">
+                Interaktiver Advanced Chart mit einstellbarem Symbol, Intervall, Theme, Sprache, Zeitzone und Höhe.
+              </p>
+            </div>
+
+            <div class="controls">
+              <div class="controls-grid">
+                <div class="field-inline">
+                  <label for="symbol">Symbol</label>
+                  <input id="symbol" type="text" value="NASDAQ:AAPL" placeholder="z. B. NASDAQ:AAPL" />
+                </div>
+
+                <div class="field-inline">
+                  <label for="interval">Intervall</label>
+                  <select id="interval">
+                    <option value="1">1 Minute</option>
+                    <option value="5">5 Minuten</option>
+                    <option value="15">15 Minuten</option>
+                    <option value="30">30 Minuten</option>
+                    <option value="60">1 Stunde</option>
+                    <option value="120">2 Stunden</option>
+                    <option value="240">4 Stunden</option>
+                    <option value="D" selected>1 Tag</option>
+                    <option value="W">1 Woche</option>
+                    <option value="M">1 Monat</option>
+                  </select>
+                </div>
+
+                <div class="field-inline">
+                  <label for="theme">Theme</label>
+                  <select id="theme">
+                    <option value="dark" selected>Dunkel</option>
+                    <option value="light">Hell</option>
+                  </select>
+                </div>
+
+                <div class="field-inline">
+                  <label for="locale">Sprache</label>
+                  <select id="locale">
+                    <option value="de_DE" selected>Deutsch</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                  </select>
+                </div>
+
+                <div class="field-inline">
+                  <label for="timezone">Zeitzone</label>
+                  <select id="timezone">
+                    <option value="Europe/Berlin" selected>Europe/Berlin</option>
+                    <option value="Etc/UTC">UTC</option>
+                    <option value="America/New_York">America/New_York</option>
+                    <option value="America/Chicago">America/Chicago</option>
+                    <option value="America/Los_Angeles">America/Los_Angeles</option>
+                    <option value="Asia/Tokyo">Asia/Tokyo</option>
+                  </select>
+                </div>
+
+                <div class="field-inline">
+                  <label for="height">Höhe in px</label>
+                  <input id="height" type="number" value="700" min="350" max="1400" step="10" />
+                </div>
+
+                <div class="field-inline">
+                  <label>Symbolwechsel im Widget</label>
+                  <div class="checkbox-row-inline">
+                    <input id="allowSymbolChange" type="checkbox" checked />
+                    <span>Aktiv</span>
+                  </div>
+                </div>
+
+                <div class="field-inline">
+                  <label for="style">Chart-Stil</label>
+                  <select id="style">
+                    <option value="1" selected>Candles</option>
+                    <option value="2">Bars</option>
+                    <option value="3">Line</option>
+                    <option value="9">Area</option>
+                  </select>
+                </div>
+
+                <div class="field-inline">
+                  <label for="toolbarBg">Toolbar-Farbe</label>
+                  <select id="toolbarBg">
+                    <option value="#0f1115" selected>Dunkel</option>
+                    <option value="#ffffff">Hell</option>
+                    <option value="#171a21">Anthrazit</option>
+                  </select>
+                </div>
+
+                <div class="field-inline">
+                  <label for="studies">Beliebte Studien</label>
+                  <select id="studies">
+                    <option value="" selected>Keine vorladen</option>
+                    <option value="Volume@tv-basicstudies">Volume</option>
+                    <option value="MASimple@tv-basicstudies">Simple Moving Average</option>
+                    <option value="RSI@tv-basicstudies">RSI</option>
+                    <option value="MACD@tv-basicstudies">MACD</option>
+                  </select>
+                </div>
+
+                <div class="field-inline">
+                  <label for="withdateranges">Datumsbereiche</label>
+                  <div class="checkbox-row-inline">
+                    <input id="withdateranges" type="checkbox" checked />
+                    <span>Anzeigen</span>
+                  </div>
+                </div>
+
+                <div class="field-inline">
+                  <label for="hidelegend">Legende ausblenden</label>
+                  <div class="checkbox-row-inline">
+                    <input id="hidelegend" type="checkbox" />
+                    <span>Aktiv</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="chart-btn chart-btn-primary" id="applyBtn">Chart aktualisieren</button>
+                <button class="chart-btn chart-btn-secondary" id="resetBtn">Zurücksetzen</button>
+              </div>
+
+              <div class="status" id="statusText"></div>
+            </div>
+
+            <div class="chart-wrap">
+              <div class="chart-box">
+                <div id="tv-chart-container"></div>
+              </div>
+            </div>
+
+            <div class="info-bar">
+              <div class="info-chip" id="infoSymbolChip">Standard-Symbol: NASDAQ:AAPL</div>
+              <div class="info-chip">Währung ergibt sich aus Markt/Symbol</div>
+              <div class="info-chip">Beispiel-Symbole: NASDAQ:MSFT, NASDAQ:NVDA, NYSE:KO</div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- PREMIUM DETAIL -->
+  <main id="view-premium" class="page-view">
+    <div class="container app-shell">
+      <section id="premiumGate" class="gate hidden">
+        <h3>Diese Detailseite ist nur für Plus-Mitglieder</h3>
+        <p>
+          Über Premium-Mails und direkte Links gelangen nur Plus-Mitglieder auf die vollständige Chance-Detailseite.
+          Logge dich mit einem Premium-Konto ein oder aktiviere Plus.
+        </p>
+        <div class="gate-actions">
+          <button class="btn btn-top-secondary" type="button" onclick="goToRoute('/')">Zur Startseite</button>
+          <button class="btn btn-top-primary" type="button" onclick="goToRoute('/#preise')">Plus ansehen</button>
+        </div>
+      </section>
+
+      <section id="premiumContent">
+        <section class="page-hero">
+          <div class="kicker">⭐ Premium Chance Detail</div>
+          <div class="row-head">
+            <div>
+              <h1 id="premiumHeroTitle">Chance wird geladen …</h1>
+              <p class="page-hero-copy" id="premiumHeroCopy">
+                Hier sieht der Nutzer die Aktie, den aktuellen Preis, die heutige Änderung, Land, Branche, Argumente und direkt darunter den Chart.
+              </p>
+              <div class="chips" id="premiumHeroChips"></div>
+            </div>
+            <div class="price-box">
+              <div class="price" id="premiumHeroPrice">—</div>
+              <div class="change" id="premiumHeroChange">—</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="toolbar-grid">
+          <div class="toolbar-field">
+            <label for="daySelect">Tag auswählen</label>
+            <select id="daySelect"></select>
+          </div>
+          <div class="toolbar-field">
+            <label for="opportunitySelect">Chance / Aktie auswählen</label>
+            <select id="opportunitySelect"></select>
+          </div>
+        </section>
+
+        <section class="app-layout">
+          <aside class="sidebar-card">
+            <div class="premium-badge">Nur für Plus-Mitglieder</div>
+            <h3 style="margin-top:18px;">Chancen der letzten 5 Tage</h3>
+            <p class="muted">Pro Tag werden die zugehörigen Chancen angezeigt. Ältere Einträge als 5 Tage werden automatisch ausgeblendet.</p>
+            <div class="opportunity-list" id="opportunityList"></div>
+          </aside>
+
+          <div class="content-grid">
+            <section class="content-card">
+              <div class="content-split">
+                <div>
+                  <h3>Was macht die Aktie?</h3>
+                  <p class="body-copy" id="premiumAboutText"></p>
+
+                  <h3 style="margin-top:24px;">Warum könnte das gerade interessant sein?</h3>
+                  <p class="body-copy" id="premiumWhyText"></p>
+
+                  <h3 style="margin-top:24px;">Was Analysten und Marktbeobachter sehen</h3>
+                  <p class="body-copy" id="premiumAnalystText"></p>
+                </div>
+
+                <div>
+                  <div class="facts-grid" id="premiumFactsGrid"></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="content-card">
+              <div class="grid-3">
+                <article class="mini-card">
+                  <h4>Chancen</h4>
+                  <p id="premiumChanceText"></p>
+                </article>
+                <article class="mini-card">
+                  <h4>Risiken</h4>
+                  <p id="premiumRiskText"></p>
+                </article>
+                <article class="mini-card">
+                  <h4>Alternative Idee</h4>
+                  <p id="premiumAlternativeText"></p>
+                </article>
+              </div>
+            </section>
+
+            <section class="content-card">
+              <div class="notice">
+                Interne Premium-Route in dieser Datei. Für produktive URLs wie
+                <strong>/premium/chancen/&lt;opportunity_id&gt;</strong>
+                brauchst du später zusätzlich Rewrites auf diese HTML-Datei.
+              </div>
+            </section>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <!-- AUTH MODAL -->
   <div class="modal-overlay" id="authModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
       <button class="close" type="button" aria-label="Schließen" onclick="closeAuthModal()">×</button>
@@ -987,7 +1813,7 @@
 
       <section id="panelLogin">
         <h3 id="authTitle">Willkommen zurück</h3>
-        <p class="intro">Melde dich an, um deine Investment-Ideen zu sehen.</p>
+        <p class="intro">Melde dich an, um Watchlist und Premium-Chancen zu sehen.</p>
         <div class="field">
           <label for="loginEmail">E-Mail</label>
           <input id="loginEmail" type="email" placeholder="deine@email.de" autocomplete="email">
@@ -1029,24 +1855,24 @@
     </div>
   </div>
 
-  <!-- Premium Modal als vorbereiteter Hook für den späteren Stripe-Flow -->
+  <!-- PREMIUM MODAL -->
   <div class="modal-overlay" id="premiumModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="premiumTitle">
       <button class="close" type="button" aria-label="Schließen" onclick="closePremiumModal()">×</button>
       <h3 id="premiumTitle">AnlageKompass Plus</h3>
-      <p class="intro">Erhalte täglich neue datenbasierte Investment-Ideen, Chancen-Alerts und mehr Orientierung im Alltag.</p>
+      <p class="intro">Erhalte täglich neue datenbasierte Investment-Ideen, Chancen-Alerts, Premium-Detailseiten und Watchlist-Funktionen.</p>
       <ul class="feature-list" style="margin-top:8px; margin-bottom:22px;">
         <li class="available"><span class="tick">✓</span><strong>5–10 Investment-Ideen pro Analyse</strong></li>
         <li class="available"><span class="tick">✓</span><strong>Tagesaktuelle Chancen</strong></li>
         <li class="available"><span class="tick">✓</span><strong>E-Mail Alerts für Premium-Mitglieder</strong></li>
         <li class="available"><span class="tick">✓</span><strong>Watchlist + Kurs-Alerts</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>Werbefrei</strong></li>
+        <li class="available"><span class="tick">✓</span><strong>Premium Chance Detail mit Chart</strong></li>
       </ul>
-      <button class="submit-btn" type="button" onclick="showSuccess('Stripe-Checkout ist hier vorbereitet. Für Live-Zahlungen muss dein serverseitiger Stripe-Endpoint verbunden sein.')">Plus freischalten</button>
+      <button class="submit-btn" type="button" onclick="showSuccess('Stripe-Checkout ist vorbereitet. Für Live-Zahlungen verbindest du als Nächstes deinen serverseitigen Stripe-Endpoint.')">Plus freischalten</button>
     </div>
   </div>
 
-  <!-- AGB / Datenschutz als Platzhalter, damit die Pflicht-Checkbox sinnvoll nutzbar ist -->
+  <!-- LEGAL MODAL -->
   <div class="modal-overlay" id="legalModal" aria-hidden="true">
     <div class="modal legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
       <button class="close" type="button" aria-label="Schließen" onclick="closeLegalModal()">×</button>
@@ -1056,7 +1882,6 @@
   </div>
 
   <script>
-    // Öffentliche Frontend-Konfiguration. Secret Keys gehören NICHT in diese Datei.
     const CONFIG = {
       supabaseUrl: 'https://wksfnfhlnynrkqzjcqxb.supabase.co',
       supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrc2ZuZmhsbnlucmtxempjcXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNjQ1MjcsImV4cCI6MjA4OTg0MDUyN30.hs-9YKdo-vjzR9EIxYzCqalDc90CiRhcH6ALOvd_WXs'
@@ -1071,40 +1896,373 @@
       console.error('Supabase konnte nicht initialisiert werden:', e);
     }
 
+    const WATCHLIST = [
+      {
+        id: "nvda",
+        name: "NVIDIA",
+        ticker: "NVDA",
+        symbol: "NASDAQ:NVDA",
+        price: 942.10,
+        changePct: 2.1,
+        currency: "USD",
+        country: "USA",
+        sector: "Technologie",
+        industry: "Halbleiter",
+        alertRules: [
+          "Benachrichtige mich bei Rückgang um 5 % gegenüber dem aktuellen Niveau.",
+          "Benachrichtige mich, wenn eine neue Premium-Chance zu NVIDIA veröffentlicht wird.",
+          "Benachrichtige mich, wenn die Aktie an einem Tag mehr als 4 % steigt."
+        ],
+        premiumOpportunityId: "nvda-20260324"
+      },
+      {
+        id: "msft",
+        name: "Microsoft",
+        ticker: "MSFT",
+        symbol: "NASDAQ:MSFT",
+        price: 428.70,
+        changePct: 0.8,
+        currency: "USD",
+        country: "USA",
+        sector: "Technologie",
+        industry: "Software / Cloud",
+        alertRules: [
+          "Benachrichtige mich, wenn Azure/Cloud als neue Chance im Feed auftaucht.",
+          "Benachrichtige mich bei Rückgang um 4 %.",
+          "Benachrichtige mich, wenn sich die Tagesänderung auf über +3 % bewegt."
+        ],
+        premiumOpportunityId: "msft-20260323"
+      },
+      {
+        id: "asml",
+        name: "ASML",
+        ticker: "ASML",
+        symbol: "EURONEXT:ASML",
+        price: 894.50,
+        changePct: 1.3,
+        currency: "EUR",
+        country: "Niederlande",
+        sector: "Technologie",
+        industry: "Lithographiesysteme",
+        alertRules: [
+          "Benachrichtige mich bei neuer Halbleiter-/Chip-Chance.",
+          "Benachrichtige mich bei Rückgang um 6 %.",
+          "Benachrichtige mich, wenn ein neues Premium-Detail zu ASML erscheint."
+        ],
+        premiumOpportunityId: "asml-20260324"
+      }
+    ];
+
+    const SAMPLE_DAYS = [
+      {
+        date: "2026-03-24",
+        opportunities: [
+          {
+            id: "nvda-20260324",
+            name: "NVIDIA",
+            ticker: "NVDA",
+            symbol: "NASDAQ:NVDA",
+            price: 942.10,
+            changePct: 2.1,
+            currency: "USD",
+            country: "USA",
+            sector: "Technologie",
+            industry: "Halbleiter",
+            theme: "KI-Infrastruktur",
+            exchange: "NASDAQ",
+            marketCap: "Large Cap",
+            description: "NVIDIA entwickelt Hochleistungs-Chips und Plattformen für KI, Rechenzentren, Grafik und industrielle Anwendungen. Das Unternehmen profitiert stark vom Aufbau neuer KI-Infrastruktur.",
+            whyNow: "Die Aktie ist nach einer starken Bewegung nicht billig, aber der operative Rückenwind bleibt hoch. Wenn Umsatzwachstum und Margen stabil bleiben, kann das Chancen-Risiko-Verhältnis weiterhin interessant sein.",
+            analystView: "Der Markt fokussiert sich auf Datacenter-Wachstum, neue Produktzyklen und die Frage, wie nachhaltig die KI-Nachfrage bleibt.",
+            chance: "Dominante Marktstellung im KI-Stack, hohe Datacenter-Nachfrage, neue Produktgenerationen und starke operative Hebel.",
+            risk: "Hohe Bewertung, stärkere Schwankungen und Abhängigkeit vom Investitionszyklus großer Kunden.",
+            alternative: "Microsoft als defensivere Qualitätsidee oder ein breiter Technologie-/KI-ETF.",
+            source: "Premium-Analyse 24.03.2026"
+          },
+          {
+            id: "asml-20260324",
+            name: "ASML",
+            ticker: "ASML",
+            symbol: "EURONEXT:ASML",
+            price: 894.50,
+            changePct: 1.3,
+            currency: "EUR",
+            country: "Niederlande",
+            sector: "Technologie",
+            industry: "Lithographiesysteme",
+            theme: "Chip-Produktion",
+            exchange: "EURONEXT",
+            marketCap: "Large Cap",
+            description: "ASML ist zentral für die weltweite Halbleiterproduktion und liefert Schlüsseltechnologie für fortgeschrittene Chipfertigung.",
+            whyNow: "Der Markt achtet stark auf Investitionspläne im Halbleitersektor. ASML profitiert von struktureller Nachfrage, bleibt aber zyklisch.",
+            analystView: "Entscheidend sind Orderlage, geopolitische Risiken und die Ausbauraten großer Halbleiterkunden.",
+            chance: "Strukturelle Knappheit bei High-End-Fertigungskapazität und hohe technologische Eintrittsbarrieren.",
+            risk: "Zyklik im Sektor, Exportbeschränkungen und einzelne größere Kunden als Treiber.",
+            alternative: "TSMC als Infrastruktur-Profiteur oder Semiconductor-ETF als breitere Alternative.",
+            source: "Premium-Analyse 24.03.2026"
+          }
+        ]
+      },
+      {
+        date: "2026-03-23",
+        opportunities: [
+          {
+            id: "msft-20260323",
+            name: "Microsoft",
+            ticker: "MSFT",
+            symbol: "NASDAQ:MSFT",
+            price: 428.70,
+            changePct: 0.8,
+            currency: "USD",
+            country: "USA",
+            sector: "Technologie",
+            industry: "Software / Cloud",
+            theme: "KI-Ökosystem",
+            exchange: "NASDAQ",
+            marketCap: "Mega Cap",
+            description: "Microsoft verbindet Cloud, Unternehmenssoftware und KI-Produkte in einem breit diversifizierten Qualitätsprofil.",
+            whyNow: "Cloud und KI-Monetarisierung treiben die Story. Die Aktie gilt oft als defensivere KI-Idee als reine Halbleiterwerte.",
+            analystView: "Wichtig sind Azure-Wachstum, KI-Preisgestaltung und die operative Hebelwirkung im Enterprise-Geschäft.",
+            chance: "Breite Plattform, starke Cashflows und gute Positionierung bei KI-Anwendungen.",
+            risk: "Hohe Erwartungen, starker Wettbewerb und bei Enttäuschungen schneller Bewertungsdruck.",
+            alternative: "Alphabet oder Nasdaq-100-ETF.",
+            source: "Premium-Analyse 23.03.2026"
+          }
+        ]
+      },
+      {
+        date: "2026-03-22",
+        opportunities: [
+          {
+            id: "novo-20260322",
+            name: "Novo Nordisk",
+            ticker: "NOVO-B",
+            symbol: "OMXCOP:NOVO_B",
+            price: 875.20,
+            changePct: -1.2,
+            currency: "DKK",
+            country: "Dänemark",
+            sector: "Gesundheit",
+            industry: "Pharma",
+            theme: "Adipositas / Diabetes",
+            exchange: "OMXCOP",
+            marketCap: "Large Cap",
+            description: "Novo Nordisk ist führend in Diabetes- und Adipositas-Therapien und profitiert von strukturellem Gesundheitswachstum.",
+            whyNow: "Die Nachfrage nach Adipositas-Medikamenten bleibt ein zentraler Kurstreiber, gleichzeitig ist das Thema stark im Markt eingepreist.",
+            analystView: "Entscheidend sind Produktionskapazitäten, Wettbewerb und langfristige Margenentwicklung.",
+            chance: "Starkes Produktprofil, struktureller Nachfragepfad und hohe Qualität.",
+            risk: "Bewertung, regulatorische Entwicklungen und Wettbewerb im GLP-1-Markt.",
+            alternative: "Eli Lilly oder Healthcare-ETF.",
+            source: "Premium-Analyse 22.03.2026"
+          }
+        ]
+      },
+      {
+        date: "2026-03-21",
+        opportunities: [
+          {
+            id: "ko-20260321",
+            name: "Coca-Cola",
+            ticker: "KO",
+            symbol: "NYSE:KO",
+            price: 63.45,
+            changePct: 0.4,
+            currency: "USD",
+            country: "USA",
+            sector: "Konsum",
+            industry: "Getränke",
+            theme: "Defensiv / Qualität",
+            exchange: "NYSE",
+            marketCap: "Large Cap",
+            description: "Coca-Cola steht für globale Markenstärke, relativ stabile Nachfrage und defensives Profil.",
+            whyNow: "In unsicheren Marktphasen rücken defensive Qualitätswerte oft stärker in den Fokus.",
+            analystView: "Themen sind Pricing Power, Margenqualität und globale Nachfrageentwicklung.",
+            chance: "Stabile Cashflows, starke Marke, defensiver Charakter.",
+            risk: "Begrenztes Wachstum, Währungsbewegungen und Bewertungsniveau.",
+            alternative: "PepsiCo oder Consumer Staples ETF.",
+            source: "Premium-Analyse 21.03.2026"
+          }
+        ]
+      },
+      {
+        date: "2026-03-20",
+        opportunities: [
+          {
+            id: "coin-20260320",
+            name: "Coinbase",
+            ticker: "COIN",
+            symbol: "NASDAQ:COIN",
+            price: 228.10,
+            changePct: 3.4,
+            currency: "USD",
+            country: "USA",
+            sector: "Finanzen",
+            industry: "Krypto-Infrastruktur",
+            theme: "Krypto / Volatilität",
+            exchange: "NASDAQ",
+            marketCap: "Mid/Large Cap",
+            description: "Coinbase ist eine zentrale Plattform für Krypto-Handel und Infrastruktur in den USA.",
+            whyNow: "Steigende Krypto-Aktivität, Zuflüsse in den Sektor und stärkere Risikobereitschaft stützen das Setup.",
+            analystView: "Wichtig sind Handelsvolumen, Regulierung und die Nachhaltigkeit der Marktaktivität.",
+            chance: "Hebel auf steigende Krypto-Aktivität und Infrastrukturrolle im Ökosystem.",
+            risk: "Sehr hohe Volatilität, Regulierungsrisiken und starke Stimmungsabhängigkeit.",
+            alternative: "Bitcoin-ETF oder breiter Krypto-Proxy mit kleinerer Positionsgröße.",
+            source: "Premium-Analyse 20.03.2026"
+          }
+        ]
+      }
+    ];
+
+    const chartDefaults = {
+      symbol: "NASDAQ:AAPL",
+      interval: "D",
+      theme: "dark",
+      locale: "de_DE",
+      timezone: "Europe/Berlin",
+      height: 700,
+      allowSymbolChange: true,
+      style: "1",
+      toolbarBg: "#0f1115",
+      studies: "",
+      withdateranges: true,
+      hidelegend: false
+    };
+
+    let currentUser = null;
+    let currentProfile = null;
+    let currentWatchItem = null;
+    let currentOpportunity = null;
+
+    function getEl(id) {
+      return document.getElementById(id);
+    }
+
+    function formatMoney(value, currency) {
+      return new Intl.NumberFormat('de-DE', {
+        style: 'currency',
+        currency,
+        maximumFractionDigits: 2
+      }).format(value);
+    }
+
+    function formatDateLabel(dateStr) {
+      return new Date(dateStr + 'T12:00:00').toLocaleDateString('de-DE', {
+        weekday: 'short',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    }
+
+    function showView(viewId) {
+      document.querySelectorAll('.page-view').forEach((view) => view.classList.remove('active'));
+      getEl(viewId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    }
+
+    function parseRoute() {
+      let path = location.pathname || '/';
+
+      if (path === '/' || path === '/index.html') {
+        const hash = location.hash || '';
+        if (hash.startsWith('#/')) {
+          path = hash.slice(1);
+        } else {
+          path = '/';
+        }
+      }
+
+      return path;
+    }
+
+    function goToRoute(path) {
+      if (path.startsWith('/#')) {
+        path = path.replace('/#', '#');
+        location.hash = path;
+        return;
+      }
+
+      if (location.pathname === '/' || location.pathname.endsWith('.html') || location.protocol === 'file:') {
+        location.hash = '#' + path;
+        handleRoute();
+      } else {
+        history.pushState({}, '', path);
+        handleRoute();
+      }
+    }
+
+    function mapAuthError(message) {
+      const known = {
+        'Invalid login credentials': 'Falsche E-Mail oder falsches Passwort.',
+        'Email not confirmed': 'Bitte bestätige zuerst deine E-Mail-Adresse.',
+        'User already registered': 'Diese E-Mail-Adresse ist bereits registriert.',
+        'Password should be at least 6 characters': 'Das Passwort muss mindestens 6 Zeichen lang sein.'
+      };
+      return known[message] || message || 'Die Anmeldung konnte gerade nicht abgeschlossen werden.';
+    }
+
+    function clearMessages() {
+      getEl('authError').style.display = 'none';
+      getEl('authSuccess').style.display = 'none';
+    }
+
+    function showError(message) {
+      const box = getEl('authError');
+      const ok = getEl('authSuccess');
+      ok.style.display = 'none';
+      box.textContent = message;
+      box.style.display = 'block';
+    }
+
+    function showSuccess(message) {
+      const box = getEl('authSuccess');
+      const err = getEl('authError');
+      err.style.display = 'none';
+      box.textContent = message;
+      box.style.display = 'block';
+    }
+
+    function setLoading(button, loading, text) {
+      if (!button) return;
+      button.disabled = loading;
+      button.textContent = loading ? 'Bitte warten…' : text;
+    }
+
     function openAuthModal(tab = 'login') {
-      document.getElementById('authModal').classList.add('open');
-      document.getElementById('authModal').setAttribute('aria-hidden', 'false');
+      getEl('authModal').classList.add('open');
+      getEl('authModal').setAttribute('aria-hidden', 'false');
       switchAuth(tab);
     }
 
     function closeAuthModal() {
-      document.getElementById('authModal').classList.remove('open');
-      document.getElementById('authModal').setAttribute('aria-hidden', 'true');
+      getEl('authModal').classList.remove('open');
+      getEl('authModal').setAttribute('aria-hidden', 'true');
       clearMessages();
     }
 
     function switchAuth(mode) {
       const login = mode === 'login';
-      document.getElementById('tabLogin').classList.toggle('active', login);
-      document.getElementById('tabRegister').classList.toggle('active', !login);
-      document.getElementById('panelLogin').classList.toggle('hidden', !login);
-      document.getElementById('panelRegister').classList.toggle('hidden', login);
+      getEl('tabLogin').classList.toggle('active', login);
+      getEl('tabRegister').classList.toggle('active', !login);
+      getEl('panelLogin').classList.toggle('hidden', !login);
+      getEl('panelRegister').classList.toggle('hidden', login);
       clearMessages();
     }
 
     function openPremiumModal() {
-      document.getElementById('premiumModal').classList.add('open');
-      document.getElementById('premiumModal').setAttribute('aria-hidden', 'false');
+      getEl('premiumModal').classList.add('open');
+      getEl('premiumModal').setAttribute('aria-hidden', 'false');
     }
 
     function closePremiumModal() {
-      document.getElementById('premiumModal').classList.remove('open');
-      document.getElementById('premiumModal').setAttribute('aria-hidden', 'true');
+      getEl('premiumModal').classList.remove('open');
+      getEl('premiumModal').setAttribute('aria-hidden', 'true');
     }
 
     function openLegalModal(type) {
-      const title = document.getElementById('legalTitle');
-      const content = document.getElementById('legalContent');
+      const title = getEl('legalTitle');
+      const content = getEl('legalContent');
+
       if (type === 'agb') {
         title.textContent = 'Allgemeine Geschäftsbedingungen';
         content.innerHTML = `
@@ -1128,56 +2286,81 @@
           <p>Bitte ergänze hier später deine rechtsverbindlichen Angaben zu Verantwortlichen, Speicherfristen und Betroffenenrechten.</p>
         `;
       }
-      document.getElementById('legalModal').classList.add('open');
-      document.getElementById('legalModal').setAttribute('aria-hidden', 'false');
+
+      getEl('legalModal').classList.add('open');
+      getEl('legalModal').setAttribute('aria-hidden', 'false');
     }
 
     function closeLegalModal() {
-      document.getElementById('legalModal').classList.remove('open');
-      document.getElementById('legalModal').setAttribute('aria-hidden', 'true');
+      getEl('legalModal').classList.remove('open');
+      getEl('legalModal').setAttribute('aria-hidden', 'true');
     }
 
-    function showError(message) {
-      const box = document.getElementById('authError');
-      const ok = document.getElementById('authSuccess');
-      ok.style.display = 'none';
-      box.textContent = message;
-      box.style.display = 'block';
-    }
+    async function upsertProfileForUser(user, firstName = '', lastName = '', email = '') {
+      if (!supabaseClient || !user?.id) return;
 
-    function showSuccess(message) {
-      const box = document.getElementById('authSuccess');
-      const err = document.getElementById('authError');
-      err.style.display = 'none';
-      box.textContent = message;
-      box.style.display = 'block';
-    }
-
-    function clearMessages() {
-      document.getElementById('authError').style.display = 'none';
-      document.getElementById('authSuccess').style.display = 'none';
-    }
-
-    function setLoading(button, loading, text) {
-      if (!button) return;
-      button.disabled = loading;
-      button.textContent = loading ? 'Bitte warten…' : text;
-    }
-
-    function mapAuthError(message) {
-      const known = {
-        'Invalid login credentials': 'Falsche E-Mail oder falsches Passwort.',
-        'Email not confirmed': 'Bitte bestätige zuerst deine E-Mail-Adresse.',
-        'User already registered': 'Diese E-Mail-Adresse ist bereits registriert.',
-        'Password should be at least 6 characters': 'Das Passwort muss mindestens 6 Zeichen lang sein.'
+      const profilePayload = {
+        id: user.id,
+        email: email || user.email || null,
+        name: `${firstName} ${lastName}`.trim() || user.user_metadata?.full_name || null,
+        first_name: firstName || user.user_metadata?.first_name || null,
+        last_name: lastName || user.user_metadata?.last_name || null,
+        is_premium: false,
+        plan: 'free',
+        risk_level: null,
+        investment_budget: null,
+        investment_horizon: null,
+        wants_crypto: false,
+        alert_frequency: 'daily',
+        email_alerts_enabled: true
       };
-      return known[message] || 'Die Anmeldung konnte gerade nicht abgeschlossen werden.';
+
+      const { error } = await supabaseClient
+        .from('profiles')
+        .upsert(profilePayload, { onConflict: 'id' });
+
+      if (error) {
+        console.error('profiles upsert error:', error);
+      }
+    }
+
+    async function loadCurrentProfile() {
+      if (!supabaseClient || !currentUser?.id) {
+        currentProfile = null;
+        return null;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .maybeSingle();
+
+        if (error) {
+          console.error('profile load error:', error);
+          currentProfile = null;
+          return null;
+        }
+
+        currentProfile = data || null;
+        return currentProfile;
+      } catch (error) {
+        console.error(error);
+        currentProfile = null;
+        return null;
+      }
+    }
+
+    function isPremiumUser() {
+      return Boolean(currentProfile?.is_premium) || currentProfile?.plan === 'plus';
     }
 
     async function handleLogin() {
       clearMessages();
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
+      const email = getEl('loginEmail').value.trim();
+      const password = getEl('loginPassword').value;
+
       if (!email || !password) {
         showError('Bitte fülle E-Mail und Passwort aus.');
         return;
@@ -1186,18 +2369,35 @@
         showError('Supabase ist nicht verfügbar. Bitte prüfe die Frontend-Konfiguration.');
         return;
       }
-      const button = document.getElementById('loginBtn');
+
+      const button = getEl('loginBtn');
       setLoading(button, true, 'Anmelden');
+
       try {
-        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
         if (error) {
           console.error('Supabase login error:', error);
-          showError(error.message || JSON.stringify(error));
-        } else {
-          showSuccess('Anmeldung erfolgreich. Dein Konto ist jetzt verbunden.');
-          setTimeout(() => closeAuthModal(), 900);
+          showError(mapAuthError(error.message));
+          return;
         }
+
+        currentUser = data?.user || null;
+        if (currentUser) {
+          await upsertProfileForUser(currentUser, '', '', email);
+          await loadCurrentProfile();
+        }
+
+        showSuccess('Anmeldung erfolgreich. Du wirst jetzt weitergeleitet …');
+
+        setTimeout(() => {
+          closeAuthModal();
+          goToRoute('/watchlist');
+          refreshNavUI();
+        }, 800);
+
       } catch (error) {
+        console.error(error);
         showError('Die Anmeldung konnte nicht ausgeführt werden.');
       } finally {
         setLoading(button, false, 'Anmelden');
@@ -1206,11 +2406,12 @@
 
     async function handleRegister() {
       clearMessages();
-      const firstName = document.getElementById('registerFirstName').value.trim();
-      const lastName = document.getElementById('registerLastName').value.trim();
-      const email = document.getElementById('registerEmail').value.trim();
-      const password = document.getElementById('registerPassword').value;
-      const terms = document.getElementById('registerTerms').checked;
+
+      const firstName = getEl('registerFirstName').value.trim();
+      const lastName = getEl('registerLastName').value.trim();
+      const email = getEl('registerEmail').value.trim();
+      const password = getEl('registerPassword').value;
+      const terms = getEl('registerTerms').checked;
 
       if (!firstName || !lastName || !email || !password) {
         showError('Bitte fülle alle Felder aus.');
@@ -1229,7 +2430,7 @@
         return;
       }
 
-      const button = document.getElementById('registerBtn');
+      const button = getEl('registerBtn');
       setLoading(button, true, 'Konto erstellen');
 
       try {
@@ -1247,33 +2448,392 @@
 
         if (error) {
           console.error('Supabase signUp error:', error);
-          showError(error.message || JSON.stringify(error));
+          showError(mapAuthError(error.message));
           return;
         }
 
-        const userId = data?.user?.id;
-        if (userId) {
-          try {
-            await supabaseClient.from('profiles').upsert({
-              id: userId,
-              email,
-              name: `${firstName} ${lastName}`,
-              first_name: firstName,
-              last_name: lastName,
-              is_premium: false,
-              created_at: new Date().toISOString()
-            });
-          } catch (profileError) {
-            console.warn('Profil konnte nicht direkt angelegt werden:', profileError);
-          }
+        currentUser = data?.user || null;
+        if (currentUser) {
+          await upsertProfileForUser(currentUser, firstName, lastName, email);
+          await loadCurrentProfile();
         }
 
-        showSuccess('Konto erstellt. Bitte prüfe dein E-Mail-Postfach und bestätige deine Adresse, falls Supabase die Bestätigung verlangt.');
+        showSuccess('Konto erstellt. Du wirst jetzt weitergeleitet …');
+
+        setTimeout(() => {
+          closeAuthModal();
+          goToRoute('/watchlist');
+          refreshNavUI();
+        }, 900);
+
       } catch (error) {
+        console.error(error);
         showError('Die Registrierung konnte nicht abgeschlossen werden.');
       } finally {
         setLoading(button, false, 'Konto erstellen');
       }
+    }
+
+    async function logout() {
+      if (supabaseClient) {
+        await supabaseClient.auth.signOut();
+      }
+      currentUser = null;
+      currentProfile = null;
+      refreshNavUI();
+      goToRoute('/');
+    }
+
+    function refreshNavUI() {
+      const loggedOut = getEl('navLoggedOut');
+      const loggedIn = getEl('navLoggedIn');
+      const navUserText = getEl('navUserText');
+
+      if (currentUser) {
+        loggedOut.classList.add('hidden');
+        loggedIn.classList.remove('hidden');
+        navUserText.textContent = currentUser.user_metadata?.full_name || currentUser.email || 'Eingeloggt';
+      } else {
+        loggedOut.classList.remove('hidden');
+        loggedIn.classList.add('hidden');
+      }
+    }
+
+    function requireLogin() {
+      if (!currentUser) {
+        openAuthModal('login');
+        return false;
+      }
+      return true;
+    }
+
+    function setChartStatus(message) {
+      getEl("statusText").textContent = message;
+    }
+
+    function getChartSettings() {
+      return {
+        symbol: getEl("symbol").value.trim() || chartDefaults.symbol,
+        interval: getEl("interval").value,
+        theme: getEl("theme").value,
+        locale: getEl("locale").value,
+        timezone: getEl("timezone").value,
+        height: parseInt(getEl("height").value, 10) || chartDefaults.height,
+        allowSymbolChange: getEl("allowSymbolChange").checked,
+        style: getEl("style").value,
+        toolbarBg: getEl("toolbarBg").value,
+        studies: getEl("studies").value,
+        withdateranges: getEl("withdateranges").checked,
+        hidelegend: getEl("hidelegend").checked
+      };
+    }
+
+    function setChartFormValues(values) {
+      getEl("symbol").value = values.symbol;
+      getEl("interval").value = values.interval;
+      getEl("theme").value = values.theme;
+      getEl("locale").value = values.locale;
+      getEl("timezone").value = values.timezone;
+      getEl("height").value = values.height;
+      getEl("allowSymbolChange").checked = values.allowSymbolChange;
+      getEl("style").value = values.style;
+      getEl("toolbarBg").value = values.toolbarBg;
+      getEl("studies").value = values.studies;
+      getEl("withdateranges").checked = values.withdateranges;
+      getEl("hidelegend").checked = values.hidelegend;
+    }
+
+    function sanitizeHeight(height) {
+      if (height < 350) return 350;
+      if (height > 1400) return 1400;
+      return height;
+    }
+
+    function loadTradingViewChart() {
+      const settings = getChartSettings();
+      settings.height = sanitizeHeight(settings.height);
+
+      const container = getEl("tv-chart-container");
+      if (!container) return;
+
+      container.innerHTML = "";
+      container.style.height = settings.height + "px";
+
+      const widgetHost = document.createElement("div");
+      widgetHost.className = "tradingview-widget-container";
+      widgetHost.style.width = "100%";
+      widgetHost.style.height = "100%";
+
+      const widgetInner = document.createElement("div");
+      widgetInner.id = "tradingview_widget_inner";
+      widgetInner.style.width = "100%";
+      widgetInner.style.height = "100%";
+
+      widgetHost.appendChild(widgetInner);
+      container.appendChild(widgetHost);
+
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+      script.async = true;
+
+      const config = {
+        autosize: true,
+        symbol: settings.symbol,
+        interval: settings.interval,
+        timezone: settings.timezone,
+        theme: settings.theme,
+        style: settings.style,
+        locale: settings.locale,
+        allow_symbol_change: settings.allowSymbolChange,
+        withdateranges: settings.withdateranges,
+        hide_side_toolbar: false,
+        hide_top_toolbar: false,
+        hide_legend: settings.hidelegend,
+        save_image: true,
+        calendar: false,
+        studies: settings.studies ? [settings.studies] : [],
+        toolbar_bg: settings.toolbarBg,
+        support_host: "https://www.tradingview.com",
+        container_id: "tradingview_widget_inner"
+      };
+
+      script.text = JSON.stringify(config);
+      widgetHost.appendChild(script);
+
+      setChartStatus("Chart geladen: " + settings.symbol);
+      getEl("infoSymbolChip").textContent = `Standard-Symbol: ${settings.symbol}`;
+    }
+
+    function resetChartSettings() {
+      const symbol = getEl("symbol").value.trim() || chartDefaults.symbol;
+      setChartFormValues({ ...chartDefaults, symbol });
+      loadTradingViewChart();
+      setChartStatus("Standardwerte wurden wiederhergestellt.");
+    }
+
+    function renderWatchlistSidebar(activeId) {
+      const root = getEl('watchlistItems');
+      root.innerHTML = WATCHLIST.map(item => `
+        <button class="watch-item ${item.id === activeId ? 'active' : ''}" data-id="${item.id}">
+          <strong>${item.name} (${item.ticker})</strong>
+          <span>${item.country} · ${item.industry}</span>
+          <span>${formatMoney(item.price, item.currency)} · ${item.changePct >= 0 ? '+' : ''}${item.changePct.toFixed(1)} % heute</span>
+        </button>
+      `).join('');
+
+      root.querySelectorAll('.watch-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const selected = WATCHLIST.find(item => item.id === btn.dataset.id) || WATCHLIST[0];
+          renderWatchlist(selected);
+        });
+      });
+    }
+
+    function renderWatchlist(stock) {
+      currentWatchItem = stock;
+      getEl('watchTitle').textContent = `${stock.name} (${stock.ticker})`;
+      getEl('watchSubtitle').innerHTML = `
+        ${stock.country} · ${stock.sector} / ${stock.industry} ·
+        <button class="linklike" style="background:none;border:none;color:#29bbff;cursor:pointer;font:inherit;padding:0;" onclick="goToRoute('/premium/chancen/${stock.premiumOpportunityId}')">Premium-Chance öffnen</button>
+      `;
+
+      getEl('watchPrice').textContent = formatMoney(stock.price, stock.currency);
+      const changeEl = getEl('watchChange');
+      const sign = stock.changePct >= 0 ? '+' : '';
+      changeEl.textContent = `${sign}${stock.changePct.toFixed(1)} % heute`;
+      changeEl.className = `change ${stock.changePct >= 0 ? 'pos' : 'neg'}`;
+
+      getEl('watchFactsGrid').innerHTML = `
+        <div class="fact-card"><div class="label">Ticker</div><div class="value">${stock.ticker}</div></div>
+        <div class="fact-card"><div class="label">Land</div><div class="value">${stock.country}</div></div>
+        <div class="fact-card"><div class="label">Sektor</div><div class="value">${stock.sector}</div></div>
+        <div class="fact-card"><div class="label">Branche</div><div class="value">${stock.industry}</div></div>
+      `;
+
+      getEl('watchAlertList').innerHTML = stock.alertRules.map((rule, idx) => `
+        <div class="alert-item">
+          <strong>Alert-Regel ${idx + 1}</strong>
+          <p>${rule}</p>
+        </div>
+      `).join('');
+
+      renderWatchlistSidebar(stock.id);
+      getEl('symbol').value = stock.symbol;
+      loadTradingViewChart();
+    }
+
+    function getAvailableDays() {
+      return SAMPLE_DAYS.slice(0, 5);
+    }
+
+    function findOpportunityById(opportunityId) {
+      for (const day of getAvailableDays()) {
+        const found = day.opportunities.find(item => item.id === opportunityId);
+        if (found) return { day, opportunity: found };
+      }
+      return null;
+    }
+
+    function populateDaySelect(days) {
+      const select = getEl('daySelect');
+      select.innerHTML = days.map((day) => `
+        <option value="${day.date}">${formatDateLabel(day.date)}</option>
+      `).join('');
+    }
+
+    function populateOpportunitySelect(day, selectedId = null) {
+      const select = getEl('opportunitySelect');
+      select.innerHTML = day.opportunities.map(op => `
+        <option value="${op.id}" ${selectedId === op.id ? 'selected' : ''}>
+          ${op.name} (${op.ticker})
+        </option>
+      `).join('');
+    }
+
+    function renderOpportunityList(day, selectedId) {
+      const list = getEl('opportunityList');
+      list.innerHTML = day.opportunities.map(op => `
+        <button class="opportunity-item ${op.id === selectedId ? 'active' : ''}" data-id="${op.id}">
+          <strong>${op.name} (${op.ticker})</strong>
+          <span>${op.country} · ${op.industry}</span>
+          <span>${formatMoney(op.price, op.currency)} · ${op.changePct >= 0 ? '+' : ''}${op.changePct.toFixed(1)} % heute</span>
+        </button>
+      `).join('');
+
+      list.querySelectorAll('.opportunity-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          goToRoute('/premium/chancen/' + id);
+        });
+      });
+    }
+
+    function renderPremiumFacts(opportunity) {
+      const facts = [
+        { label: 'Ticker', value: opportunity.ticker },
+        { label: 'Land', value: opportunity.country },
+        { label: 'Sektor', value: opportunity.sector },
+        { label: 'Branche', value: opportunity.industry },
+        { label: 'Börse', value: opportunity.exchange },
+        { label: 'Marktkapitalisierung', value: opportunity.marketCap },
+        { label: 'Währung', value: opportunity.currency },
+        { label: 'Quelle', value: opportunity.source }
+      ];
+
+      getEl('premiumFactsGrid').innerHTML = facts.map(item => `
+        <div class="fact-card">
+          <div class="label">${item.label}</div>
+          <div class="value">${item.value}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderPremiumOpportunity(opportunity, day) {
+      currentOpportunity = opportunity;
+
+      getEl('premiumHeroTitle').textContent = `${opportunity.name} (${opportunity.ticker})`;
+      getEl('premiumHeroPrice').textContent = formatMoney(opportunity.price, opportunity.currency);
+
+      const changeEl = getEl('premiumHeroChange');
+      const sign = opportunity.changePct >= 0 ? '+' : '';
+      changeEl.textContent = `${sign}${opportunity.changePct.toFixed(1)} % heute · ${opportunity.currency}`;
+      changeEl.className = `change ${opportunity.changePct >= 0 ? 'pos' : 'neg'}`;
+
+      getEl('premiumHeroChips').innerHTML = `
+        <span class="chip">${opportunity.country}</span>
+        <span class="chip">${opportunity.sector}</span>
+        <span class="chip">${opportunity.industry}</span>
+        <span class="chip">${opportunity.theme}</span>
+      `;
+
+      getEl('premiumAboutText').textContent = opportunity.description;
+      getEl('premiumWhyText').textContent = opportunity.whyNow;
+      getEl('premiumAnalystText').textContent = opportunity.analystView;
+      getEl('premiumChanceText').textContent = opportunity.chance;
+      getEl('premiumRiskText').textContent = opportunity.risk;
+      getEl('premiumAlternativeText').textContent = opportunity.alternative;
+
+      renderPremiumFacts(opportunity);
+      getEl('daySelect').value = day.date;
+      populateOpportunitySelect(day, opportunity.id);
+      renderOpportunityList(day, opportunity.id);
+
+      getEl('symbol').value = opportunity.symbol;
+      loadTradingViewChart();
+    }
+
+    async function renderPremiumRoute(opportunityIdFromRoute = null) {
+      if (!requireLogin()) {
+        showView('view-landing');
+        return;
+      }
+
+      showView('view-premium');
+
+      if (!isPremiumUser()) {
+        getEl('premiumGate').classList.remove('hidden');
+        getEl('premiumContent').classList.add('hidden');
+        return;
+      }
+
+      getEl('premiumGate').classList.add('hidden');
+      getEl('premiumContent').classList.remove('hidden');
+
+      const days = getAvailableDays();
+      populateDaySelect(days);
+
+      const resolved = opportunityIdFromRoute ? findOpportunityById(opportunityIdFromRoute) : null;
+      const initialDay = resolved?.day || days[0];
+      const initialOpportunity = resolved?.opportunity || initialDay.opportunities[0];
+
+      populateOpportunitySelect(initialDay, initialOpportunity.id);
+      renderPremiumOpportunity(initialOpportunity, initialDay);
+
+      getEl('daySelect').onchange = (event) => {
+        const selectedDay = days.find(day => day.date === event.target.value) || days[0];
+        const firstOpportunity = selectedDay.opportunities[0];
+        populateOpportunitySelect(selectedDay, firstOpportunity.id);
+        renderPremiumOpportunity(firstOpportunity, selectedDay);
+      };
+
+      getEl('opportunitySelect').onchange = (event) => {
+        const selectedDay = days.find(day => day.date === getEl('daySelect').value) || days[0];
+        const selectedOpportunity = selectedDay.opportunities.find(item => item.id === event.target.value) || selectedDay.opportunities[0];
+        renderPremiumOpportunity(selectedOpportunity, selectedDay);
+      };
+    }
+
+    async function handleRoute() {
+      const route = parseRoute();
+
+      if (route === '/' || route === '') {
+        showView('view-landing');
+        return;
+      }
+
+      if (route === '/watchlist') {
+        if (!requireLogin()) {
+          showView('view-landing');
+          return;
+        }
+        showView('view-watchlist');
+        renderWatchlist(currentWatchItem || WATCHLIST[0]);
+        return;
+      }
+
+      if (route === '/premium/chancen') {
+        await renderPremiumRoute();
+        return;
+      }
+
+      if (route.startsWith('/premium/chancen/')) {
+        const opportunityId = decodeURIComponent(route.replace('/premium/chancen/', '').trim());
+        await renderPremiumRoute(opportunityId);
+        return;
+      }
+
+      showView('view-landing');
     }
 
     document.querySelectorAll('.modal-overlay').forEach((overlay) => {
@@ -1290,6 +2850,32 @@
         closePremiumModal();
         closeLegalModal();
       }
+    });
+
+    window.addEventListener('popstate', handleRoute);
+    window.addEventListener('hashchange', handleRoute);
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      setChartFormValues(chartDefaults);
+
+      getEl("applyBtn").addEventListener("click", loadTradingViewChart);
+      getEl("resetBtn").addEventListener("click", resetChartSettings);
+
+      if (supabaseClient) {
+        const { data } = await supabaseClient.auth.getSession();
+        currentUser = data?.session?.user || null;
+        await loadCurrentProfile();
+
+        supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+          currentUser = session?.user || null;
+          await loadCurrentProfile();
+          refreshNavUI();
+          handleRoute();
+        });
+      }
+
+      refreshNavUI();
+      await handleRoute();
     });
   </script>
 </body>
