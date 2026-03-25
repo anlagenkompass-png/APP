@@ -3,7 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AnlageKompass</title>
+
+  <title>AnlageKompass – Kostenlose Top-Idee jeden Dienstag</title>
+  <meta name="description" content="AnlageKompass zeigt dir verständlich erklärte Marktchancen, eine kostenlose Top-Idee jeden Dienstag, Watchlist-Funktionen und klare Einordnungen für Aktien, ETFs und Krypto. Keine Anlageberatung." />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="theme-color" content="#030817" />
+  <link rel="canonical" href="https://meinanlagekompass.com/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="AnlageKompass – Kostenlose Top-Idee jeden Dienstag" />
+  <meta property="og:description" content="Verständlich erklärte Marktchancen, Watchlist, Premium-Chancen und jeden Dienstag eine kostenlose Top-Idee. Keine Anlageberatung." />
+  <meta property="og:url" content="https://meinanlagekompass.com/" />
+  <meta property="og:site_name" content="AnlageKompass" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="AnlageKompass – Kostenlose Top-Idee jeden Dienstag" />
+  <meta name="twitter:description" content="Verständlich erklärte Marktchancen, Watchlist, Premium-Chancen und jeden Dienstag eine kostenlose Top-Idee. Keine Anlageberatung." />
+
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%231ea8ff%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%2328d0b1%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23030817%22/%3E%3Cpath d=%22M14 42L26 28l8 8 16-20%22 fill=%22none%22 stroke=%22url(%23g)%22 stroke-width=%226%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3Ccircle cx=%2250%22 cy=%2216%22 r=%226%22 fill=%22%2328d0b1%22/%3E%3C/svg%3E'
+  />
+  <link
+    rel="apple-touch-icon"
+    href='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%231ea8ff%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%2328d0b1%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23030817%22/%3E%3Cpath d=%22M14 42L26 28l8 8 16-20%22 fill=%22none%22 stroke=%22url(%23g)%22 stroke-width=%226%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3Ccircle cx=%2250%22 cy=%2216%22 r=%226%22 fill=%22%2328d0b1%22/%3E%3C/svg%3E'
+  />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AnlageKompass",
+      "url": "https://meinanlagekompass.com/",
+      "description": "Kostenlose Top-Idee jeden Dienstag. Verständlich erklärte Marktchancen, Watchlist und klare Einordnungen für Aktien, ETFs und Krypto. Keine Anlageberatung."
+    }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,15 +119,30 @@
       cursor: pointer;
     }
 
-    .brand-mark {
-      width: 22px;
-      height: 28px;
-      background: linear-gradient(180deg, #1da7ff 0%, #1ebeff 100%);
-      box-shadow: 0 0 22px rgba(29, 167, 255, 0.24);
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(30,168,255,0.16), rgba(40,208,177,0.16));
+      border: 1px solid rgba(30,168,255,0.26);
+      box-shadow: 0 0 22px rgba(29, 167, 255, 0.18);
       flex: 0 0 auto;
     }
 
-    .brand-text { color: #20c4ea; }
+    .brand-logo svg {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    .brand-text {
+      color: #20c4ea;
+      display: inline-flex;
+      align-items: center;
+    }
 
     .nav-actions {
       display: flex;
@@ -130,6 +180,7 @@
     }
 
     .btn:hover { transform: translateY(-1px); }
+
     .btn-top-secondary, .btn-top-primary, .btn-primary, .btn-ghost, .btn-hero-primary, .btn-hero-secondary, .submit-btn, .btn-card-primary, .btn-card-secondary {
       min-height: 46px;
       padding: 0 18px;
@@ -243,7 +294,7 @@
       line-height: 1.7;
     }
 
-    .feature-grid, .pricing-grid, .stats-grid, .grid-3, .toolbar-grid, .facts-grid {
+    .feature-grid, .pricing-grid, .stats-grid, .grid-3, .toolbar-grid, .facts-grid, .detail-facts-grid {
       display: grid;
       gap: 18px;
     }
@@ -254,6 +305,7 @@
     .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .toolbar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 24px; }
     .facts-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .detail-facts-grid { grid-template-columns: repeat(2, minmax(180px, 1fr)); align-content: start; }
 
     .feature-card,
     .panel,
@@ -429,12 +481,24 @@
     .fact-card {
       padding: 18px; border-radius: 18px; background: rgba(8, 16, 30, 0.56);
       border: 1px solid rgba(117, 141, 181, 0.14);
+      min-height: 98px;
+    }
+    .detail-facts-grid .fact-card {
+      min-height: 112px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .fact-card .label {
       color: var(--text-soft); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;
     }
     .fact-card .value {
-      color: var(--text); font-size: 17px; font-weight: 800; line-height: 1.35; word-break: break-word;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.35;
+      word-break: normal;
+      overflow-wrap: anywhere;
     }
 
     .toolbar-field {
@@ -450,12 +514,18 @@
       background: rgba(8, 16, 30, 0.56); color: var(--text-muted); font-size: 13px; font-weight: 700;
     }
 
-    .content-split { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; }
+    .content-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.95fr);
+      gap: 24px;
+      align-items: start;
+    }
 
     .chart-card { overflow: hidden; }
     .chart-header { padding: 20px 20px 12px; border-bottom: 1px solid rgba(117, 141, 181, 0.16); }
     .chart-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
     .chart-subtitle { color: var(--text-muted); font-size: 14px; line-height: 1.5; }
+    .chart-subtitle:empty { display: none; }
     .chart-wrap { padding: 20px; }
     .chart-box {
       width: 100%; border: 1px solid rgba(117, 141, 181, 0.16); border-radius: 14px;
@@ -538,7 +608,7 @@
 
     @media (max-width: 820px) {
       .container { width: min(100% - 28px, 100%); }
-      .feature-grid, .pricing-grid, .field-grid, .stats-grid, .grid-3, .toolbar-grid, .facts-grid {
+      .feature-grid, .pricing-grid, .field-grid, .stats-grid, .grid-3, .toolbar-grid, .facts-grid, .detail-facts-grid {
         grid-template-columns: 1fr;
       }
       .hero { min-height: auto; padding: 54px 0 68px; }
@@ -557,12 +627,23 @@
   <div class="nav-wrap">
     <div class="container nav">
       <div class="brand" onclick="goToRoute('/')">
-        <span class="brand-mark"></span>
+        <span class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="brandStroke" x1="14" y1="16" x2="50" y2="44" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#1EA8FF"/>
+                <stop offset="1" stop-color="#28D0B1"/>
+              </linearGradient>
+            </defs>
+            <path d="M14 42L26 28L34 36L50 16" stroke="url(#brandStroke)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="50" cy="16" r="6" fill="#28D0B1"/>
+          </svg>
+        </span>
         <span class="brand-text">AnlageKompass</span>
       </div>
 
       <div class="nav-actions">
-        <button class="btn btn-top-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Idee</button>
+        <button class="btn btn-top-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Top-Idee</button>
       </div>
 
       <div class="nav-actions" id="navLoggedOut">
@@ -584,15 +665,15 @@
   <main id="view-landing" class="page-view active">
     <section class="hero container">
       <div class="hero-inner">
-        <div class="hero-pill">⚡ Tagesaktuelle Investment-Ideen</div>
-        <h1>Mehr Chancen.<br>Mehr Ideen.<br>Mehr Orientierung.</h1>
+        <div class="hero-pill">⚡ Kostenlose Top-Idee jeden Dienstag</div>
+        <h1>Kostenlose Top-Idee am Dienstag.<br>Klar erklärt.<br>Ohne Börsen-Blabla.</h1>
         <p class="hero-copy">
-          Erhalte datenbasierte Investment-Ideen für Aktien, ETFs und Krypto – verständlich erklärt,
-          sauber strukturiert und direkt mit Chartansicht.
+          Erhalte verständlich erklärte Marktchancen für Aktien, ETFs und Krypto, nutze deine Watchlist
+          und sieh dir jede Woche eine kostenlose Top-Idee an. Keine Anlageberatung.
         </p>
         <div class="hero-actions">
           <button class="btn btn-hero-primary" type="button" onclick="openAuthModal('register')">Kostenlos starten →</button>
-          <button class="btn btn-hero-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Dienstags-Idee</button>
+          <button class="btn btn-hero-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Top-Idee ansehen</button>
         </div>
       </div>
     </section>
@@ -601,7 +682,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Alles was du brauchst</h2>
-          <p>AnlageKompass bringt dir Investment-Ideen, die du sonst verpassen würdest.</p>
+          <p>AnlageKompass bringt dir Marktchancen, Watchlist und klare Einordnungen an einen Ort.</p>
         </div>
         <div class="feature-grid">
           <article class="feature-card">
@@ -626,13 +707,13 @@
           </article>
           <article class="feature-card">
             <span class="emoji">🗓️</span>
-            <h3>Jeden Dienstag eine Gratis-Idee</h3>
-            <p>Eine kostenlose Premium-Idee bleibt öffentlich sichtbar – ideal für neue Interessenten.</p>
+            <h3>Jeden Dienstag eine kostenlose Top-Idee</h3>
+            <p>Eine kostenlose Top-Idee bleibt öffentlich sichtbar und macht den Einstieg einfach.</p>
           </article>
           <article class="feature-card">
             <span class="emoji">📬</span>
             <h3>E-Mail-Erinnerung</h3>
-            <p>Besucher können sich an die wöchentliche Gratis-Idee erinnern lassen – serverseitig gesteuert.</p>
+            <p>Besucher können sich zur kostenlosen Top-Idee am Dienstag erinnern lassen – serverseitig steuerbar.</p>
           </article>
         </div>
       </div>
@@ -652,7 +733,7 @@
               <div class="per">/ Monat</div>
             </div>
             <ul class="feature-list">
-              <li><span class="tick">✓</span>Öffentliche Dienstags-Idee</li>
+              <li><span class="tick">✓</span>Öffentliche Top-Idee am Dienstag</li>
               <li><span class="tick">✓</span>Watchlist bis 30 Favoriten</li>
               <li><span class="tick">✓</span>Kursregeln speichern</li>
               <li><span class="tick">✓</span>Registrierung & Login</li>
@@ -722,10 +803,6 @@
               <button class="btn btn-top-primary" type="button" id="stockSearchBtn">Suchen</button>
             </div>
 
-            <div class="inline-info">
-              Falls Finnhub einen Titel nicht exakt findet, kannst du das Symbol im Chart jederzeit anpassen.
-            </div>
-
             <div class="results-stack" id="searchResults">
               <div class="search-empty">Noch keine Suche gestartet.</div>
             </div>
@@ -770,7 +847,7 @@
             <div class="row-head" style="margin-bottom: 18px;">
               <div>
                 <h3>Aktive Kursregeln</h3>
-                <p class="muted">Die Regeln bleiben lokal im Browser gespeichert.</p>
+                <p class="muted">Alle gespeicherten Regeln werden hier gesammelt angezeigt.</p>
               </div>
               <div class="inline-actions">
                 <button class="mini-btn" type="button" onclick="enableBrowserNotifications()">Benachrichtigungen aktivieren</button>
@@ -832,7 +909,6 @@
       <section class="app-layout">
         <aside class="sidebar-card">
           <h3>Chancen der letzten Tage</h3>
-          <p class="muted">Hier werden die letzten Opportunity-Gruppen angezeigt.</p>
           <div class="opportunity-list" id="opportunityList">
             <div class="search-empty">Chancen werden geladen …</div>
           </div>
@@ -849,7 +925,7 @@
                 <p class="body-copy" id="premiumWhyText"></p>
               </div>
               <div>
-                <div class="facts-grid" id="premiumFactsGrid"></div>
+                <div class="detail-facts-grid" id="premiumFactsGrid"></div>
               </div>
             </div>
           </section>
@@ -874,7 +950,7 @@
           <section class="chart-card">
             <div class="chart-header">
               <h2 class="chart-title">Chart zur Premium-Chance</h2>
-              <p class="chart-subtitle">Die aktuell ausgewählte Premium-Chance wird hier direkt visualisiert.</p>
+              <p class="chart-subtitle">Interaktiver Kursverlauf mit TradingView.</p>
             </div>
             <div class="chart-wrap">
               <div class="chart-box">
@@ -898,12 +974,12 @@
   <main id="view-public-idea" class="page-view">
     <div class="container app-shell">
       <section class="page-hero">
-        <div class="kicker">🎁 Kostenlose Dienstags-Idee</div>
+        <div class="kicker">🎁 Kostenlose Top-Idee am Dienstag</div>
         <div class="row-head">
           <div>
             <h1 id="publicHeroTitle">Kostenlose Idee wird geladen …</h1>
             <p class="page-hero-copy" id="publicHeroCopy">
-              Jeden Dienstag veröffentlichen wir hier eine kostenlose Premium-Idee.
+              Jeden Dienstag veröffentlichen wir hier eine kostenlose Top-Idee.
             </p>
             <div class="chips" id="publicHeroChips"></div>
           </div>
@@ -931,7 +1007,7 @@
               <p class="body-copy" id="publicWhyText"></p>
             </div>
             <div>
-              <div class="facts-grid" id="publicFactsGrid"></div>
+              <div class="detail-facts-grid" id="publicFactsGrid"></div>
             </div>
           </div>
 
@@ -954,7 +1030,7 @@
         <aside class="subscribe-card">
           <h3>Am Dienstag erinnern lassen</h3>
           <p class="muted" style="margin-bottom:18px;">
-            Trage deine E-Mail ein. Sobald die kostenlose Dienstags-Idee veröffentlicht wurde,
+            Trage deine E-Mail ein. Sobald die kostenlose Top-Idee veröffentlicht wurde,
             kann dein serverseitiger Job am Dienstag eine Erinnerungs-Mail mit Link zu dieser Seite versenden.
           </p>
 
@@ -967,7 +1043,7 @@
           <div class="status-line" id="freeIdeaReminderStatus"></div>
 
           <div class="notice" style="margin-top:18px;">
-            Diese Seite ist bewusst ohne Login erreichbar. Sie soll Interessenten jede Woche zur Website zurückholen.
+            Diese Seite ist bewusst ohne Login erreichbar. Sie bringt Besucher jede Woche zur Website zurück.
           </div>
         </aside>
       </section>
@@ -975,7 +1051,7 @@
       <section class="chart-card" style="margin-top:24px;">
         <div class="chart-header">
           <h2 class="chart-title">Chart zur kostenlosen Idee</h2>
-          <p class="chart-subtitle">Die öffentliche Gratis-Idee wird hier genau wie im Premium-Bereich dargestellt.</p>
+          <p class="chart-subtitle">Interaktiver Kursverlauf mit TradingView.</p>
         </div>
         <div class="chart-wrap">
           <div class="chart-box">
@@ -1176,6 +1252,16 @@
       return `${sign}${num.toFixed(1)} %`;
     }
 
+    function formatScoreValue(value) {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return '—';
+      return num.toLocaleString('de-DE', { maximumFractionDigits: 1 });
+    }
+
+    function normalizeText(value) {
+      return String(value || '').replace(/\s+/g, ' ').trim();
+    }
+
     function parseDateSafe(value) {
       if (!value) return null;
 
@@ -1219,6 +1305,52 @@
         month: '2-digit',
         year: 'numeric'
       });
+    }
+
+    function formatDateTimeLabel(value) {
+      const d = parseDateSafe(value);
+      return d ? d.toLocaleString('de-DE') : '—';
+    }
+
+    function simplifyInvestmentText(text, fallback = '') {
+      let clean = normalizeText(text);
+      if (!clean) return fallback;
+
+      const replacements = [
+        [/\bMACD(?:[-/ ]*RSI)?(?:-Dynamik)?\b/gi, 'Marktsignale'],
+        [/\bRSI(?:-Dynamik)?\b/gi, 'Marktstimmung'],
+        [/\bMomentum\b/gi, 'Kursdynamik'],
+        [/\bTrendstruktur\b/gi, 'Kursverlauf'],
+        [/\bVolumenaktivität\b/gi, 'Handelsaktivität'],
+        [/\bVolumen\b/gi, 'Handelsvolumen'],
+        [/\bBreakout\b/gi, 'Ausbruch nach oben'],
+        [/\bPullback\b/gi, 'kurze Verschnaufpause'],
+        [/\bSetup\b/gi, 'Ausgangslage'],
+        [/\bEntry\b/gi, 'Einstieg'],
+        [/\bStop-?Loss\b/gi, 'Absicherungsmarke'],
+        [/\bRetracement\b/gi, 'Zwischenrückgang'],
+        [/\bVolatilität\b/gi, 'Kursschwankungen'],
+        [/\bKonsolidierung\b/gi, 'ruhigere Phase'],
+        [/\bbullish\b/gi, 'positiv'],
+        [/\bbearish\b/gi, 'vorsichtig']
+      ];
+
+      replacements.forEach(([pattern, replacement]) => {
+        clean = clean.replace(pattern, replacement);
+      });
+
+      clean = clean
+        .replace(/starkes?\s+Kursdynamik/gi, 'eine starke Kursbewegung')
+        .replace(/starkes?\s+Momentum/gi, 'eine starke Kursbewegung')
+        .replace(/positive\s+Marktsignale/gi, 'mehrere positive Signale')
+        .replace(/klare[rn]?\s+Kursverlauf/gi, 'einen gut erkennbaren Kursverlauf')
+        .replace(/erhöhte\s+Handelsaktivität/gi, 'mehr Aktivität im Handel')
+        .replace(/,\s*,/g, ', ')
+        .replace(/\s+\./g, '.')
+        .replace(/\s+,/g, ',')
+        .trim();
+
+      return clean || fallback;
     }
 
     function getStorageKey(base) {
@@ -1859,6 +1991,7 @@
         }
 
         renderFavoritesList();
+        renderAlertList();
         renderSearchResults(searchState.results);
         return;
       }
@@ -1874,6 +2007,7 @@
       currentFavorite = finalItem;
 
       renderFavoritesList();
+      renderAlertList();
       renderFavoriteDetail(finalItem);
       renderSearchResults(searchState.results);
       startAlertMonitoring();
@@ -1887,11 +2021,12 @@
 
       if (!favorites.length) {
         root.innerHTML = `<div class="search-empty">Noch keine Favoriten gespeichert.</div>`;
+        renderAlertList();
         return;
       }
 
       root.innerHTML = favorites.map(item => `
-        <div class="favorite-card">
+        <div class="favorite-card" data-favorite-card-id="${escapeHtml(item.id)}">
           <div class="favorite-top">
             <div>
               <strong>${escapeHtml(item.name)}</strong>
@@ -1906,10 +2041,10 @@
             <div class="field-inline">
               <label>Neue Kursregel hinzufügen</label>
               <div class="alert-builder-row">
-                <select data-alert-type="${escapeHtml(item.id)}">
+                <select data-alert-type>
                   ${ALERT_TEMPLATES.map(t => `<option value="${escapeHtml(t.value)}">${escapeHtml(t.label)}</option>`).join('')}
                 </select>
-                <input data-alert-price="${escapeHtml(item.id)}" type="number" step="0.01" placeholder="Preis (nur falls nötig)" />
+                <input data-alert-price type="number" step="0.01" placeholder="Preis (nur falls nötig)" />
                 <button class="mini-btn" data-save-alert="${escapeHtml(item.id)}">Speichern</button>
               </div>
             </div>
@@ -1930,12 +2065,15 @@
 
       root.querySelectorAll('[data-save-alert]').forEach(btn => {
         btn.addEventListener('click', () => {
-          const id = btn.dataset.saveAlert;
-          const type = root.querySelector(`[data-alert-type="${CSS.escape(id)}"]`).value;
-          const targetPrice = root.querySelector(`[data-alert-price="${CSS.escape(id)}"]`).value;
-          saveAlertRule(id, type, targetPrice);
+          const card = btn.closest('[data-favorite-card-id]');
+          const favoriteId = card?.dataset.favoriteCardId || btn.dataset.saveAlert;
+          const type = card?.querySelector('[data-alert-type]')?.value || '';
+          const targetPrice = card?.querySelector('[data-alert-price]')?.value || '';
+          saveAlertRule(favoriteId, type, targetPrice);
         });
       });
+
+      renderAlertList();
     }
 
     function removeFavorite(id) {
@@ -1953,6 +2091,7 @@
       }
 
       renderFavoritesList();
+      renderAlertList();
       renderSearchResults(searchState.results);
     }
 
@@ -1966,6 +2105,29 @@
         case 'below_price': return `Kurs fällt unter ${rule.targetPrice || '—'}`;
         default: return 'Benachrichtigung';
       }
+    }
+
+    function getAllAlertEntries() {
+      const favorites = loadFavorites();
+      const favoriteMap = Object.fromEntries(favorites.map(item => [item.id, item]));
+      const alerts = loadAlerts();
+      const entries = [];
+
+      Object.entries(alerts).forEach(([favoriteId, rules]) => {
+        (Array.isArray(rules) ? rules : []).forEach(rule => {
+          entries.push({
+            favoriteId,
+            favorite: favoriteMap[favoriteId] || null,
+            rule
+          });
+        });
+      });
+
+      return entries.sort((a, b) => {
+        const ta = parseDateSafe(a.rule.createdAt)?.getTime() || 0;
+        const tb = parseDateSafe(b.rule.createdAt)?.getTime() || 0;
+        return tb - ta;
+      });
     }
 
     async function enableBrowserNotifications() {
@@ -2006,7 +2168,7 @@
       });
 
       saveAlerts(alerts);
-      if (currentFavorite?.id === favoriteId) renderAlertList(favoriteId);
+      renderAlertList();
       showBanner('Kursregel gespeichert.');
       startAlertMonitoring();
     }
@@ -2014,35 +2176,41 @@
     function deleteAlertRule(favoriteId, alertId) {
       const alerts = loadAlerts();
       alerts[favoriteId] = (alerts[favoriteId] || []).filter(rule => rule.id !== alertId);
+      if (!alerts[favoriteId].length) delete alerts[favoriteId];
       saveAlerts(alerts);
-      if (currentFavorite?.id === favoriteId) renderAlertList(favoriteId);
+      renderAlertList();
     }
 
-    function renderAlertList(favoriteId) {
+    function renderAlertList() {
       const root = getEl('watchAlertList');
-      const alerts = loadAlerts()[favoriteId] || [];
+      const entries = getAllAlertEntries();
 
-      if (!alerts.length) {
+      if (!entries.length) {
         root.innerHTML = `
           <div class="fact-card">
-            <div class="value">Für diesen Favoriten wurden noch keine Regeln gespeichert.</div>
+            <div class="value">Noch keine Kursregeln gespeichert.</div>
           </div>
         `;
         return;
       }
 
-      root.innerHTML = alerts.map((rule, idx) => `
+      root.innerHTML = entries.map(({ favoriteId, favorite, rule }, idx) => `
         <div class="fact-card">
-          <div class="label">Kursregel ${idx + 1}</div>
+          <div class="label">${escapeHtml(favorite?.name || `Favorit ${idx + 1}`)}</div>
           <div class="value">${escapeHtml(getAlertLabel(rule))}</div>
+          <div class="symbol-meta" style="margin-top:10px;">
+            ${escapeHtml(favorite?.ticker || getTickerFromSymbol(favorite?.symbol || '—'))} · ${escapeHtml(favorite?.symbol || '—')}
+          </div>
           <div class="inline-actions" style="margin-top:12px;">
-            <button class="danger-btn" data-delete-alert="${escapeHtml(rule.id)}">Löschen</button>
+            <button class="danger-btn" data-delete-alert="${escapeHtml(rule.id)}" data-delete-alert-favorite="${escapeHtml(favoriteId)}">Löschen</button>
           </div>
         </div>
       `).join('');
 
       root.querySelectorAll('[data-delete-alert]').forEach(btn => {
-        btn.addEventListener('click', () => deleteAlertRule(favoriteId, btn.dataset.deleteAlert));
+        btn.addEventListener('click', () => {
+          deleteAlertRule(btn.dataset.deleteAlertFavorite, btn.dataset.deleteAlert);
+        });
       });
     }
 
@@ -2124,7 +2292,7 @@
       }
 
       saveAlerts(alerts);
-      if (currentFavorite?.id) renderAlertList(currentFavorite.id);
+      renderAlertList();
     }
 
     function startAlertMonitoring() {
@@ -2171,7 +2339,7 @@
         <div class="fact-card"><div class="label">Chart</div><div class="value">Bereit</div></div>
       `;
 
-      renderAlertList('__empty__');
+      renderAlertList();
       renderTradingViewChart('tv-chart-watchlist', chartDefaults.symbol);
     }
 
@@ -2199,7 +2367,7 @@
         <div class="fact-card"><div class="label">Land</div><div class="value">${escapeHtml(liveItem.country || '—')}</div></div>
       `;
 
-      renderAlertList(liveItem.id);
+      renderAlertList();
       renderTradingViewChart('tv-chart-watchlist', liveItem.symbol || chartDefaults.symbol);
     }
 
@@ -2224,26 +2392,61 @@
       const industry = profile?.finnhubIndustry || opportunity.assetType || 'seinem Marktsegment';
       const exchange = profile?.exchange || opportunity.exchange || 'dem Markt';
       const country = profile?.country || opportunity.country || 'dem jeweiligen Markt';
+      const context = simplifyInvestmentText(
+        opportunity.contextText,
+        'Der Titel wird derzeit im Chancen-Feed geführt und gehört damit zu den Werten, die aktuell besonders beobachtet werden.'
+      );
 
-      let text = `${company} ist in ${industry} aktiv und wird über ${exchange} gehandelt. `;
-      text += `Der Fokus liegt aktuell auf ${opportunity.assetType || 'dem Unternehmen'} in ${country}. `;
-      text += opportunity.contextText
-        ? opportunity.contextText.trim()
-        : 'Der Titel wird derzeit im Chancen-Feed geführt und gehört damit zu den Werten, die aktuell besonders beobachtet werden.';
-      return text;
+      return `${company} ist in ${industry} aktiv und wird über ${exchange} gehandelt. Der Fokus liegt aktuell auf ${opportunity.assetType || 'dem Unternehmen'} in ${country}. ${context}`;
+    }
+
+    function buildFriendlyWhyText(opportunity) {
+      const raw = normalizeText(opportunity.reasonText || opportunity.whyNow || '');
+      if (!raw) {
+        return 'Der Wert ist aktuell interessant, weil sich die Lage zuletzt verbessert hat und der Markt wieder genauer hinschaut.';
+      }
+
+      const lower = raw.toLowerCase();
+      const parts = [];
+
+      if (/(momentum|aufwärtstrend|trend|trendstruktur|breakout|ausbruch)/.test(lower)) {
+        parts.push('Der Kurs zeigt zuletzt einen klaren positiven Verlauf.');
+      }
+
+      if (/(volumen|handelsvolumen|volumenaktivität)/.test(lower)) {
+        parts.push('Außerdem ist aktuell mehr Bewegung im Handel, was auf gestiegenes Interesse hinweist.');
+      }
+
+      if (/(news|quartalszahlen|zahlen|prognose|ausblick|auftrag|guidance)/.test(lower)) {
+        parts.push('Zusätzliche Nachrichten oder Unternehmenszahlen könnten der Aktie weiteren Schub geben.');
+      }
+
+      if (/(macd|rsi|signal)/.test(lower) && !parts.length) {
+        parts.push('Mehrere Marktsignale sehen im Moment besser aus als zuvor.');
+      }
+
+      if (!parts.length) {
+        return simplifyInvestmentText(raw, 'Die Ausgangslage hat sich zuletzt verbessert und der Wert bekommt wieder mehr Aufmerksamkeit.');
+      }
+
+      return parts.join(' ');
     }
 
     function buildChanceText(opportunity) {
       const parts = [];
-      if (opportunity.strategyTag) parts.push(`Thema: ${opportunity.strategyTag}.`);
-      if (opportunity.reasonText) parts.push(opportunity.reasonText);
-      if (opportunity.contextText) parts.push(opportunity.contextText);
-      if (!parts.length) parts.push('Die Chance ergibt sich aus dem aktuellen Markt-Setup und der Einordnung im Chancen-Feed.');
-      return parts.join(' ');
+      if (opportunity.strategyTag) parts.push(`Die Idee passt zum Thema ${opportunity.strategyTag}.`);
+      if (opportunity.contextText) parts.push(simplifyInvestmentText(opportunity.contextText));
+      const why = buildFriendlyWhyText(opportunity);
+      if (why) parts.push(why);
+
+      const finalText = normalizeText(parts.join(' '));
+      return finalText || 'Die Chance liegt darin, dass der Wert aktuell positive Signale zeigt und wieder stärker beachtet wird.';
     }
 
     function buildRiskText(opportunity) {
-      return opportunity.riskText || 'Neben allgemeinen Marktrisiken spielen bei diesem Wert insbesondere Timing, Volatilität und das Ausbleiben des erwarteten Szenarios eine Rolle.';
+      const raw = simplifyInvestmentText(opportunity.riskText);
+      if (raw) return raw;
+      return 'Trotz der Chance kann der Kurs jederzeit drehen. Schlechte Nachrichten, schwache Zahlen oder ein schwächerer Gesamtmarkt können die Idee schnell belasten.';
     }
 
     function buildAlternativeIdea(opportunity) {
@@ -2254,7 +2457,7 @@
       if (assetType.includes('etf')) return `Als Alternative kann ein breiter diversifizierter ETF sinnvoll sein, um ${tag} mit weniger Einzelwertrisiko abzubilden.`;
       if (assetType.includes('crypto')) return `Als Alternative kann ein breiterer Krypto-Ansatz sinnvoll sein, wenn du die Volatilität eines Einzelwerts reduzieren möchtest.`;
       if (region.includes('us') || region.includes('usa')) return `Als Alternative kann statt des Einzelwerts auch ein breiter US-Markt-ETF genutzt werden, um die gleiche Idee defensiver umzusetzen.`;
-      return `Als Alternative kann ein breiter Markt- oder Sektor-ETF sinnvoll sein, wenn du ${tag} mit geringerer Einzelwertrisiko-Abhängigkeit umsetzen möchtest.`;
+      return `Als Alternative kann ein breiter Markt- oder Sektor-ETF sinnvoll sein, wenn du ${tag} mit geringerer Einzelwert-Abhängigkeit umsetzen möchtest.`;
     }
 
     async function loadOpportunitiesFromSupabase() {
@@ -2345,9 +2548,9 @@
         { label: 'Region', value: opportunity.country || profile?.country || '—' },
         { label: 'Kategorie', value: opportunity.assetType || '—' },
         { label: 'Thema', value: opportunity.strategyTag || '—' },
-        { label: 'Score', value: opportunity.score ?? '—' },
+        { label: 'Score', value: formatScoreValue(opportunity.score) },
         { label: 'Währung', value: opportunity.currency || '—' },
-        { label: 'Erfasst am', value: parseDateSafe(opportunity.createdAt)?.toLocaleString('de-DE') || '—' }
+        { label: 'Erfasst am', value: formatDateTimeLabel(opportunity.createdAt) }
       ];
 
       getEl('premiumFactsGrid').innerHTML = facts.map(item => `
@@ -2365,7 +2568,7 @@
         { label: 'Region', value: opportunity.country || profile?.country || '—' },
         { label: 'Kategorie', value: opportunity.assetType || '—' },
         { label: 'Thema', value: opportunity.strategyTag || '—' },
-        { label: 'Score', value: opportunity.score ?? '—' },
+        { label: 'Score', value: formatScoreValue(opportunity.score) },
         { label: 'Währung', value: opportunity.currency || '—' },
         { label: 'Veröffentlichung', value: formatDateLabel(opportunity.createdDate || opportunity.createdAt) }
       ];
@@ -2390,6 +2593,7 @@
       };
 
       getEl('premiumHeroTitle').textContent = `${finalOpportunity.name} (${finalOpportunity.ticker || getTickerFromSymbol(finalOpportunity.symbol)})`;
+      getEl('premiumHeroCopy').textContent = 'Verständlich erklärte Marktchance mit Einordnung, Risiken und Chart.';
       getEl('premiumHeroPrice').textContent = finalOpportunity.price ? formatMoney(finalOpportunity.price, finalOpportunity.currency) : '—';
 
       const changeEl = getEl('premiumHeroChange');
@@ -2409,7 +2613,7 @@
       `;
 
       getEl('premiumAboutText').textContent = buildAssetDescription(finalOpportunity, profile);
-      getEl('premiumWhyText').textContent = finalOpportunity.reasonText || finalOpportunity.whyNow || 'Für diesen Wert liegt aktuell ein relevanter Eintrag im Chancen-Feed vor.';
+      getEl('premiumWhyText').textContent = buildFriendlyWhyText(finalOpportunity);
       getEl('premiumChanceText').textContent = buildChanceText(finalOpportunity);
       getEl('premiumRiskText').textContent = buildRiskText(finalOpportunity);
       getEl('premiumAlternativeText').textContent = buildAlternativeIdea(finalOpportunity);
@@ -2433,6 +2637,7 @@
       };
 
       getEl('publicHeroTitle').textContent = `${finalOpportunity.name} (${finalOpportunity.ticker || getTickerFromSymbol(finalOpportunity.symbol)})`;
+      getEl('publicHeroCopy').textContent = 'Die kostenlose Top-Idee der Woche – einfach erklärt und ohne unnötiges Fachchinesisch.';
       getEl('publicHeroPrice').textContent = finalOpportunity.price ? formatMoney(finalOpportunity.price, finalOpportunity.currency) : '—';
 
       const changeEl = getEl('publicHeroChange');
@@ -2452,7 +2657,7 @@
       `;
 
       getEl('publicAboutText').textContent = buildAssetDescription(finalOpportunity, profile);
-      getEl('publicWhyText').textContent = finalOpportunity.reasonText || finalOpportunity.whyNow || 'Diese Idee wurde als kostenlose Wochenidee ausgewählt.';
+      getEl('publicWhyText').textContent = buildFriendlyWhyText(finalOpportunity);
       getEl('publicChanceText').textContent = buildChanceText(finalOpportunity);
       getEl('publicRiskText').textContent = buildRiskText(finalOpportunity);
       getEl('publicAlternativeText').textContent = buildAlternativeIdea(finalOpportunity);
@@ -2487,7 +2692,7 @@
 
     function renderPublicEmptyState() {
       showView('view-public-idea');
-      getEl('publicHeroTitle').textContent = 'Noch keine kostenlose Idee verfügbar';
+      getEl('publicHeroTitle').textContent = 'Noch keine kostenlose Top-Idee verfügbar';
       getEl('publicHeroCopy').textContent = 'Sobald Opportunities vorhanden sind, wird hier automatisch die beste Idee angezeigt.';
       getEl('publicHeroPrice').textContent = '—';
       getEl('publicHeroChange').textContent = '—';
@@ -2500,7 +2705,7 @@
       getEl('publicFactsGrid').innerHTML = `
         <div class="fact-card"><div class="label">Status</div><div class="value">Keine Daten</div></div>
         <div class="fact-card"><div class="label">Quelle</div><div class="value">public.opportunities</div></div>
-        <div class="fact-card"><div class="label">Auswahl</div><div class="value">Beste Idee des letzten Dienstag</div></div>
+        <div class="fact-card"><div class="label">Auswahl</div><div class="value">Beste Idee des letzten Dienstags</div></div>
         <div class="fact-card"><div class="label">Fallback</div><div class="value">Beste Idee des neuesten Tages</div></div>
       `;
       renderTradingViewChart('tv-chart-public', chartDefaults.symbol);
@@ -2578,6 +2783,7 @@
       else if (favorites.length) await renderFavoriteDetail(favorites[0]);
       else renderEmptyFavoriteState();
 
+      renderAlertList();
       startAlertMonitoring();
     }
 
