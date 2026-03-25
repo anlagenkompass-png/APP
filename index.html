@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AnlageKompass</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://s3.tradingview.com/tv.js"></script>
+
   <style>
     :root {
       --bg: #030817;
@@ -49,11 +52,7 @@
     }
 
     .hidden { display: none !important; }
-
-    .container {
-      width: min(1280px, calc(100% - 48px));
-      margin: 0 auto;
-    }
+    .container { width: min(1280px, calc(100% - 48px)); margin: 0 auto; }
 
     .nav-wrap {
       position: sticky;
@@ -142,8 +141,7 @@
       box-shadow: inset 0 0 0 1px rgba(7, 24, 54, 0.42);
     }
 
-    .btn-top-primary,
-    .btn-primary {
+    .btn-top-primary, .btn-primary {
       min-width: 176px;
       height: 46px;
       padding: 0 22px;
@@ -202,8 +200,7 @@
       margin-top: -20px;
     }
 
-    .hero-pill,
-    .kicker {
+    .hero-pill, .kicker {
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -218,8 +215,7 @@
       box-shadow: inset 0 0 0 1px rgba(4, 13, 28, 0.55);
     }
 
-    .hero h1,
-    .page-hero h1 {
+    .hero h1, .page-hero h1 {
       font-size: clamp(46px, 5.1vw, 72px);
       line-height: 0.98;
       letter-spacing: -0.055em;
@@ -232,8 +228,7 @@
       text-wrap: balance;
     }
 
-    .hero-copy,
-    .page-hero-copy {
+    .hero-copy, .page-hero-copy {
       max-width: 980px;
       font-size: 18px;
       line-height: 1.72;
@@ -251,9 +246,7 @@
       flex-wrap: wrap;
     }
 
-    section.section {
-      padding: 42px 0 58px;
-    }
+    section.section { padding: 42px 0 58px; }
 
     .section-head {
       text-align: center;
@@ -289,25 +282,22 @@
     .price-card,
     .benefit-card,
     .sidebar-card,
-    .content-card {
+    .content-card,
+    .search-result-card,
+    .favorite-card {
       background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
       border: 1px solid rgba(117, 141, 181, 0.16);
       border-radius: 24px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
 
-    .feature-card {
-      min-height: 228px;
-      padding: 30px 30px 28px;
-    }
-
+    .feature-card { min-height: 228px; padding: 30px 30px 28px; }
     .feature-card .emoji {
       font-size: 36px;
       line-height: 1;
       margin-bottom: 18px;
       display: block;
     }
-
     .feature-card h3 {
       font-size: 18px;
       line-height: 1.2;
@@ -316,15 +306,9 @@
       color: #f6f8fc;
       margin-bottom: 16px;
     }
-
-    .feature-card p {
-      font-size: 16px;
-      line-height: 1.62;
-      color: var(--text-muted);
-    }
+    .feature-card p { font-size: 16px; line-height: 1.62; color: var(--text-muted); }
 
     .compare-wrap { padding-top: 12px; padding-bottom: 18px; }
-
     .compare-box {
       width: min(1120px, 100%);
       margin: 0 auto;
@@ -334,15 +318,12 @@
       padding: 28px 28px 18px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
-
-    .compare-head,
-    .compare-row {
+    .compare-head, .compare-row {
       display: grid;
       grid-template-columns: 1.65fr 0.55fr 0.55fr;
       gap: 16px;
       align-items: center;
     }
-
     .compare-head {
       padding: 0 0 12px;
       color: var(--text-soft);
@@ -350,7 +331,6 @@
       font-weight: 700;
       letter-spacing: -0.01em;
     }
-
     .compare-row {
       min-height: 64px;
       border-top: 1px solid rgba(117, 141, 181, 0.12);
@@ -358,24 +338,15 @@
       font-size: 17px;
       line-height: 1.35;
     }
-
     .compare-feature {
       font-weight: 700;
       color: #eef4fb;
       padding-right: 14px;
     }
-
-    .compare-cell {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 19px;
-      font-weight: 700;
-    }
-
+    .compare-cell { text-align: center; color: var(--text-muted); font-size: 19px; font-weight: 700; }
     .compare-cell.yes { color: #98f3d4; }
 
     .pricing-wrap { padding-top: 36px; padding-bottom: 90px; }
-
     .pricing-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -385,11 +356,7 @@
       align-items: start;
     }
 
-    .price-card {
-      position: relative;
-      padding: 34px;
-    }
-
+    .price-card { position: relative; padding: 34px; }
     .price-card.plus {
       border-color: rgba(26, 182, 255, 0.9);
       box-shadow: var(--glow);
@@ -424,13 +391,7 @@
       color: #f8fbff;
     }
 
-    .price-line {
-      display: flex;
-      align-items: flex-end;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
+    .price-line { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 24px; }
     .price {
       font-size: 62px;
       line-height: 0.95;
@@ -438,20 +399,10 @@
       font-weight: 900;
       color: #f7fbff;
     }
-
     .price-card.plus .price { color: #1eaaff; }
+    .per { font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }
 
-    .per {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .feature-list {
-      list-style: none;
-      margin: 0 0 30px;
-    }
-
+    .feature-list { list-style: none; margin: 0 0 30px; }
     .feature-list li {
       display: flex;
       align-items: center;
@@ -463,11 +414,9 @@
       line-height: 1.4;
       padding-right: 6px;
     }
-
     .feature-list li:last-child { border-bottom: none; }
     .feature-list li strong { color: #edf3fb; font-weight: 500; }
     .feature-list li.available { color: #eef4fb; }
-
     .tick, .minus {
       width: 16px;
       flex: 0 0 16px;
@@ -476,12 +425,10 @@
       line-height: 1;
       transform: translateY(-1px);
     }
-
     .tick { color: var(--success); }
     .minus { color: #788ca7; }
 
-    .btn-card-secondary,
-    .btn-card-primary {
+    .btn-card-secondary, .btn-card-primary {
       width: 100%;
       height: 68px;
       border-radius: 18px;
@@ -489,12 +436,10 @@
       font-size: 18px;
       font-weight: 800;
     }
-
     .btn-card-secondary {
       border-color: rgba(117, 141, 181, 0.16);
       background: rgba(8, 16, 30, 0.56);
     }
-
     .btn-card-primary {
       background: linear-gradient(90deg, #1fafff 0%, #20cfb1 100%);
       box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
@@ -507,9 +452,7 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 22px;
     }
-
     .benefit-card { padding: 24px; }
-
     .benefit-card h4 {
       font-size: 20px;
       line-height: 1.2;
@@ -518,12 +461,7 @@
       margin-bottom: 10px;
       color: #f4f8fe;
     }
-
-    .benefit-card p {
-      color: var(--text-muted);
-      font-size: 15px;
-      line-height: 1.65;
-    }
+    .benefit-card p { color: var(--text-muted); font-size: 15px; line-height: 1.65; }
 
     .disclaimer {
       width: min(980px, 100%);
@@ -548,11 +486,10 @@
       padding: 24px;
       z-index: 160;
     }
-
     .modal-overlay.open { display: flex; }
 
     .modal {
-      width: min(100%, 520px);
+      width: min(100%, 560px);
       background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(10,18,36,0.98));
       border: 1px solid rgba(117, 141, 181, 0.2);
       border-radius: 28px;
@@ -596,7 +533,6 @@
       font-weight: 700;
       cursor: pointer;
     }
-
     .auth-tab.active {
       color: #f6fbff;
       background: rgba(13, 24, 45, 0.98);
@@ -622,7 +558,6 @@
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
-
     .field { margin-bottom: 14px; }
 
     .field label {
@@ -633,22 +568,25 @@
       color: #cedced;
     }
 
-    .field input,
-    .field select {
+    .field input, .field select, .field textarea {
       width: 100%;
-      height: 52px;
+      min-height: 52px;
       border-radius: 14px;
       border: 1px solid rgba(117, 141, 181, 0.18);
       background: rgba(7, 16, 31, 0.66);
       color: white;
-      padding: 0 16px;
+      padding: 14px 16px;
       font-size: 16px;
       outline: none;
       font-family: inherit;
     }
 
-    .field input:focus,
-    .field select:focus {
+    .field textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .field input:focus, .field select:focus, .field textarea:focus {
       border-color: rgba(26, 182, 255, 0.64);
       box-shadow: 0 0 0 4px rgba(26, 182, 255, 0.08);
     }
@@ -671,7 +609,7 @@
       flex: 0 0 auto;
     }
 
-    .check-row button.linklike {
+    .linklike {
       background: none;
       border: none;
       color: #29bbff;
@@ -715,6 +653,13 @@
       border: 1px solid rgba(31, 226, 176, 0.22);
     }
 
+    .auth-message.info {
+      background: rgba(59,130,246,0.12);
+      color: #b8d7ff;
+      border: 1px solid rgba(59,130,246,0.22);
+      display: block;
+    }
+
     .legal-modal {
       width: min(100%, 780px);
       max-height: min(82vh, 900px);
@@ -722,25 +667,19 @@
     }
 
     .legal-modal h3 { margin-bottom: 18px; }
-
     .legal-modal h4 {
       font-size: 18px;
       margin: 22px 0 10px;
       color: #f3f8ff;
     }
-
-    .legal-modal p,
-    .legal-modal li {
+    .legal-modal p, .legal-modal li {
       color: var(--text-muted);
       line-height: 1.75;
       font-size: 15px;
     }
-
     .legal-modal ul { padding-left: 20px; }
 
-    .app-shell {
-      padding: 30px 0 70px;
-    }
+    .app-shell { padding: 30px 0 70px; }
 
     .page-hero {
       padding: 34px;
@@ -780,79 +719,23 @@
 
     .app-layout {
       display: grid;
-      grid-template-columns: 340px 1fr;
+      grid-template-columns: 360px 1fr;
       gap: 24px;
       align-items: start;
     }
 
-    .sidebar-card,
-    .content-card {
-      padding: 24px;
-    }
+    .sidebar-card, .content-card { padding: 24px; }
 
-    .sidebar-card h3,
-    .content-card h3,
-    .section-title {
+    .sidebar-card h3, .content-card h3, .section-title {
       font-size: 22px;
       font-weight: 800;
       letter-spacing: -0.03em;
       margin-bottom: 14px;
     }
 
-    .muted {
-      color: var(--text-muted);
-      line-height: 1.7;
-      font-size: 14px;
-    }
+    .muted { color: var(--text-muted); line-height: 1.7; font-size: 14px; }
 
-    .watchlist-items,
-    .opportunity-list {
-      display: grid;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .watch-item,
-    .opportunity-item {
-      width: 100%;
-      text-align: left;
-      padding: 16px;
-      border-radius: 18px;
-      border: 1px solid rgba(117, 141, 181, 0.14);
-      background: rgba(8, 16, 30, 0.56);
-      color: var(--text);
-      cursor: pointer;
-      transition: 180ms ease;
-      font-family: inherit;
-    }
-
-    .watch-item:hover,
-    .watch-item.active,
-    .opportunity-item:hover,
-    .opportunity-item.active {
-      border-color: rgba(26, 182, 255, 0.64);
-      box-shadow: 0 0 0 1px rgba(22,169,255,0.18), 0 12px 26px rgba(0,0,0,0.18);
-    }
-
-    .watch-item strong,
-    .opportunity-item strong {
-      display: block;
-      font-size: 16px;
-      margin-bottom: 8px;
-    }
-
-    .watch-item span,
-    .opportunity-item span {
-      display: block;
-      color: var(--text-muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    .content-grid {
-      display: grid;
-      gap: 24px;
-    }
+    .content-grid { display: grid; gap: 24px; }
 
     .row-head {
       display: flex;
@@ -871,11 +754,7 @@
       margin-bottom: 8px;
     }
 
-    .price-box {
-      text-align: right;
-      min-width: 180px;
-    }
-
+    .price-box { text-align: right; min-width: 180px; }
     .price-box .price {
       font-size: clamp(30px, 4vw, 48px);
       line-height: 0.95;
@@ -918,12 +797,10 @@
       font-size: 17px;
       font-weight: 800;
       line-height: 1.35;
+      word-break: break-word;
     }
 
-    .alert-list {
-      display: grid;
-      gap: 12px;
-    }
+    .alert-list { display: grid; gap: 12px; }
 
     .alert-item {
       padding: 18px;
@@ -966,7 +843,7 @@
       font-weight: 700;
     }
 
-    .toolbar-field select {
+    .toolbar-field select, .toolbar-field input {
       width: 100%;
       height: 48px;
       border-radius: 14px;
@@ -1017,12 +894,7 @@
       gap: 24px;
     }
 
-    .body-copy {
-      color: var(--text-muted);
-      line-height: 1.75;
-      font-size: 15px;
-    }
-
+    .body-copy { color: var(--text-muted); line-height: 1.75; font-size: 15px; }
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1080,8 +952,7 @@
       font-weight: 600;
     }
 
-    .field-inline input,
-    .field-inline select {
+    .field-inline input, .field-inline select {
       width: 100%;
       height: 42px;
       border-radius: 10px;
@@ -1093,8 +964,7 @@
       font-family: inherit;
     }
 
-    .field-inline input:focus,
-    .field-inline select:focus {
+    .field-inline input:focus, .field-inline select:focus {
       border-color: var(--accent);
     }
 
@@ -1116,12 +986,7 @@
       margin: 0;
     }
 
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 18px;
-      flex-wrap: wrap;
-    }
+    .actions { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
 
     .chart-btn {
       height: 42px;
@@ -1135,11 +1000,7 @@
       font-family: inherit;
     }
 
-    .chart-btn-primary {
-      background: var(--accent);
-      color: white;
-    }
-
+    .chart-btn-primary { background: var(--accent); color: white; }
     .chart-btn-primary:hover { background: var(--accent-hover); }
 
     .chart-btn-secondary {
@@ -1158,7 +1019,6 @@
     }
 
     .chart-wrap { padding: 20px; }
-
     .chart-box {
       width: 100%;
       border: 1px solid rgba(117, 141, 181, 0.16);
@@ -1198,83 +1058,179 @@
       font-size: 14px;
     }
 
-    .gate {
-      padding: 30px;
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(10,18,36,0.98));
-      border: 1px solid rgba(117, 141, 181, 0.2);
-      box-shadow: var(--shadow);
-      max-width: 720px;
-      margin: 60px auto 0;
-      text-align: center;
+    .search-stack, .favorites-stack, .results-stack {
+      display: grid;
+      gap: 14px;
     }
 
-    .gate h3 {
-      font-size: 30px;
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-      font-weight: 900;
+    .search-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+    }
+
+    .search-result-card, .favorite-card {
+      padding: 16px;
+    }
+
+    .search-result-top, .favorite-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
       margin-bottom: 10px;
     }
 
-    .gate p {
+    .symbol-meta {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .star-btn, .mini-btn, .danger-btn {
+      border: 1px solid rgba(117,141,181,0.18);
+      background: rgba(7,16,31,0.66);
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+    }
+
+    .star-btn {
+      min-width: 48px;
+      height: 44px;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .star-btn.active {
+      color: #ffd56b;
+      border-color: rgba(255,213,107,0.4);
+    }
+
+    .mini-btn, .danger-btn {
+      height: 42px;
+      padding: 0 14px;
+      font-size: 14px;
+    }
+
+    .danger-btn {
+      color: #ffb8c2;
+      border-color: rgba(255,124,145,0.25);
+    }
+
+    .inline-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .alert-builder {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(117,141,181,0.14);
+      display: grid;
+      gap: 12px;
+    }
+
+    .alert-builder-row {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr auto;
+      gap: 12px;
+    }
+
+    .pill-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(7,16,31,0.56);
+      border: 1px solid rgba(117,141,181,0.16);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .inline-info {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(12,20,38,0.72);
+      border: 1px solid rgba(117,141,181,0.14);
       color: var(--text-muted);
       line-height: 1.7;
-      margin-bottom: 22px;
-      font-size: 16px;
+      font-size: 14px;
     }
 
-    .gate-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .search-empty {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      padding: 10px 0;
     }
+
+    .opportunity-list { display: grid; gap: 12px; margin-top: 16px; }
+    .opportunity-item {
+      width: 100%;
+      text-align: left;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(117, 141, 181, 0.14);
+      background: rgba(8, 16, 30, 0.56);
+      color: var(--text);
+      cursor: pointer;
+      transition: 180ms ease;
+      font-family: inherit;
+    }
+    .opportunity-item:hover, .opportunity-item.active {
+      border-color: rgba(26, 182, 255, 0.64);
+      box-shadow: 0 0 0 1px rgba(22,169,255,0.18), 0 12px 26px rgba(0,0,0,0.18);
+    }
+    .opportunity-item strong { display: block; font-size: 16px; margin-bottom: 8px; }
+    .opportunity-item span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .banner {
+      width: min(980px, 100%);
+      margin: 24px auto 0;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(31,226,176,0.22);
+      background: rgba(31,226,176,0.10);
+      color: #9cf6da;
+      line-height: 1.65;
+      font-size: 14px;
+      display: none;
+    }
+    .banner.show { display: block; }
 
     @media (max-width: 1180px) {
-      .app-layout,
-      .content-split {
-        grid-template-columns: 1fr;
-      }
-
-      .facts-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .controls-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
+      .app-layout, .content-split { grid-template-columns: 1fr; }
+      .facts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .controls-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
     @media (max-width: 820px) {
       .container { width: min(100% - 28px, 100%); }
-      .feature-grid,
-      .pricing-grid,
-      .benefits,
-      .field-grid,
-      .stats-grid,
-      .grid-3,
-      .toolbar-grid,
-      .facts-grid {
+      .feature-grid, .pricing-grid, .benefits, .field-grid, .stats-grid, .grid-3, .toolbar-grid, .facts-grid {
         grid-template-columns: 1fr;
       }
-
       .compare-box { padding: 18px 18px 10px; border-radius: 22px; }
-      .compare-head,
-      .compare-row { grid-template-columns: 1.5fr 0.5fr 0.5fr; gap: 10px; }
+      .compare-head, .compare-row { grid-template-columns: 1.5fr 0.5fr 0.5fr; gap: 10px; }
       .compare-row { min-height: 54px; font-size: 14px; }
       .compare-cell { font-size: 16px; }
       .hero { min-height: auto; padding: 54px 0 68px; }
-      .hero h1,
-      .page-hero h1 { font-size: clamp(38px, 10vw, 56px); }
-      .hero-copy,
-      .page-hero-copy { font-size: 16px; }
-      .hero-actions,
-      .nav-actions { width: 100%; }
-      .hero-actions .btn,
-      .btn-hero-primary,
-      .btn-hero-secondary { width: 100%; }
-      .controls-grid { grid-template-columns: 1fr; }
+      .hero h1, .page-hero h1 { font-size: clamp(38px, 10vw, 56px); }
+      .hero-copy, .page-hero-copy { font-size: 16px; }
+      .hero-actions, .nav-actions { width: 100%; }
+      .hero-actions .btn, .btn-hero-primary, .btn-hero-secondary { width: 100%; }
+      .controls-grid, .alert-builder-row, .search-box { grid-template-columns: 1fr; }
       #tv-chart-container { height: 560px; }
       .price { font-size: 52px; }
     }
@@ -1302,15 +1258,16 @@
     </div>
   </div>
 
-  <!-- LANDING -->
+  <div class="banner container" id="globalBanner"></div>
+
   <main id="view-landing" class="page-view active">
     <section class="hero container">
       <div class="hero-inner">
         <div class="hero-pill">⚡ Tagesaktuelle Investment-Ideen</div>
         <h1>Mehr Chancen.<br>Mehr Ideen.<br>Mehr Orientierung.</h1>
         <p class="hero-copy">
-          Erhalte täglich neue datenbasierte Investment-Ideen für Aktien, ETFs und Krypto – passend
-          zu deinem Risikoprofil, verständlich erklärt.
+          Erhalte täglich neue datenbasierte Investment-Ideen für Aktien, ETFs und Krypto –
+          passend zu deinem Risikoprofil, verständlich erklärt.
         </p>
         <div class="hero-actions">
           <button class="btn btn-hero-primary" type="button" onclick="openAuthModal('register')">Kostenlos starten →</button>
@@ -1334,27 +1291,27 @@
           <article class="feature-card">
             <span class="emoji">⚡</span>
             <h3>Tagesaktuelle Chancen</h3>
-            <p>Der Chancen-Feed zeigt dir täglich aktualisierte Marktchancen – bevor sie alle sehen.</p>
+            <p>Der Chancen-Feed zeigt dir täglich aktualisierte Marktchancen – kompakt, verständlich und schnell erfassbar.</p>
           </article>
           <article class="feature-card">
             <span class="emoji">📬</span>
             <h3>E-Mail Alerts</h3>
-            <p>Werde per E-Mail benachrichtigt, sobald neue Chancen entdeckt werden – täglich oder nach Bedarf.</p>
+            <p>Lege Preisregeln fest und verwalte deine Beobachtungen an einem Ort.</p>
           </article>
           <article class="feature-card">
             <span class="emoji">🧭</span>
             <h3>Verständliche Sprache</h3>
-            <p>Kein Börsenjargon. Jede Idee erklärt, warum sie aktuell spannend sein könnte – klar und direkt.</p>
+            <p>Kein unnötiger Börsenjargon. Jede Idee wird so erklärt, dass Nutzer direkt verstehen, worum es geht.</p>
           </article>
           <article class="feature-card">
             <span class="emoji">🏷️</span>
-            <h3>Watchlist &amp; Alerts</h3>
-            <p>Speichere Aktien, verfolge Preisänderungen und lass dich bei wichtigen Bewegungen benachrichtigen.</p>
+            <h3>Watchlist &amp; Favoriten</h3>
+            <p>Speichere bis zu 30 Werte, öffne direkt den Chart und hinterlege individuelle Kursregeln.</p>
           </article>
           <article class="feature-card">
-            <span class="emoji">🚫</span>
-            <h3>Keine Werbung</h3>
-            <p>Premium ist komplett werbefrei. Fokus auf das Wesentliche: deine Investment-Ideen.</p>
+            <span class="emoji">🔎</span>
+            <h3>Aktiensuche</h3>
+            <p>Suche schnell nach Unternehmen und Symbolen und füge relevante Titel direkt zur Watchlist hinzu.</p>
           </article>
         </div>
       </div>
@@ -1364,7 +1321,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Was Free kann – und was Plus zusätzlich bringt</h2>
-          <p>Free ist ein guter Einstieg. Plus ist die Version für echte, regelmäßige Nutzung.</p>
+          <p>Free ist ein guter Einstieg. Plus ist die Version für intensive Nutzung.</p>
         </div>
 
         <div class="compare-box">
@@ -1390,27 +1347,17 @@
             <div class="compare-cell">–</div>
           </div>
           <div class="compare-row">
-            <div class="compare-feature">Chancen-Feed mit aktuellen Ideen</div>
-            <div class="compare-cell">–</div>
+            <div class="compare-feature">Chancen-Feed</div>
             <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">E-Mail-Benachrichtigungen</div>
-            <div class="compare-cell">–</div>
             <div class="compare-cell yes">✓</div>
           </div>
           <div class="compare-row">
             <div class="compare-feature">Watchlist &amp; Alerts</div>
-            <div class="compare-cell">–</div>
+            <div class="compare-cell yes">✓</div>
             <div class="compare-cell yes">✓</div>
           </div>
           <div class="compare-row">
-            <div class="compare-feature">Alternative Strategien &amp; mehr Orientierung</div>
-            <div class="compare-cell">–</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Werbefrei</div>
+            <div class="compare-feature">Mehr Ideen &amp; Orientierung</div>
             <div class="compare-cell">–</div>
             <div class="compare-cell yes">✓</div>
           </div>
@@ -1422,7 +1369,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Preise</h2>
-          <p>Starte kostenlos und upgrade wenn du mehr Ideen möchtest.</p>
+          <p>Starte kostenlos und erweitere später serverseitig den Zahlungsflow.</p>
         </div>
 
         <div class="pricing-grid">
@@ -1433,34 +1380,27 @@
               <div class="per">/ Monat</div>
             </div>
             <ul class="feature-list">
-              <li class="available"><span class="tick">✓</span><strong>2–3 Investment-Ideen</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Basis-Analyse</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Risikoeinschätzung</strong></li>
-              <li><span class="minus">–</span>Tagesaktuelle Chancen</li>
-              <li><span class="minus">–</span>E-Mail Alerts</li>
-              <li><span class="minus">–</span>Watchlist</li>
-              <li><span class="minus">–</span>Strategie-Ideen</li>
-              <li><span class="minus">–</span>Werbefrei</li>
+              <li class="available"><span class="tick">✓</span><strong>Basis-Zugang</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Watchlist bis 30 Favoriten</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Kursregeln speichern</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Premium-Chancen ansehen</strong></li>
+              <li><span class="minus">–</span>Serverseitiger Billing-Flow</li>
             </ul>
             <button class="btn btn-card-secondary" type="button" onclick="openAuthModal('register')">Kostenlos starten</button>
           </article>
 
           <article class="price-card plus">
-            <div class="recommend">⭐ Empfohlen</div>
+            <div class="recommend">⭐ Später erweiterbar</div>
             <div class="plan-name">AnlageKompass Plus</div>
             <div class="price-line">
               <div class="price">9,99€</div>
               <div class="per">/ Monat</div>
             </div>
             <ul class="feature-list">
-              <li class="available"><span class="tick">✓</span><strong>5–10 Investment-Ideen</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Vollständige Analyse</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Tagesaktuelle Chancen</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>E-Mail Alerts (täglich)</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Watchlist + Kurs-Alerts</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Strategie-Ideen</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Marktübersicht</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Premium Chance Detail</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Billing vorbereitbar</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Stripe serverseitig anschließbar</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Klares Upgrade-Popup</strong></li>
+              <li class="available"><span class="tick">✓</span><strong>Keine leeren Klicks mehr</strong></li>
             </ul>
             <button class="btn btn-card-primary" type="button" onclick="openPremiumModal()">Plus freischalten</button>
           </article>
@@ -1468,73 +1408,67 @@
       </div>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <h2>Warum sich Plus im Alltag lohnt</h2>
-          <p>Free bleibt dauerhaft kostenlos. Plus lohnt sich dann, wenn du regelmäßig neue Ideen sehen und schneller reagieren willst.</p>
-        </div>
-        <div class="benefits">
-          <article class="benefit-card">
-            <h4>Free bleibt kostenlos</h4>
-            <p>Du kannst AnlageKompass kostenlos nutzen, dein Profil anlegen und dir erste passende Investment-Ideen anzeigen lassen – ohne Zeitdruck und ohne Zwang zum Upgrade.</p>
-          </article>
-          <article class="benefit-card">
-            <h4>Plus bringt mehr Aktualität</h4>
-            <p>Mit Plus bekommst du neue Chancen, weitere passende Ideen, E-Mail Alerts und Watchlist-Funktionen. So wird AnlageKompass zu einer laufenden Ideenquelle statt nur zu einer einmaligen Analyse.</p>
-          </article>
-          <article class="benefit-card">
-            <h4>Mehr Nutzen im echten Alltag</h4>
-            <p>Wenn du Märkte nicht ständig selbst beobachten willst, hilft dir Plus dabei, relevante Chancen kompakt, verständlich und regelmäßig aufbereitet zu sehen – ohne den Eindruck von Anlageberatung.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
     <div class="disclaimer container">
-      Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen, aber keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten. Investitionen sind mit Risiken verbunden.
+      Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen,
+      aber keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf
+      von Finanzinstrumenten. Investitionen sind mit Risiken verbunden.
     </div>
   </main>
 
-  <!-- WATCHLIST -->
   <main id="view-watchlist" class="page-view">
     <div class="container app-shell">
       <section class="page-hero">
         <div class="kicker">📌 Watchlist & Alerts</div>
-        <h1>Deine Watchlist mit Kursregeln und direktem Chart</h1>
+        <h1>Beobachte Aktien, lege Kursregeln fest und öffne direkt den Chart</h1>
         <p class="page-hero-copy">
-          Hier sieht der Nutzer gespeicherte Werte, Preisregeln, Verknüpfungen zur Premium-Chance und den eingebauten TradingView-Chart.
+          Suche nach Aktien, füge interessante Werte per Stern zu deinen Favoriten hinzu,
+          verwalte bis zu 30 Titel und hinterlege Benachrichtigungsregeln für Preisbewegungen.
         </p>
       </section>
 
       <section class="stats-grid">
         <article class="mini-card">
-          <h4>Gespeicherte Werte</h4>
-          <p>Behalte deine Favoriten im Blick und öffne passende Chancen direkt aus deiner Watchlist.</p>
+          <h4>Aktien suchen</h4>
+          <p>Finde Unternehmen schnell über Namen oder Symbol und übernimm passende Werte direkt in deine Watchlist.</p>
         </article>
         <article class="mini-card">
-          <h4>Kursregeln</h4>
-          <p>Beispiel: Benachrichtige mich bei -5 % oder wenn eine neue Premium-Chance zum Wert auftaucht.</p>
+          <h4>Favoriten speichern</h4>
+          <p>Speichere bis zu 30 Aktien gleichzeitig und öffne Details oder den Chart mit einem Klick.</p>
         </article>
         <article class="mini-card">
-          <h4>E-Mail-Alerts</h4>
-          <p>Nur für Plus-Mitglieder aktivierbar und mit der Opportunity-Detailseite verknüpft.</p>
+          <h4>Kursregeln definieren</h4>
+          <p>Lege pro Favorit Regeln für Preisziele oder prozentuale Bewegungen fest.</p>
         </article>
       </section>
 
       <section class="app-layout">
         <aside class="sidebar-card">
-          <h3>Meine Watchlist</h3>
-          <p class="muted">Wähle einen Wert aus, um Details, Beispiel-Alerts und den passenden Chart zu sehen.</p>
-          <div class="watchlist-items" id="watchlistItems"></div>
+          <h3>Aktiensuche</h3>
+          <p class="muted">Suche nach Symbol oder Unternehmensname. Beispiel: Apple, Microsoft, NVDA, ASML</p>
+
+          <div class="search-stack">
+            <div class="search-box">
+              <input id="stockSearchInput" type="text" placeholder="Aktie suchen..." />
+              <button class="btn btn-top-primary" type="button" id="stockSearchBtn">Suchen</button>
+            </div>
+
+            <div class="inline-info">
+              Finnhub API ist eingebunden. Falls ein Markt-Symbol nicht perfekt gefunden wird,
+              kannst du den Eintrag trotzdem auswählen und im Chart später feinjustieren.
+            </div>
+
+            <div class="results-stack" id="searchResults">
+              <div class="search-empty">Noch keine Suche gestartet.</div>
+            </div>
+          </div>
         </aside>
 
         <div class="content-grid">
           <section class="content-card">
             <div class="row-head">
               <div>
-                <h2 id="watchTitle">Aktie wird geladen …</h2>
-                <p class="muted" id="watchSubtitle">Beispielhafte Watchlist-Ansicht mit Alert-Logik und Verlinkung auf Premium-Chancen.</p>
+                <h2 id="watchTitle">Noch kein Favorit ausgewählt</h2>
+                <p class="muted" id="watchSubtitle">Wähle einen Favoriten oder suche zuerst nach einer Aktie.</p>
               </div>
               <div class="price-box">
                 <div class="price" id="watchPrice">—</div>
@@ -1542,19 +1476,42 @@
               </div>
             </div>
 
-            <div class="facts-grid" id="watchFactsGrid"></div>
+            <div class="facts-grid" id="watchFactsGrid">
+              <div class="fact-card"><div class="label">Status</div><div class="value">Keine Auswahl</div></div>
+              <div class="fact-card"><div class="label">Favoriten</div><div class="value" id="favoritesCountBox">0 / 30</div></div>
+              <div class="fact-card"><div class="label">Hinweis</div><div class="value">Suche starten</div></div>
+              <div class="fact-card"><div class="label">Chart</div><div class="value">Bereit</div></div>
+            </div>
           </section>
 
           <section class="content-card">
-            <h3>Aktive Alert-Regeln</h3>
-            <div class="alert-list" id="watchAlertList"></div>
+            <div class="row-head" style="margin-bottom: 18px;">
+              <div>
+                <h3>Meine Favoriten</h3>
+                <p class="muted">Verwalte deine gespeicherten Werte. Maximal 30 Favoriten gleichzeitig.</p>
+              </div>
+              <div class="pill-count" id="favoritesCountPill">0 / 30 Favoriten</div>
+            </div>
+            <div class="favorites-stack" id="favoritesList">
+              <div class="search-empty">Noch keine Favoriten gespeichert.</div>
+            </div>
+          </section>
+
+          <section class="content-card">
+            <h3>Aktive Kursregeln</h3>
+            <div class="alert-list" id="watchAlertList">
+              <div class="alert-item">
+                <strong>Noch keine Kursregeln</strong>
+                <p>Wähle zuerst einen Favoriten aus und speichere danach Regeln für Preisziele oder prozentuale Bewegungen.</p>
+              </div>
+            </div>
           </section>
 
           <section class="chart-card">
             <div class="chart-header">
               <h2 class="chart-title">Aktienchart</h2>
               <p class="chart-subtitle">
-                Interaktiver Advanced Chart mit einstellbarem Symbol, Intervall, Theme, Sprache, Zeitzone und Höhe.
+                Interaktiver TradingView-Chart mit Symbol, Intervall, Theme, Sprache, Zeitzone und Höhe.
               </p>
             </div>
 
@@ -1629,9 +1586,9 @@
                   <label for="style">Chart-Stil</label>
                   <select id="style">
                     <option value="1" selected>Candles</option>
-                    <option value="2">Bars</option>
-                    <option value="3">Line</option>
-                    <option value="9">Area</option>
+                    <option value="0">Bars</option>
+                    <option value="2">Line</option>
+                    <option value="3">Area</option>
                   </select>
                 </div>
 
@@ -1641,17 +1598,6 @@
                     <option value="#0f1115" selected>Dunkel</option>
                     <option value="#ffffff">Hell</option>
                     <option value="#171a21">Anthrazit</option>
-                  </select>
-                </div>
-
-                <div class="field-inline">
-                  <label for="studies">Beliebte Studien</label>
-                  <select id="studies">
-                    <option value="" selected>Keine vorladen</option>
-                    <option value="Volume@tv-basicstudies">Volume</option>
-                    <option value="MASimple@tv-basicstudies">Simple Moving Average</option>
-                    <option value="RSI@tv-basicstudies">RSI</option>
-                    <option value="MACD@tv-basicstudies">MACD</option>
                   </select>
                 </div>
 
@@ -1688,8 +1634,7 @@
 
             <div class="info-bar">
               <div class="info-chip" id="infoSymbolChip">Standard-Symbol: NASDAQ:AAPL</div>
-              <div class="info-chip">Währung ergibt sich aus Markt/Symbol</div>
-              <div class="info-chip">Beispiel-Symbole: NASDAQ:MSFT, NASDAQ:NVDA, NYSE:KO</div>
+              <div class="info-chip">Beispiele: NASDAQ:AAPL, NASDAQ:MSFT, NASDAQ:NVDA, NYSE:KO</div>
             </div>
           </section>
         </div>
@@ -1697,109 +1642,93 @@
     </div>
   </main>
 
-  <!-- PREMIUM DETAIL -->
   <main id="view-premium" class="page-view">
     <div class="container app-shell">
-      <section id="premiumGate" class="gate hidden">
-        <h3>Diese Detailseite ist nur für Plus-Mitglieder</h3>
-        <p>
-          Über Premium-Mails und direkte Links gelangen nur Plus-Mitglieder auf die vollständige Chance-Detailseite.
-          Logge dich mit einem Premium-Konto ein oder aktiviere Plus.
-        </p>
-        <div class="gate-actions">
-          <button class="btn btn-top-secondary" type="button" onclick="goToRoute('/')">Zur Startseite</button>
-          <button class="btn btn-top-primary" type="button" onclick="goToRoute('/#preise')">Plus ansehen</button>
+      <section class="page-hero">
+        <div class="kicker">⭐ Chancen & Detailansicht</div>
+        <div class="row-head">
+          <div>
+            <h1 id="premiumHeroTitle">Chance wird geladen …</h1>
+            <p class="page-hero-copy" id="premiumHeroCopy">
+              Tägliche Chancen mit Kurzüberblick, Einordnung, Risiken und möglicher Alternative.
+            </p>
+            <div class="chips" id="premiumHeroChips"></div>
+          </div>
+          <div class="price-box">
+            <div class="price" id="premiumHeroPrice">—</div>
+            <div class="change" id="premiumHeroChange">—</div>
+          </div>
         </div>
       </section>
 
-      <section id="premiumContent">
-        <section class="page-hero">
-          <div class="kicker">⭐ Premium Chance Detail</div>
-          <div class="row-head">
-            <div>
-              <h1 id="premiumHeroTitle">Chance wird geladen …</h1>
-              <p class="page-hero-copy" id="premiumHeroCopy">
-                Hier sieht der Nutzer die Aktie, den aktuellen Preis, die heutige Änderung, Land, Branche, Argumente und direkt darunter den Chart.
-              </p>
-              <div class="chips" id="premiumHeroChips"></div>
+      <section class="toolbar-grid">
+        <div class="toolbar-field">
+          <label for="daySelect">Tag auswählen</label>
+          <select id="daySelect"></select>
+        </div>
+        <div class="toolbar-field">
+          <label for="opportunitySelect">Chance / Aktie auswählen</label>
+          <select id="opportunitySelect"></select>
+        </div>
+      </section>
+
+      <section class="app-layout">
+        <aside class="sidebar-card">
+          <div class="premium-badge">Nach Login verfügbar</div>
+          <h3 style="margin-top:18px;">Chancen der letzten 5 Tage</h3>
+          <p class="muted">Alle Chancen sind jetzt nach Anmeldung sichtbar – ohne separates Plus-Gate.</p>
+          <div class="opportunity-list" id="opportunityList"></div>
+        </aside>
+
+        <div class="content-grid">
+          <section class="content-card">
+            <div class="content-split">
+              <div>
+                <h3>Was macht die Aktie?</h3>
+                <p class="body-copy" id="premiumAboutText"></p>
+
+                <h3 style="margin-top:24px;">Warum könnte das gerade interessant sein?</h3>
+                <p class="body-copy" id="premiumWhyText"></p>
+
+                <h3 style="margin-top:24px;">Was Analysten und Marktbeobachter sehen</h3>
+                <p class="body-copy" id="premiumAnalystText"></p>
+              </div>
+
+              <div>
+                <div class="facts-grid" id="premiumFactsGrid"></div>
+              </div>
             </div>
-            <div class="price-box">
-              <div class="price" id="premiumHeroPrice">—</div>
-              <div class="change" id="premiumHeroChange">—</div>
+          </section>
+
+          <section class="content-card">
+            <div class="grid-3">
+              <article class="mini-card">
+                <h4>Chancen</h4>
+                <p id="premiumChanceText"></p>
+              </article>
+              <article class="mini-card">
+                <h4>Risiken</h4>
+                <p id="premiumRiskText"></p>
+              </article>
+              <article class="mini-card">
+                <h4>Alternative Idee</h4>
+                <p id="premiumAlternativeText"></p>
+              </article>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section class="toolbar-grid">
-          <div class="toolbar-field">
-            <label for="daySelect">Tag auswählen</label>
-            <select id="daySelect"></select>
-          </div>
-          <div class="toolbar-field">
-            <label for="opportunitySelect">Chance / Aktie auswählen</label>
-            <select id="opportunitySelect"></select>
-          </div>
-        </section>
-
-        <section class="app-layout">
-          <aside class="sidebar-card">
-            <div class="premium-badge">Nur für Plus-Mitglieder</div>
-            <h3 style="margin-top:18px;">Chancen der letzten 5 Tage</h3>
-            <p class="muted">Pro Tag werden die zugehörigen Chancen angezeigt. Ältere Einträge als 5 Tage werden automatisch ausgeblendet.</p>
-            <div class="opportunity-list" id="opportunityList"></div>
-          </aside>
-
-          <div class="content-grid">
-            <section class="content-card">
-              <div class="content-split">
-                <div>
-                  <h3>Was macht die Aktie?</h3>
-                  <p class="body-copy" id="premiumAboutText"></p>
-
-                  <h3 style="margin-top:24px;">Warum könnte das gerade interessant sein?</h3>
-                  <p class="body-copy" id="premiumWhyText"></p>
-
-                  <h3 style="margin-top:24px;">Was Analysten und Marktbeobachter sehen</h3>
-                  <p class="body-copy" id="premiumAnalystText"></p>
-                </div>
-
-                <div>
-                  <div class="facts-grid" id="premiumFactsGrid"></div>
-                </div>
-              </div>
-            </section>
-
-            <section class="content-card">
-              <div class="grid-3">
-                <article class="mini-card">
-                  <h4>Chancen</h4>
-                  <p id="premiumChanceText"></p>
-                </article>
-                <article class="mini-card">
-                  <h4>Risiken</h4>
-                  <p id="premiumRiskText"></p>
-                </article>
-                <article class="mini-card">
-                  <h4>Alternative Idee</h4>
-                  <p id="premiumAlternativeText"></p>
-                </article>
-              </div>
-            </section>
-
-            <section class="content-card">
-              <div class="notice">
-                Interne Premium-Route in dieser Datei. Für produktive URLs wie
-                <strong>/premium/chancen/&lt;opportunity_id&gt;</strong>
-                brauchst du später zusätzlich Rewrites auf diese HTML-Datei.
-              </div>
-            </section>
-          </div>
-        </section>
+          <section class="content-card">
+            <div class="notice">
+              Diese Seite ist aktuell bewusst nach Login frei zugänglich gemacht.
+              Falls du später wieder ein echtes Premium-Gate willst, kann man das sauber mit `plan`
+              bzw. `is_premium` im Profil zurückschalten.
+            </div>
+          </section>
+        </div>
       </section>
     </div>
   </main>
 
-  <!-- AUTH MODAL -->
   <div class="modal-overlay" id="authModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
       <button class="close" type="button" aria-label="Schließen" onclick="closeAuthModal()">×</button>
@@ -1810,10 +1739,11 @@
 
       <div class="auth-message error" id="authError"></div>
       <div class="auth-message success" id="authSuccess"></div>
+      <div class="auth-message info hidden" id="authInfo"></div>
 
       <section id="panelLogin">
         <h3 id="authTitle">Willkommen zurück</h3>
-        <p class="intro">Melde dich an, um Watchlist und Premium-Chancen zu sehen.</p>
+        <p class="intro">Melde dich an, um Watchlist und Chancen zu sehen.</p>
         <div class="field">
           <label for="loginEmail">E-Mail</label>
           <input id="loginEmail" type="email" placeholder="deine@email.de" autocomplete="email">
@@ -1827,7 +1757,7 @@
 
       <section id="panelRegister" class="hidden">
         <h3>Konto erstellen</h3>
-        <p class="intro">Starte kostenlos – keine Kreditkarte nötig.</p>
+        <p class="intro">Nach dem Registrieren erhältst du einen Bestätigungslink per E-Mail. Erst danach wird das Konto aktiv genutzt.</p>
         <div class="field-grid">
           <div class="field">
             <label for="registerFirstName">Vorname</label>
@@ -1851,28 +1781,32 @@
           <span>Ich bestätige die <button class="linklike" type="button" onclick="openLegalModal('agb')">AGB</button> und habe die <button class="linklike" type="button" onclick="openLegalModal('datenschutz')">Datenschutzhinweise</button> gelesen.</span>
         </label>
         <button class="submit-btn" id="registerBtn" type="button" onclick="handleRegister()">Konto erstellen</button>
+        <div style="margin-top:12px;">
+          <button class="linklike" type="button" onclick="resendConfirmation()">Bestätigungs-Mail erneut senden</button>
+        </div>
       </section>
     </div>
   </div>
 
-  <!-- PREMIUM MODAL -->
   <div class="modal-overlay" id="premiumModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="premiumTitle">
       <button class="close" type="button" aria-label="Schließen" onclick="closePremiumModal()">×</button>
       <h3 id="premiumTitle">AnlageKompass Plus</h3>
-      <p class="intro">Erhalte täglich neue datenbasierte Investment-Ideen, Chancen-Alerts, Premium-Detailseiten und Watchlist-Funktionen.</p>
+      <p class="intro">
+        Der bisherige Klick wirkte leer, weil dort noch kein echter Zahlungsflow hinterlegt war.
+        Diese Version zeigt jetzt bewusst eine klare Zwischenstufe.
+      </p>
       <ul class="feature-list" style="margin-top:8px; margin-bottom:22px;">
-        <li class="available"><span class="tick">✓</span><strong>5–10 Investment-Ideen pro Analyse</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>Tagesaktuelle Chancen</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>E-Mail Alerts für Premium-Mitglieder</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>Watchlist + Kurs-Alerts</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>Premium Chance Detail mit Chart</strong></li>
+        <li class="available"><span class="tick">✓</span><strong>UI für Upgrade vorbereitet</strong></li>
+        <li class="available"><span class="tick">✓</span><strong>Kein verwirrender Doppelklick mehr</strong></li>
+        <li class="available"><span class="tick">✓</span><strong>Serverseitiger Stripe-Checkout später anschließbar</strong></li>
       </ul>
-      <button class="submit-btn" type="button" onclick="showSuccess('Stripe-Checkout ist vorbereitet. Für Live-Zahlungen verbindest du als Nächstes deinen serverseitigen Stripe-Endpoint.')">Plus freischalten</button>
+      <div class="inline-actions" style="margin-top:12px;">
+        <button class="submit-btn" type="button" onclick="handlePremiumInterest()">Verstanden</button>
+      </div>
     </div>
   </div>
 
-  <!-- LEGAL MODAL -->
   <div class="modal-overlay" id="legalModal" aria-hidden="true">
     <div class="modal legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
       <button class="close" type="button" aria-label="Schließen" onclick="closeLegalModal()">×</button>
@@ -1884,7 +1818,8 @@
   <script>
     const CONFIG = {
       supabaseUrl: 'https://wksfnfhlnynrkqzjcqxb.supabase.co',
-      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrc2ZuZmhsbnlucmtxempjcXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNjQ1MjcsImV4cCI6MjA4OTg0MDUyN30.hs-9YKdo-vjzR9EIxYzCqalDc90CiRhcH6ALOvd_WXs'
+      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrc2ZuZmhsbnlucmtxempjcXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNjQ1MjcsImV4cCI6MjA4OTg0MDUyN30.hs-9YKdo-vjzR9EIxYzCqalDc90CiRhcH6ALOvd_WXs',
+      finnhubApiKey: 'd13dvc9r01qs7glh0ijgd13dvc9r01qs7glh0ik0'
     };
 
     let supabaseClient = null;
@@ -1895,63 +1830,6 @@
     } catch (e) {
       console.error('Supabase konnte nicht initialisiert werden:', e);
     }
-
-    const WATCHLIST = [
-      {
-        id: "nvda",
-        name: "NVIDIA",
-        ticker: "NVDA",
-        symbol: "NASDAQ:NVDA",
-        price: 942.10,
-        changePct: 2.1,
-        currency: "USD",
-        country: "USA",
-        sector: "Technologie",
-        industry: "Halbleiter",
-        alertRules: [
-          "Benachrichtige mich bei Rückgang um 5 % gegenüber dem aktuellen Niveau.",
-          "Benachrichtige mich, wenn eine neue Premium-Chance zu NVIDIA veröffentlicht wird.",
-          "Benachrichtige mich, wenn die Aktie an einem Tag mehr als 4 % steigt."
-        ],
-        premiumOpportunityId: "nvda-20260324"
-      },
-      {
-        id: "msft",
-        name: "Microsoft",
-        ticker: "MSFT",
-        symbol: "NASDAQ:MSFT",
-        price: 428.70,
-        changePct: 0.8,
-        currency: "USD",
-        country: "USA",
-        sector: "Technologie",
-        industry: "Software / Cloud",
-        alertRules: [
-          "Benachrichtige mich, wenn Azure/Cloud als neue Chance im Feed auftaucht.",
-          "Benachrichtige mich bei Rückgang um 4 %.",
-          "Benachrichtige mich, wenn sich die Tagesänderung auf über +3 % bewegt."
-        ],
-        premiumOpportunityId: "msft-20260323"
-      },
-      {
-        id: "asml",
-        name: "ASML",
-        ticker: "ASML",
-        symbol: "EURONEXT:ASML",
-        price: 894.50,
-        changePct: 1.3,
-        currency: "EUR",
-        country: "Niederlande",
-        sector: "Technologie",
-        industry: "Lithographiesysteme",
-        alertRules: [
-          "Benachrichtige mich bei neuer Halbleiter-/Chip-Chance.",
-          "Benachrichtige mich bei Rückgang um 6 %.",
-          "Benachrichtige mich, wenn ein neues Premium-Detail zu ASML erscheint."
-        ],
-        premiumOpportunityId: "asml-20260324"
-      }
-    ];
 
     const SAMPLE_DAYS = [
       {
@@ -2123,26 +2001,37 @@
       allowSymbolChange: true,
       style: "1",
       toolbarBg: "#0f1115",
-      studies: "",
       withdateranges: true,
       hidelegend: false
     };
 
+    const ALERT_TEMPLATES = [
+      { value: "drop_pct_2", label: "Benachrichtige mich, wenn der Kurs um 2 % fällt" },
+      { value: "drop_pct_5", label: "Benachrichtige mich, wenn der Kurs um 5 % fällt" },
+      { value: "rise_pct_3", label: "Benachrichtige mich, wenn der Kurs um 3 % steigt" },
+      { value: "rise_pct_5", label: "Benachrichtige mich, wenn der Kurs um 5 % steigt" },
+      { value: "target_price", label: "Benachrichtige mich, wenn der Kurs einen Zielpreis erreicht" },
+      { value: "below_price", label: "Benachrichtige mich, wenn der Kurs unter einen Preis fällt" }
+    ];
+
     let currentUser = null;
     let currentProfile = null;
-    let currentWatchItem = null;
+    let currentFavorite = null;
     let currentOpportunity = null;
+    let tradingViewWidget = null;
+    let pendingConfirmationEmail = '';
 
     function getEl(id) {
       return document.getElementById(id);
     }
 
-    function formatMoney(value, currency) {
+    function formatMoney(value, currency = 'USD') {
+      if (value === null || value === undefined || value === '') return '—';
       return new Intl.NumberFormat('de-DE', {
         style: 'currency',
         currency,
         maximumFractionDigits: 2
-      }).format(value);
+      }).format(Number(value));
     }
 
     function formatDateLabel(dateStr) {
@@ -2154,10 +2043,85 @@
       });
     }
 
+    function showBanner(message) {
+      const banner = getEl('globalBanner');
+      banner.textContent = message;
+      banner.classList.add('show');
+    }
+
+    function clearBanner() {
+      getEl('globalBanner').classList.remove('show');
+      getEl('globalBanner').textContent = '';
+    }
+
+    function getStorageKey(base) {
+      const suffix = currentUser?.id || 'guest';
+      return `${base}_${suffix}`;
+    }
+
+    function loadFavorites() {
+      try {
+        return JSON.parse(localStorage.getItem(getStorageKey('ak_favorites')) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function saveFavorites(favorites) {
+      localStorage.setItem(getStorageKey('ak_favorites'), JSON.stringify(favorites));
+    }
+
+    function loadAlerts() {
+      try {
+        return JSON.parse(localStorage.getItem(getStorageKey('ak_alerts')) || '{}');
+      } catch {
+        return {};
+      }
+    }
+
+    function saveAlerts(alerts) {
+      localStorage.setItem(getStorageKey('ak_alerts'), JSON.stringify(alerts));
+    }
+
+    function getFavoriteById(id) {
+      return loadFavorites().find(item => item.id === id) || null;
+    }
+
+    function isFavorite(symbol) {
+      return loadFavorites().some(item => item.symbol === symbol);
+    }
+
+    function normalizeFinnhubResult(item) {
+      const displaySymbol = item.displaySymbol || item.symbol || '';
+      const exchange = (item.exchange || '').toUpperCase();
+      const country = item.country || '—';
+      const currency = item.currency || 'USD';
+      const description = item.description || displaySymbol || 'Unbekannt';
+
+      let symbol = displaySymbol;
+      if (exchange && displaySymbol && !displaySymbol.includes(':')) {
+        symbol = `${exchange}:${displaySymbol}`;
+      }
+
+      return {
+        id: `${exchange || 'EX'}-${displaySymbol}`.replace(/\s+/g, '-'),
+        name: description,
+        ticker: displaySymbol,
+        symbol: symbol || displaySymbol,
+        exchange,
+        country,
+        currency,
+        sector: '—',
+        industry: '—',
+        price: null,
+        changePct: null
+      };
+    }
+
     function showView(viewId) {
       document.querySelectorAll('.page-view').forEach((view) => view.classList.remove('active'));
       getEl(viewId).classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
 
     function parseRoute() {
@@ -2194,7 +2158,7 @@
     function mapAuthError(message) {
       const known = {
         'Invalid login credentials': 'Falsche E-Mail oder falsches Passwort.',
-        'Email not confirmed': 'Bitte bestätige zuerst deine E-Mail-Adresse.',
+        'Email not confirmed': 'Bitte bestätige zuerst deine E-Mail-Adresse über den Link in der Mail.',
         'User already registered': 'Diese E-Mail-Adresse ist bereits registriert.',
         'Password should be at least 6 characters': 'Das Passwort muss mindestens 6 Zeichen lang sein.'
       };
@@ -2202,24 +2166,33 @@
     }
 
     function clearMessages() {
-      getEl('authError').style.display = 'none';
-      getEl('authSuccess').style.display = 'none';
+      ['authError', 'authSuccess'].forEach(id => {
+        getEl(id).style.display = 'none';
+        getEl(id).textContent = '';
+      });
+      const info = getEl('authInfo');
+      info.classList.add('hidden');
+      info.textContent = '';
     }
 
     function showError(message) {
       const box = getEl('authError');
-      const ok = getEl('authSuccess');
-      ok.style.display = 'none';
+      getEl('authSuccess').style.display = 'none';
       box.textContent = message;
       box.style.display = 'block';
     }
 
     function showSuccess(message) {
       const box = getEl('authSuccess');
-      const err = getEl('authError');
-      err.style.display = 'none';
+      getEl('authError').style.display = 'none';
       box.textContent = message;
       box.style.display = 'block';
+    }
+
+    function showInfo(message) {
+      const box = getEl('authInfo');
+      box.textContent = message;
+      box.classList.remove('hidden');
     }
 
     function setLoading(button, loading, text) {
@@ -2247,6 +2220,10 @@
       getEl('panelLogin').classList.toggle('hidden', !login);
       getEl('panelRegister').classList.toggle('hidden', login);
       clearMessages();
+
+      if (!login && pendingConfirmationEmail) {
+        showInfo(`Für ${pendingConfirmationEmail} kann bei Bedarf erneut eine Bestätigungs-Mail gesendet werden.`);
+      }
     }
 
     function openPremiumModal() {
@@ -2257,6 +2234,12 @@
     function closePremiumModal() {
       getEl('premiumModal').classList.remove('open');
       getEl('premiumModal').setAttribute('aria-hidden', 'true');
+    }
+
+    function handlePremiumInterest() {
+      closePremiumModal();
+      showBanner('Der Upgrade-Bereich ist jetzt klar vorbereitet. Für echte Zahlungen brauchst du als Nächstes einen serverseitigen Stripe-Checkout-Endpunkt.');
+      goToRoute('/#preise');
     }
 
     function openLegalModal(type) {
@@ -2271,8 +2254,8 @@
           <p>AnlageKompass stellt Informationen, Einordnungen und datenbasierte Investment-Ideen bereit. Die Inhalte dienen ausschließlich Informationszwecken.</p>
           <h4>2. Kein Beratungsverhältnis</h4>
           <p>Es wird keine Anlageberatung, Finanzberatung oder individuelle Empfehlung erbracht.</p>
-          <h4>3. Nutzung von Free und Plus</h4>
-          <p>Ein Teil der Funktionen ist dauerhaft kostenlos nutzbar. Zusätzliche Funktionen können im Rahmen eines kostenpflichtigen Plus-Zugangs bereitgestellt werden.</p>
+          <h4>3. Nutzung</h4>
+          <p>Nach Registrierung und ggf. Bestätigung der E-Mail-Adresse kann der Nutzer die Plattformfunktionen verwenden.</p>
         `;
       } else {
         title.textContent = 'Datenschutzhinweise';
@@ -2319,9 +2302,7 @@
         .from('profiles')
         .upsert(profilePayload, { onConflict: 'id' });
 
-      if (error) {
-        console.error('profiles upsert error:', error);
-      }
+      if (error) console.error('profiles upsert error:', error);
     }
 
     async function loadCurrentProfile() {
@@ -2350,10 +2331,6 @@
         currentProfile = null;
         return null;
       }
-    }
-
-    function isPremiumUser() {
-      return Boolean(currentProfile?.is_premium) || currentProfile?.plan === 'plus';
     }
 
     async function handleLogin() {
@@ -2394,8 +2371,7 @@
           closeAuthModal();
           goToRoute('/watchlist');
           refreshNavUI();
-        }, 800);
-
+        }, 700);
       } catch (error) {
         console.error(error);
         showError('Die Anmeldung konnte nicht ausgeführt werden.');
@@ -2434,10 +2410,13 @@
       setLoading(button, true, 'Konto erstellen');
 
       try {
+        const emailRedirectTo = `${window.location.origin}${window.location.pathname}#/email-bestaetigt`;
+
         const { data, error } = await supabaseClient.auth.signUp({
           email,
           password,
           options: {
+            emailRedirectTo,
             data: {
               first_name: firstName,
               last_name: lastName,
@@ -2452,25 +2431,65 @@
           return;
         }
 
-        currentUser = data?.user || null;
-        if (currentUser) {
-          await upsertProfileForUser(currentUser, firstName, lastName, email);
-          await loadCurrentProfile();
+        pendingConfirmationEmail = email;
+
+        if (data?.user) {
+          await upsertProfileForUser(data.user, firstName, lastName, email);
         }
 
-        showSuccess('Konto erstellt. Du wirst jetzt weitergeleitet …');
+        if (data?.session) {
+          currentUser = data.user || null;
+          await loadCurrentProfile();
+          showSuccess('Konto erstellt und direkt angemeldet.');
+          setTimeout(() => {
+            closeAuthModal();
+            goToRoute('/watchlist');
+            refreshNavUI();
+          }, 700);
+          return;
+        }
 
-        setTimeout(() => {
-          closeAuthModal();
-          goToRoute('/watchlist');
-          refreshNavUI();
-        }, 900);
-
+        showSuccess('Konto erstellt. Bitte bestätige jetzt zuerst deine E-Mail-Adresse. Erst danach kannst du dich anmelden.');
+        showInfo('Nach Klick auf den Bestätigungslink landest du wieder auf dieser Seite und erhältst dort eine Erfolgsmeldung.');
       } catch (error) {
         console.error(error);
         showError('Die Registrierung konnte nicht abgeschlossen werden.');
       } finally {
         setLoading(button, false, 'Konto erstellen');
+      }
+    }
+
+    async function resendConfirmation() {
+      clearMessages();
+
+      const email = getEl('registerEmail').value.trim() || pendingConfirmationEmail;
+      if (!email) {
+        showError('Bitte gib zuerst die registrierte E-Mail-Adresse ein.');
+        return;
+      }
+      if (!supabaseClient) {
+        showError('Supabase ist nicht verfügbar.');
+        return;
+      }
+
+      try {
+        const emailRedirectTo = `${window.location.origin}${window.location.pathname}#/email-bestaetigt`;
+        const { error } = await supabaseClient.auth.resend({
+          type: 'signup',
+          email,
+          options: { emailRedirectTo }
+        });
+
+        if (error) {
+          showError(mapAuthError(error.message));
+          return;
+        }
+
+        pendingConfirmationEmail = email;
+        showSuccess('Die Bestätigungs-Mail wurde erneut versendet.');
+      } catch (error) {
+        console.error(error);
+        showError('Die Bestätigungs-Mail konnte nicht erneut versendet werden.');
       }
     }
 
@@ -2480,7 +2499,9 @@
       }
       currentUser = null;
       currentProfile = null;
+      currentFavorite = null;
       refreshNavUI();
+      clearBanner();
       goToRoute('/');
     }
 
@@ -2522,7 +2543,6 @@
         allowSymbolChange: getEl("allowSymbolChange").checked,
         style: getEl("style").value,
         toolbarBg: getEl("toolbarBg").value,
-        studies: getEl("studies").value,
         withdateranges: getEl("withdateranges").checked,
         hidelegend: getEl("hidelegend").checked
       };
@@ -2538,7 +2558,6 @@
       getEl("allowSymbolChange").checked = values.allowSymbolChange;
       getEl("style").value = values.style;
       getEl("toolbarBg").value = values.toolbarBg;
-      getEl("studies").value = values.studies;
       getEl("withdateranges").checked = values.withdateranges;
       getEl("hidelegend").checked = values.hidelegend;
     }
@@ -2554,55 +2573,39 @@
       settings.height = sanitizeHeight(settings.height);
 
       const container = getEl("tv-chart-container");
-      if (!container) return;
+      if (!container || !window.TradingView?.widget) {
+        setChartStatus("TradingView konnte noch nicht geladen werden.");
+        return;
+      }
 
       container.innerHTML = "";
       container.style.height = settings.height + "px";
 
-      const widgetHost = document.createElement("div");
-      widgetHost.className = "tradingview-widget-container";
-      widgetHost.style.width = "100%";
-      widgetHost.style.height = "100%";
+      try {
+        tradingViewWidget = new TradingView.widget({
+          autosize: true,
+          symbol: settings.symbol,
+          interval: settings.interval,
+          timezone: settings.timezone,
+          theme: settings.theme,
+          style: settings.style,
+          locale: settings.locale,
+          allow_symbol_change: settings.allowSymbolChange,
+          withdateranges: settings.withdateranges,
+          hide_side_toolbar: false,
+          hide_top_toolbar: false,
+          hide_legend: settings.hidelegend,
+          save_image: true,
+          toolbar_bg: settings.toolbarBg,
+          container_id: "tv-chart-container"
+        });
 
-      const widgetInner = document.createElement("div");
-      widgetInner.id = "tradingview_widget_inner";
-      widgetInner.style.width = "100%";
-      widgetInner.style.height = "100%";
-
-      widgetHost.appendChild(widgetInner);
-      container.appendChild(widgetHost);
-
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-      script.async = true;
-
-      const config = {
-        autosize: true,
-        symbol: settings.symbol,
-        interval: settings.interval,
-        timezone: settings.timezone,
-        theme: settings.theme,
-        style: settings.style,
-        locale: settings.locale,
-        allow_symbol_change: settings.allowSymbolChange,
-        withdateranges: settings.withdateranges,
-        hide_side_toolbar: false,
-        hide_top_toolbar: false,
-        hide_legend: settings.hidelegend,
-        save_image: true,
-        calendar: false,
-        studies: settings.studies ? [settings.studies] : [],
-        toolbar_bg: settings.toolbarBg,
-        support_host: "https://www.tradingview.com",
-        container_id: "tradingview_widget_inner"
-      };
-
-      script.text = JSON.stringify(config);
-      widgetHost.appendChild(script);
-
-      setChartStatus("Chart geladen: " + settings.symbol);
-      getEl("infoSymbolChip").textContent = `Standard-Symbol: ${settings.symbol}`;
+        setChartStatus("Chart geladen: " + settings.symbol);
+        getEl("infoSymbolChip").textContent = `Standard-Symbol: ${settings.symbol}`;
+      } catch (error) {
+        console.error(error);
+        setChartStatus("Chart konnte nicht geladen werden.");
+      }
     }
 
     function resetChartSettings() {
@@ -2612,55 +2615,323 @@
       setChartStatus("Standardwerte wurden wiederhergestellt.");
     }
 
-    function renderWatchlistSidebar(activeId) {
-      const root = getEl('watchlistItems');
-      root.innerHTML = WATCHLIST.map(item => `
-        <button class="watch-item ${item.id === activeId ? 'active' : ''}" data-id="${item.id}">
-          <strong>${item.name} (${item.ticker})</strong>
-          <span>${item.country} · ${item.industry}</span>
-          <span>${formatMoney(item.price, item.currency)} · ${item.changePct >= 0 ? '+' : ''}${item.changePct.toFixed(1)} % heute</span>
-        </button>
-      `).join('');
+    function updateFavoritesCounter() {
+      const favorites = loadFavorites();
+      getEl('favoritesCountPill').textContent = `${favorites.length} / 30 Favoriten`;
+      getEl('favoritesCountBox').textContent = `${favorites.length} / 30`;
+    }
 
-      root.querySelectorAll('.watch-item').forEach(btn => {
+    function renderSearchResults(results) {
+      const root = getEl('searchResults');
+
+      if (!results || !results.length) {
+        root.innerHTML = `<div class="search-empty">Keine Treffer gefunden.</div>`;
+        return;
+      }
+
+      root.innerHTML = results.map(item => {
+        const normalized = normalizeFinnhubResult(item);
+        const fav = isFavorite(normalized.symbol);
+        return `
+          <div class="search-result-card">
+            <div class="search-result-top">
+              <div>
+                <strong>${normalized.name}</strong>
+                <div class="symbol-meta">
+                  ${normalized.ticker || '—'} · ${normalized.exchange || '—'} · ${normalized.country || '—'}<br>
+                  Symbol für Chart: ${normalized.symbol || '—'}
+                </div>
+              </div>
+              <button class="star-btn ${fav ? 'active' : ''}" data-symbol="${normalized.symbol}" data-item='${encodeURIComponent(JSON.stringify(normalized))}' title="Zu Favoriten hinzufügen">★</button>
+            </div>
+            <div class="inline-actions">
+              <button class="mini-btn" data-open='${encodeURIComponent(JSON.stringify(normalized))}'>Im Chart öffnen</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      root.querySelectorAll('.star-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          const selected = WATCHLIST.find(item => item.id === btn.dataset.id) || WATCHLIST[0];
-          renderWatchlist(selected);
+          const item = JSON.parse(decodeURIComponent(btn.dataset.item));
+          toggleFavorite(item);
+        });
+      });
+
+      root.querySelectorAll('[data-open]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const item = JSON.parse(decodeURIComponent(btn.dataset.open));
+          renderFavoriteDetail(item);
         });
       });
     }
 
-    function renderWatchlist(stock) {
-      currentWatchItem = stock;
-      getEl('watchTitle').textContent = `${stock.name} (${stock.ticker})`;
-      getEl('watchSubtitle').innerHTML = `
-        ${stock.country} · ${stock.sector} / ${stock.industry} ·
-        <button class="linklike" style="background:none;border:none;color:#29bbff;cursor:pointer;font:inherit;padding:0;" onclick="goToRoute('/premium/chancen/${stock.premiumOpportunityId}')">Premium-Chance öffnen</button>
-      `;
+    async function searchStocks() {
+      const query = getEl('stockSearchInput').value.trim();
+      if (!query) {
+        renderSearchResults([]);
+        return;
+      }
 
-      getEl('watchPrice').textContent = formatMoney(stock.price, stock.currency);
-      const changeEl = getEl('watchChange');
-      const sign = stock.changePct >= 0 ? '+' : '';
-      changeEl.textContent = `${sign}${stock.changePct.toFixed(1)} % heute`;
-      changeEl.className = `change ${stock.changePct >= 0 ? 'pos' : 'neg'}`;
+      const root = getEl('searchResults');
+      root.innerHTML = `<div class="search-empty">Suche läuft…</div>`;
 
-      getEl('watchFactsGrid').innerHTML = `
-        <div class="fact-card"><div class="label">Ticker</div><div class="value">${stock.ticker}</div></div>
-        <div class="fact-card"><div class="label">Land</div><div class="value">${stock.country}</div></div>
-        <div class="fact-card"><div class="label">Sektor</div><div class="value">${stock.sector}</div></div>
-        <div class="fact-card"><div class="label">Branche</div><div class="value">${stock.industry}</div></div>
-      `;
+      try {
+        const url = `https://finnhub.io/api/v1/search?q=${encodeURIComponent(query)}&token=${CONFIG.finnhubApiKey}`;
+        const res = await fetch(url);
+        const data = await res.json();
 
-      getEl('watchAlertList').innerHTML = stock.alertRules.map((rule, idx) => `
-        <div class="alert-item">
-          <strong>Alert-Regel ${idx + 1}</strong>
-          <p>${rule}</p>
+        const results = Array.isArray(data?.result) ? data.result.slice(0, 12) : [];
+        renderSearchResults(results);
+      } catch (error) {
+        console.error(error);
+        root.innerHTML = `<div class="search-empty">Die Suche konnte gerade nicht geladen werden.</div>`;
+      }
+    }
+
+    function toggleFavorite(item) {
+      if (!requireLogin()) return;
+
+      const favorites = loadFavorites();
+      const exists = favorites.findIndex(f => f.symbol === item.symbol);
+
+      if (exists >= 0) {
+        favorites.splice(exists, 1);
+        saveFavorites(favorites);
+
+        const alerts = loadAlerts();
+        delete alerts[item.id];
+        saveAlerts(alerts);
+
+        if (currentFavorite?.symbol === item.symbol) {
+          currentFavorite = null;
+          renderEmptyFavoriteState();
+        }
+
+        renderFavoritesList();
+        searchStocks();
+        return;
+      }
+
+      if (favorites.length >= 30) {
+        showBanner('Maximal 30 Favoriten gleichzeitig.');
+        return;
+      }
+
+      favorites.unshift(item);
+      saveFavorites(favorites);
+      renderFavoritesList();
+      renderFavoriteDetail(item);
+      searchStocks();
+    }
+
+    function removeFavorite(id) {
+      const favorites = loadFavorites().filter(item => item.id !== id);
+      saveFavorites(favorites);
+
+      const alerts = loadAlerts();
+      delete alerts[id];
+      saveAlerts(alerts);
+
+      if (currentFavorite?.id === id) {
+        currentFavorite = null;
+        renderEmptyFavoriteState();
+      }
+
+      renderFavoritesList();
+      searchStocks();
+    }
+
+    function renderFavoritesList() {
+      updateFavoritesCounter();
+
+      const favorites = loadFavorites();
+      const root = getEl('favoritesList');
+
+      if (!favorites.length) {
+        root.innerHTML = `<div class="search-empty">Noch keine Favoriten gespeichert.</div>`;
+        return;
+      }
+
+      root.innerHTML = favorites.map(item => `
+        <div class="favorite-card">
+          <div class="favorite-top">
+            <div>
+              <strong>${item.name}</strong>
+              <div class="symbol-meta">${item.ticker || '—'} · ${item.exchange || '—'} · ${item.country || '—'}<br>${item.symbol}</div>
+            </div>
+            <div class="inline-actions">
+              <button class="mini-btn" data-open-id="${item.id}">Öffnen</button>
+              <button class="danger-btn" data-remove-id="${item.id}">Entfernen</button>
+            </div>
+          </div>
+
+          <div class="alert-builder">
+            <div class="field-inline">
+              <label>Neue Kursregel hinzufügen</label>
+              <div class="alert-builder-row">
+                <select data-alert-type="${item.id}">
+                  ${ALERT_TEMPLATES.map(t => `<option value="${t.value}">${t.label}</option>`).join('')}
+                </select>
+                <input data-alert-price="${item.id}" type="number" step="0.01" placeholder="Preis (nur falls nötig)" />
+                <button class="mini-btn" data-save-alert="${item.id}">Speichern</button>
+              </div>
+            </div>
+            <div class="muted">Hinweis: Regeln werden aktuell im Browser gespeichert. Für echte E-Mail-Auslösung brauchst du später einen serverseitigen Job oder Edge Function.</div>
+          </div>
         </div>
       `).join('');
 
-      renderWatchlistSidebar(stock.id);
-      getEl('symbol').value = stock.symbol;
+      root.querySelectorAll('[data-open-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const item = getFavoriteById(btn.dataset.openId);
+          if (item) renderFavoriteDetail(item);
+        });
+      });
+
+      root.querySelectorAll('[data-remove-id]').forEach(btn => {
+        btn.addEventListener('click', () => removeFavorite(btn.dataset.removeId));
+      });
+
+      root.querySelectorAll('[data-save-alert]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.saveAlert;
+          const type = root.querySelector(`[data-alert-type="${id}"]`).value;
+          const targetPrice = root.querySelector(`[data-alert-price="${id}"]`).value;
+          saveAlertRule(id, type, targetPrice);
+        });
+      });
+    }
+
+    function getAlertLabel(rule) {
+      switch (rule.type) {
+        case 'drop_pct_2': return 'Benachrichtige mich, wenn der Kurs um 2 % fällt';
+        case 'drop_pct_5': return 'Benachrichtige mich, wenn der Kurs um 5 % fällt';
+        case 'rise_pct_3': return 'Benachrichtige mich, wenn der Kurs um 3 % steigt';
+        case 'rise_pct_5': return 'Benachrichtige mich, wenn der Kurs um 5 % steigt';
+        case 'target_price': return `Benachrichtige mich, wenn der Kurs ${rule.targetPrice || '—'} erreicht`;
+        case 'below_price': return `Benachrichtige mich, wenn der Kurs unter ${rule.targetPrice || '—'} fällt`;
+        default: return 'Benachrichtigung';
+      }
+    }
+
+    function saveAlertRule(favoriteId, type, targetPrice) {
+      const favorite = getFavoriteById(favoriteId);
+      if (!favorite) return;
+
+      if ((type === 'target_price' || type === 'below_price') && !targetPrice) {
+        showBanner('Für diese Regel bitte einen Zielpreis angeben.');
+        return;
+      }
+
+      const alerts = loadAlerts();
+      if (!alerts[favoriteId]) alerts[favoriteId] = [];
+
+      alerts[favoriteId].push({
+        id: cryptoRandomId(),
+        type,
+        targetPrice: targetPrice || null,
+        email: currentUser?.email || currentProfile?.email || null,
+        createdAt: new Date().toISOString()
+      });
+
+      saveAlerts(alerts);
+
+      if (currentFavorite?.id === favoriteId) {
+        renderAlertList(favoriteId);
+      }
+
+      showBanner('Kursregel gespeichert.');
+    }
+
+    function deleteAlertRule(favoriteId, alertId) {
+      const alerts = loadAlerts();
+      alerts[favoriteId] = (alerts[favoriteId] || []).filter(rule => rule.id !== alertId);
+      saveAlerts(alerts);
+      if (currentFavorite?.id === favoriteId) renderAlertList(favoriteId);
+    }
+
+    function renderAlertList(favoriteId) {
+      const root = getEl('watchAlertList');
+      const alerts = loadAlerts()[favoriteId] || [];
+
+      if (!alerts.length) {
+        root.innerHTML = `
+          <div class="alert-item">
+            <strong>Noch keine Kursregeln</strong>
+            <p>Für diesen Favoriten wurden noch keine Regeln gespeichert.</p>
+          </div>
+        `;
+        return;
+      }
+
+      root.innerHTML = alerts.map((rule, idx) => `
+        <div class="alert-item">
+          <strong>Kursregel ${idx + 1}</strong>
+          <p>${getAlertLabel(rule)}</p>
+          <p style="margin-top:8px;">Empfänger: ${rule.email || '—'}</p>
+          <div class="inline-actions" style="margin-top:12px;">
+            <button class="danger-btn" data-delete-alert="${rule.id}">Löschen</button>
+          </div>
+        </div>
+      `).join('');
+
+      root.querySelectorAll('[data-delete-alert]').forEach(btn => {
+        btn.addEventListener('click', () => deleteAlertRule(favoriteId, btn.dataset.deleteAlert));
+      });
+    }
+
+    function renderEmptyFavoriteState() {
+      getEl('watchTitle').textContent = 'Noch kein Favorit ausgewählt';
+      getEl('watchSubtitle').textContent = 'Wähle einen Favoriten oder suche zuerst nach einer Aktie.';
+      getEl('watchPrice').textContent = '—';
+      getEl('watchChange').textContent = '—';
+      getEl('watchChange').className = 'change';
+      getEl('watchFactsGrid').innerHTML = `
+        <div class="fact-card"><div class="label">Status</div><div class="value">Keine Auswahl</div></div>
+        <div class="fact-card"><div class="label">Favoriten</div><div class="value">${loadFavorites().length} / 30</div></div>
+        <div class="fact-card"><div class="label">Hinweis</div><div class="value">Suche starten</div></div>
+        <div class="fact-card"><div class="label">Chart</div><div class="value">Bereit</div></div>
+      `;
+      renderAlertList('__empty__');
+      getEl('symbol').value = chartDefaults.symbol;
       loadTradingViewChart();
+    }
+
+    function renderFavoriteDetail(item) {
+      currentFavorite = item;
+
+      getEl('watchTitle').textContent = `${item.name}${item.ticker ? ' (' + item.ticker + ')' : ''}`;
+      getEl('watchSubtitle').innerHTML = `
+        ${item.country || '—'} · ${item.exchange || '—'} ·
+        <button class="linklike" type="button" onclick="goToRoute('/premium/chancen')">Chancen öffnen</button>
+      `;
+
+      getEl('watchPrice').textContent = item.price ? formatMoney(item.price, item.currency || 'USD') : 'Livekurs extern';
+      const changeEl = getEl('watchChange');
+      if (typeof item.changePct === 'number') {
+        const sign = item.changePct >= 0 ? '+' : '';
+        changeEl.textContent = `${sign}${item.changePct.toFixed(1)} % heute`;
+        changeEl.className = `change ${item.changePct >= 0 ? 'pos' : 'neg'}`;
+      } else {
+        changeEl.textContent = 'Chart aktiv';
+        changeEl.className = 'change';
+      }
+
+      getEl('watchFactsGrid').innerHTML = `
+        <div class="fact-card"><div class="label">Name</div><div class="value">${item.name || '—'}</div></div>
+        <div class="fact-card"><div class="label">Ticker</div><div class="value">${item.ticker || '—'}</div></div>
+        <div class="fact-card"><div class="label">Börse</div><div class="value">${item.exchange || '—'}</div></div>
+        <div class="fact-card"><div class="label">Land</div><div class="value">${item.country || '—'}</div></div>
+      `;
+
+      renderAlertList(item.id);
+      getEl('symbol').value = item.symbol || chartDefaults.symbol;
+      loadTradingViewChart();
+    }
+
+    function cryptoRandomId() {
+      return Math.random().toString(36).slice(2) + Date.now().toString(36);
     }
 
     function getAvailableDays() {
@@ -2771,15 +3042,6 @@
 
       showView('view-premium');
 
-      if (!isPremiumUser()) {
-        getEl('premiumGate').classList.remove('hidden');
-        getEl('premiumContent').classList.add('hidden');
-        return;
-      }
-
-      getEl('premiumGate').classList.add('hidden');
-      getEl('premiumContent').classList.remove('hidden');
-
       const days = getAvailableDays();
       populateDaySelect(days);
 
@@ -2804,6 +3066,25 @@
       };
     }
 
+    async function renderWatchlistRoute() {
+      if (!requireLogin()) {
+        showView('view-landing');
+        return;
+      }
+
+      showView('view-watchlist');
+      renderFavoritesList();
+
+      const favorites = loadFavorites();
+      if (currentFavorite) {
+        renderFavoriteDetail(currentFavorite);
+      } else if (favorites.length) {
+        renderFavoriteDetail(favorites[0]);
+      } else {
+        renderEmptyFavoriteState();
+      }
+    }
+
     async function handleRoute() {
       const route = parseRoute();
 
@@ -2812,13 +3093,14 @@
         return;
       }
 
+      if (route === '/email-bestaetigt') {
+        showView('view-landing');
+        showBanner('Deine E-Mail-Adresse wurde erfolgreich bestätigt. Du kannst dich jetzt anmelden bzw. bist – falls bereits eine Session aktiv ist – direkt eingeloggt.');
+        return;
+      }
+
       if (route === '/watchlist') {
-        if (!requireLogin()) {
-          showView('view-landing');
-          return;
-        }
-        showView('view-watchlist');
-        renderWatchlist(currentWatchItem || WATCHLIST[0]);
+        await renderWatchlistRoute();
         return;
       }
 
@@ -2834,6 +3116,39 @@
       }
 
       showView('view-landing');
+    }
+
+    function extractAccessTokenFromHash() {
+      const hash = window.location.hash || '';
+      if (!hash.includes('access_token=')) return null;
+
+      const raw = hash.startsWith('#') ? hash.slice(1) : hash;
+      const parts = raw.split('&');
+      const params = new URLSearchParams(parts.join('&'));
+      return {
+        access_token: params.get('access_token'),
+        refresh_token: params.get('refresh_token')
+      };
+    }
+
+    async function handleSupabaseEmailRedirect() {
+      if (!supabaseClient) return;
+
+      const tokenData = extractAccessTokenFromHash();
+      if (!tokenData?.access_token || !tokenData?.refresh_token) return;
+
+      try {
+        const { error } = await supabaseClient.auth.setSession({
+          access_token: tokenData.access_token,
+          refresh_token: tokenData.refresh_token
+        });
+
+        if (!error) {
+          history.replaceState({}, '', `${window.location.pathname}#/email-bestaetigt`);
+        }
+      } catch (error) {
+        console.error('Email redirect session error:', error);
+      }
     }
 
     document.querySelectorAll('.modal-overlay').forEach((overlay) => {
@@ -2860,6 +3175,12 @@
 
       getEl("applyBtn").addEventListener("click", loadTradingViewChart);
       getEl("resetBtn").addEventListener("click", resetChartSettings);
+      getEl("stockSearchBtn").addEventListener("click", searchStocks);
+      getEl("stockSearchInput").addEventListener("keydown", (e) => {
+        if (e.key === 'Enter') searchStocks();
+      });
+
+      await handleSupabaseEmailRedirect();
 
       if (supabaseClient) {
         const { data } = await supabaseClient.auth.getSession();
@@ -2870,11 +3191,14 @@
           currentUser = session?.user || null;
           await loadCurrentProfile();
           refreshNavUI();
+          updateFavoritesCounter();
           handleRoute();
         });
       }
 
       refreshNavUI();
+      updateFavoritesCounter();
+      loadTradingViewChart();
       await handleRoute();
     });
   </script>
