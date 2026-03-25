@@ -130,52 +130,28 @@
     }
 
     .btn:hover { transform: translateY(-1px); }
+    .btn-top-secondary, .btn-top-primary, .btn-primary, .btn-ghost, .btn-hero-primary, .btn-hero-secondary, .submit-btn, .btn-card-primary, .btn-card-secondary {
+      min-height: 46px;
+      padding: 0 18px;
+    }
 
     .btn-top-secondary {
-      min-width: 138px;
-      height: 46px;
-      padding: 0 20px;
       border-color: rgba(27, 172, 255, 0.42);
       background: rgba(5, 16, 34, 0.72);
       color: #1db6ff;
       box-shadow: inset 0 0 0 1px rgba(7, 24, 54, 0.42);
     }
 
-    .btn-top-primary, .btn-primary {
-      min-width: 176px;
-      height: 46px;
-      padding: 0 22px;
+    .btn-top-primary, .btn-primary, .submit-btn, .btn-card-primary, .btn-hero-primary {
       color: white;
       background: linear-gradient(90deg, #20adff 0%, #23d0b1 100%);
       box-shadow: 0 10px 28px rgba(16, 178, 232, 0.22);
+      border: none;
     }
 
-    .btn-ghost {
-      min-width: 120px;
-      height: 46px;
-      padding: 0 18px;
+    .btn-ghost, .btn-card-secondary, .btn-hero-secondary {
       border-color: rgba(123, 143, 175, 0.18);
       background: rgba(7, 16, 31, 0.45);
-      color: #f5f8fc;
-    }
-
-    .btn-hero-primary {
-      min-width: 252px;
-      height: 56px;
-      font-size: 16px;
-      border-radius: 16px;
-      color: white;
-      background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
-      box-shadow: 0 16px 44px rgba(12, 170, 235, 0.22);
-    }
-
-    .btn-hero-secondary {
-      min-width: 168px;
-      height: 56px;
-      font-size: 18px;
-      border-radius: 16px;
-      border-color: rgba(123, 143, 175, 0.16);
-      background: rgba(7, 16, 31, 0.55);
       color: #f5f8fc;
     }
 
@@ -225,7 +201,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      text-wrap: balance;
     }
 
     .hero-copy, .page-hero-copy {
@@ -250,7 +225,7 @@
 
     .section-head {
       text-align: center;
-      margin-bottom: 50px;
+      margin-bottom: 40px;
     }
 
     .section-head h2 {
@@ -268,14 +243,17 @@
       line-height: 1.7;
     }
 
-    .feature-grid {
-      width: min(1260px, 100%);
-      margin: 0 auto;
+    .feature-grid, .pricing-grid, .stats-grid, .grid-3, .toolbar-grid, .facts-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 26px;
-      padding: 0 4px;
+      gap: 18px;
     }
+
+    .feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(980px, 100%); margin: 0 auto; }
+    .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 24px; }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .toolbar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 24px; }
+    .facts-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
     .feature-card,
     .panel,
@@ -284,166 +262,45 @@
     .sidebar-card,
     .content-card,
     .search-result-card,
-    .favorite-card {
+    .favorite-card,
+    .mini-card,
+    .chart-card,
+    .subscribe-card {
       background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
       border: 1px solid rgba(117, 141, 181, 0.16);
       border-radius: 24px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
 
-    .feature-card { min-height: 228px; padding: 30px 30px 28px; }
-    .feature-card .emoji {
-      font-size: 36px;
-      line-height: 1;
-      margin-bottom: 18px;
-      display: block;
-    }
-    .feature-card h3 {
-      font-size: 18px;
-      line-height: 1.2;
-      letter-spacing: -0.03em;
-      font-weight: 800;
-      color: #f6f8fc;
-      margin-bottom: 16px;
-    }
+    .feature-card { min-height: 228px; padding: 30px; }
+    .feature-card .emoji { font-size: 36px; margin-bottom: 18px; display: block; }
+    .feature-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 16px; }
     .feature-card p { font-size: 16px; line-height: 1.62; color: var(--text-muted); }
 
-    .compare-wrap { padding-top: 12px; padding-bottom: 18px; }
-    .compare-box {
-      width: min(1120px, 100%);
-      margin: 0 auto;
-      background: linear-gradient(180deg, rgba(12,22,44,0.94), rgba(8,17,34,0.94));
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      border-radius: 30px;
-      padding: 28px 28px 18px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-    }
-    .compare-head, .compare-row {
-      display: grid;
-      grid-template-columns: 1.65fr 0.55fr 0.55fr;
-      gap: 16px;
-      align-items: center;
-    }
-    .compare-head {
-      padding: 0 0 12px;
-      color: var(--text-soft);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-    .compare-row {
-      min-height: 64px;
-      border-top: 1px solid rgba(117, 141, 181, 0.12);
-      color: #eef4fb;
-      font-size: 17px;
-      line-height: 1.35;
-    }
-    .compare-feature {
-      font-weight: 700;
-      color: #eef4fb;
-      padding-right: 14px;
-    }
-    .compare-cell { text-align: center; color: var(--text-muted); font-size: 19px; font-weight: 700; }
-    .compare-cell.yes { color: #98f3d4; }
-
-    .pricing-wrap { padding-top: 36px; padding-bottom: 90px; }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 34px;
-      width: min(980px, 100%);
-      margin: 0 auto;
-      align-items: start;
-    }
-
-    .price-card { position: relative; padding: 34px; }
-    .price-card.plus {
-      border-color: rgba(26, 182, 255, 0.9);
-      box-shadow: var(--glow);
-    }
-
+    .price-card { padding: 34px; position: relative; }
+    .price-card.plus { border-color: rgba(26, 182, 255, 0.9); box-shadow: var(--glow); }
     .recommend {
-      position: absolute;
-      top: -16px;
-      left: 50%;
-      transform: translateX(-50%);
-      min-width: 198px;
-      height: 30px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 16px;
-      background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
-      color: white;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      box-shadow: 0 10px 26px rgba(19, 183, 223, 0.22);
+      position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+      min-width: 198px; height: 30px; border-radius: 999px;
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0 16px; background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
+      color: white; font-size: 14px; font-weight: 800;
     }
 
-    .plan-name {
-      font-size: 22px;
-      line-height: 1.2;
-      letter-spacing: -0.04em;
-      font-weight: 800;
-      margin-bottom: 22px;
-      color: #f8fbff;
-    }
-
+    .plan-name { font-size: 22px; font-weight: 800; margin-bottom: 22px; }
     .price-line { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 24px; }
-    .price {
-      font-size: 62px;
-      line-height: 0.95;
-      letter-spacing: -0.06em;
-      font-weight: 900;
-      color: #f7fbff;
-    }
-    .price-card.plus .price { color: #1eaaff; }
+    .price { font-size: 62px; line-height: 0.95; font-weight: 900; letter-spacing: -0.06em; color: #f7fbff; }
     .per { font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }
-
-    .feature-list { list-style: none; margin: 0 0 30px; }
+    .feature-list { list-style: none; margin: 0 0 26px; }
     .feature-list li {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      min-height: 54px;
-      border-bottom: 1px solid rgba(117, 141, 181, 0.14);
-      color: var(--text-muted);
-      font-size: 18px;
-      line-height: 1.4;
-      padding-right: 6px;
+      display: flex; align-items: center; gap: 14px; min-height: 52px;
+      border-bottom: 1px solid rgba(117, 141, 181, 0.14); color: var(--text-muted);
+      font-size: 17px; line-height: 1.4;
     }
     .feature-list li:last-child { border-bottom: none; }
-    .feature-list li strong { color: #edf3fb; font-weight: 500; }
-    .feature-list li.available { color: #eef4fb; }
-    .tick, .minus {
-      width: 16px;
-      flex: 0 0 16px;
-      text-align: center;
-      font-size: 24px;
-      line-height: 1;
-      transform: translateY(-1px);
-    }
+    .tick, .minus { width: 16px; font-size: 22px; }
     .tick { color: var(--success); }
     .minus { color: #788ca7; }
-
-    .btn-card-secondary, .btn-card-primary {
-      width: 100%;
-      height: 68px;
-      border-radius: 18px;
-      color: white;
-      font-size: 18px;
-      font-weight: 800;
-    }
-    .btn-card-secondary {
-      border-color: rgba(117, 141, 181, 0.16);
-      background: rgba(8, 16, 30, 0.56);
-    }
-    .btn-card-primary {
-      background: linear-gradient(90deg, #1fafff 0%, #20cfb1 100%);
-      box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
-    }
 
     .disclaimer {
       width: min(980px, 100%);
@@ -455,712 +312,6 @@
       color: var(--text-soft);
       font-size: 13px;
       line-height: 1.7;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 7, 18, 0.72);
-      backdrop-filter: blur(12px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      z-index: 160;
-    }
-    .modal-overlay.open { display: flex; }
-
-    .modal {
-      width: min(100%, 560px);
-      background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(10,18,36,0.98));
-      border: 1px solid rgba(117, 141, 181, 0.2);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      padding: 28px;
-      position: relative;
-    }
-
-    .close {
-      position: absolute;
-      right: 18px;
-      top: 18px;
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      background: rgba(7, 16, 31, 0.56);
-      color: #d9e8f6;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .auth-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      background: rgba(6, 14, 28, 0.64);
-      border: 1px solid rgba(117, 141, 181, 0.12);
-      padding: 6px;
-      border-radius: 16px;
-      margin-bottom: 20px;
-    }
-
-    .auth-tab {
-      height: 42px;
-      border-radius: 12px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .auth-tab.active {
-      color: #f6fbff;
-      background: rgba(13, 24, 45, 0.98);
-    }
-
-    .modal h3 {
-      font-size: 30px;
-      line-height: 1.1;
-      letter-spacing: -0.04em;
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
-
-    .modal .intro {
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
-
-    .field-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    .field { margin-bottom: 14px; }
-
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #cedced;
-    }
-
-    .field input, .field select, .field textarea {
-      width: 100%;
-      min-height: 52px;
-      border-radius: 14px;
-      border: 1px solid rgba(117, 141, 181, 0.18);
-      background: rgba(7, 16, 31, 0.66);
-      color: white;
-      padding: 14px 16px;
-      font-size: 16px;
-      outline: none;
-      font-family: inherit;
-    }
-
-    .field textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .field input:focus, .field select:focus, .field textarea:focus {
-      border-color: rgba(26, 182, 255, 0.64);
-      box-shadow: 0 0 0 4px rgba(26, 182, 255, 0.08);
-    }
-
-    .check-row {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      margin: 10px 0 20px;
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .check-row input {
-      width: 18px;
-      height: 18px;
-      margin-top: 2px;
-      accent-color: #1eb6ff;
-      flex: 0 0 auto;
-    }
-
-    .linklike {
-      background: none;
-      border: none;
-      color: #29bbff;
-      cursor: pointer;
-      padding: 0;
-      font: inherit;
-    }
-
-    .submit-btn {
-      width: 100%;
-      height: 56px;
-      border-radius: 16px;
-      color: white;
-      font-size: 17px;
-      font-weight: 800;
-      background: linear-gradient(90deg, #1fafff 0%, #21ceb2 100%);
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 14px 34px rgba(18, 187, 214, 0.18);
-      font-family: inherit;
-    }
-
-    .auth-message {
-      display: none;
-      margin-bottom: 16px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-size: 14px;
-      line-height: 1.55;
-    }
-
-    .auth-message.error {
-      background: rgba(255, 75, 75, 0.12);
-      color: #ffb6b6;
-      border: 1px solid rgba(255, 87, 87, 0.22);
-    }
-
-    .auth-message.success {
-      background: rgba(31, 226, 176, 0.12);
-      color: #9cf6da;
-      border: 1px solid rgba(31, 226, 176, 0.22);
-    }
-
-    .auth-message.info {
-      background: rgba(59,130,246,0.12);
-      color: #b8d7ff;
-      border: 1px solid rgba(59,130,246,0.22);
-      display: block;
-    }
-
-    .legal-modal {
-      width: min(100%, 780px);
-      max-height: min(82vh, 900px);
-      overflow: auto;
-    }
-
-    .legal-modal h3 { margin-bottom: 18px; }
-    .legal-modal h4 {
-      font-size: 18px;
-      margin: 22px 0 10px;
-      color: #f3f8ff;
-    }
-    .legal-modal p, .legal-modal li {
-      color: var(--text-muted);
-      line-height: 1.75;
-      font-size: 15px;
-    }
-    .legal-modal ul { padding-left: 20px; }
-
-    .app-shell { padding: 30px 0 70px; }
-
-    .page-hero {
-      padding: 34px;
-      border-radius: 28px;
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      background: linear-gradient(180deg, rgba(12,22,44,0.92), rgba(10,18,36,0.96));
-      box-shadow: var(--glow);
-      margin-bottom: 24px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-bottom: 24px;
-    }
-
-    .mini-card {
-      padding: 24px;
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
-      border: 1px solid rgba(117, 141, 181, 0.16);
-    }
-
-    .mini-card h4 {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 10px;
-      letter-spacing: -0.03em;
-    }
-
-    .mini-card p {
-      color: var(--text-muted);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-
-    .app-layout {
-      display: grid;
-      grid-template-columns: 360px 1fr;
-      gap: 24px;
-      align-items: start;
-    }
-
-    .sidebar-card, .content-card { padding: 24px; }
-
-    .sidebar-card h3, .content-card h3, .section-title {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 14px;
-    }
-
-    .muted { color: var(--text-muted); line-height: 1.7; font-size: 14px; }
-
-    .content-grid { display: grid; gap: 24px; }
-
-    .row-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-
-    .row-head h2 {
-      font-size: clamp(28px, 3vw, 42px);
-      line-height: 1;
-      letter-spacing: -0.04em;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-
-    .price-box { text-align: right; min-width: 180px; }
-    .price-box .price {
-      font-size: clamp(30px, 4vw, 48px);
-      line-height: 0.95;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-    }
-
-    .price-box .change {
-      margin-top: 8px;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .price-box .change.pos { color: var(--success); }
-    .price-box .change.neg { color: var(--danger); }
-
-    .facts-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .fact-card {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(8, 16, 30, 0.56);
-      border: 1px solid rgba(117, 141, 181, 0.14);
-    }
-
-    .fact-card .label {
-      color: var(--text-soft);
-      font-size: 12px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .fact-card .value {
-      color: var(--text);
-      font-size: 17px;
-      font-weight: 800;
-      line-height: 1.35;
-      word-break: break-word;
-    }
-
-    .alert-list { display: grid; gap: 12px; }
-
-    .alert-item {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(8, 16, 30, 0.56);
-      border: 1px solid rgba(117, 141, 181, 0.14);
-    }
-
-    .alert-item strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 16px;
-    }
-
-    .alert-item p {
-      color: var(--text-muted);
-      line-height: 1.65;
-      font-size: 14px;
-    }
-
-    .toolbar-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .toolbar-field {
-      padding: 18px;
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
-      border: 1px solid rgba(117, 141, 181, 0.16);
-    }
-
-    .toolbar-field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 700;
-    }
-
-    .toolbar-field select, .toolbar-field input {
-      width: 100%;
-      height: 48px;
-      border-radius: 14px;
-      border: 1px solid rgba(117, 141, 181, 0.18);
-      background: rgba(7, 16, 31, 0.66);
-      color: white;
-      padding: 0 14px;
-      font-size: 15px;
-      outline: none;
-      font-family: inherit;
-    }
-
-    .chips {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
-
-    .chip {
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(117, 141, 181, 0.14);
-      background: rgba(8, 16, 30, 0.56);
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .content-split {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 24px;
-    }
-
-    .body-copy { color: var(--text-muted); line-height: 1.75; font-size: 15px; }
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .chart-card {
-      background: var(--panel);
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    }
-
-    .chart-header {
-      padding: 20px 20px 12px;
-      border-bottom: 1px solid rgba(117, 141, 181, 0.16);
-    }
-
-    .chart-title {
-      margin: 0 0 8px;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-
-    .chart-subtitle {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .controls {
-      padding: 20px;
-      border-bottom: 1px solid rgba(117, 141, 181, 0.16);
-      background: var(--panel-2);
-    }
-
-    .controls-grid {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .field-inline {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .field-inline label {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .field-inline input, .field-inline select {
-      width: 100%;
-      height: 42px;
-      border-radius: 10px;
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      background: var(--input-bg);
-      color: var(--text);
-      padding: 0 12px;
-      outline: none;
-      font-family: inherit;
-    }
-
-    .field-inline input:focus, .field-inline select:focus {
-      border-color: var(--accent);
-    }
-
-    .checkbox-row-inline {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      height: 42px;
-      padding: 0 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      background: var(--input-bg);
-      color: var(--text);
-    }
-
-    .checkbox-row-inline input {
-      width: 16px;
-      height: 16px;
-      margin: 0;
-    }
-
-    .actions { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
-
-    .chart-btn {
-      height: 42px;
-      padding: 0 18px;
-      border: 0;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 14px;
-      transition: 0.2s ease;
-      font-family: inherit;
-    }
-
-    .chart-btn-primary { background: var(--accent); color: white; }
-    .chart-btn-primary:hover { background: var(--accent-hover); }
-
-    .chart-btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid rgba(117, 141, 181, 0.16);
-    }
-
-    .chart-btn-secondary:hover { background: rgba(255, 255, 255, 0.04); }
-
-    .status {
-      margin-top: 12px;
-      font-size: 13px;
-      color: var(--success);
-      min-height: 18px;
-    }
-
-    .chart-wrap { padding: 20px; }
-    .chart-box {
-      width: 100%;
-      border: 1px solid rgba(117, 141, 181, 0.16);
-      border-radius: 14px;
-      overflow: hidden;
-      background: #000;
-    }
-
-    #tv-chart-container {
-      width: 100%;
-      height: 700px;
-    }
-
-    .info-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      padding: 0 20px 20px;
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-
-    .info-chip {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(117, 141, 181, 0.14);
-      border-radius: 999px;
-      padding: 8px 12px;
-    }
-
-    .notice {
-      padding: 16px 18px;
-      border-radius: 18px;
-      background: rgba(12, 20, 38, 0.72);
-      border: 1px solid rgba(117, 141, 181, 0.14);
-      color: var(--text-muted);
-      line-height: 1.7;
-      font-size: 14px;
-    }
-
-    .search-stack, .favorites-stack, .results-stack {
-      display: grid;
-      gap: 14px;
-    }
-
-    .search-box {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-    }
-
-    .search-result-card, .favorite-card {
-      padding: 16px;
-    }
-
-    .search-result-top, .favorite-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: flex-start;
-      margin-bottom: 10px;
-    }
-
-    .symbol-meta {
-      color: var(--text-muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .star-btn, .mini-btn, .danger-btn {
-      border: 1px solid rgba(117,141,181,0.18);
-      background: rgba(7,16,31,0.66);
-      color: white;
-      border-radius: 12px;
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: 700;
-    }
-
-    .star-btn {
-      min-width: 48px;
-      height: 44px;
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    .star-btn.active {
-      color: #ffd56b;
-      border-color: rgba(255,213,107,0.4);
-    }
-
-    .mini-btn, .danger-btn {
-      height: 42px;
-      padding: 0 14px;
-      font-size: 14px;
-    }
-
-    .danger-btn {
-      color: #ffb8c2;
-      border-color: rgba(255,124,145,0.25);
-    }
-
-    .inline-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .alert-builder {
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(117,141,181,0.14);
-      display: grid;
-      gap: 12px;
-    }
-
-    .alert-builder-row {
-      display: grid;
-      grid-template-columns: 1.2fr .8fr auto;
-      gap: 12px;
-    }
-
-    .pill-count {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 34px;
-      padding: 0 14px;
-      border-radius: 999px;
-      background: rgba(7,16,31,0.56);
-      border: 1px solid rgba(117,141,181,0.16);
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .inline-info {
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: rgba(12,20,38,0.72);
-      border: 1px solid rgba(117,141,181,0.14);
-      color: var(--text-muted);
-      line-height: 1.7;
-      font-size: 14px;
-    }
-
-    .search-empty {
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.7;
-      padding: 10px 0;
-    }
-
-    .opportunity-list { display: grid; gap: 12px; margin-top: 0; }
-    .opportunity-item {
-      width: 100%;
-      text-align: left;
-      padding: 16px;
-      border-radius: 18px;
-      border: 1px solid rgba(117, 141, 181, 0.14);
-      background: rgba(8, 16, 30, 0.56);
-      color: var(--text);
-      cursor: pointer;
-      transition: 180ms ease;
-      font-family: inherit;
-    }
-    .opportunity-item:hover, .opportunity-item.active {
-      border-color: rgba(26, 182, 255, 0.64);
-      box-shadow: 0 0 0 1px rgba(22,169,255,0.18), 0 12px 26px rgba(0,0,0,0.18);
-    }
-    .opportunity-item strong { display: block; font-size: 16px; margin-bottom: 8px; }
-    .opportunity-item span {
-      display: block;
-      color: var(--text-muted);
-      font-size: 13px;
-      line-height: 1.55;
     }
 
     .banner {
@@ -1177,20 +328,212 @@
     }
     .banner.show { display: block; }
 
-    .loader-card {
-      padding: 24px;
-      border-radius: 24px;
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(2, 7, 18, 0.72);
+      backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center;
+      padding: 24px; z-index: 160;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      width: min(100%, 560px);
+      background: linear-gradient(180deg, rgba(12,22,44,0.98), rgba(10,18,36,0.98));
+      border: 1px solid rgba(117, 141, 181, 0.2);
+      border-radius: 28px; box-shadow: var(--shadow); padding: 28px; position: relative;
+    }
+    .close {
+      position: absolute; right: 18px; top: 18px; width: 38px; height: 38px; border-radius: 12px;
+      border: 1px solid rgba(117, 141, 181, 0.16); background: rgba(7, 16, 31, 0.56); color: #d9e8f6;
+      font-size: 20px; cursor: pointer;
+    }
+
+    .auth-tabs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+      background: rgba(6, 14, 28, 0.64); border: 1px solid rgba(117, 141, 181, 0.12);
+      padding: 6px; border-radius: 16px; margin-bottom: 20px;
+    }
+    .auth-tab {
+      height: 42px; border-radius: 12px; border: none; background: transparent;
+      color: var(--text-muted); font-size: 15px; font-weight: 700; cursor: pointer;
+    }
+    .auth-tab.active { color: #f6fbff; background: rgba(13, 24, 45, 0.98); }
+    .modal h3 { font-size: 30px; font-weight: 900; margin-bottom: 10px; }
+    .modal .intro { font-size: 16px; line-height: 1.7; color: var(--text-muted); margin-bottom: 20px; }
+
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field { margin-bottom: 14px; }
+    .field label, .field-inline label {
+      display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #cedced;
+    }
+
+    .field input, .field select, .field textarea,
+    .toolbar-field select, .toolbar-field input,
+    .field-inline input, .field-inline select, .search-box input {
+      width: 100%; min-height: 50px; border-radius: 14px;
+      border: 1px solid rgba(117, 141, 181, 0.18); background: rgba(7, 16, 31, 0.66);
+      color: white; padding: 12px 14px; font-size: 15px; outline: none; font-family: inherit;
+    }
+
+    .field input:focus, .field select:focus, .field textarea:focus,
+    .toolbar-field select:focus, .toolbar-field input:focus,
+    .field-inline input:focus, .field-inline select:focus, .search-box input:focus {
+      border-color: rgba(26, 182, 255, 0.64);
+      box-shadow: 0 0 0 4px rgba(26, 182, 255, 0.08);
+    }
+
+    .check-row {
+      display: flex; gap: 12px; align-items: flex-start; margin: 10px 0 20px;
+      color: var(--text-muted); font-size: 14px; line-height: 1.6;
+    }
+    .check-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: #1eb6ff; }
+
+    .auth-message {
+      display: none; margin-bottom: 16px; padding: 12px 14px; border-radius: 14px; font-size: 14px; line-height: 1.55;
+    }
+    .auth-message.error { background: rgba(255,75,75,0.12); color: #ffb6b6; border: 1px solid rgba(255,87,87,0.22); }
+    .auth-message.success { background: rgba(31,226,176,0.12); color: #9cf6da; border: 1px solid rgba(31,226,176,0.22); }
+    .auth-message.info { background: rgba(59,130,246,0.12); color: #b8d7ff; border: 1px solid rgba(59,130,246,0.22); display: block; }
+
+    .linklike {
+      background: none; border: none; color: #29bbff; cursor: pointer; padding: 0; font: inherit;
+    }
+
+    .app-shell { padding: 30px 0 70px; }
+    .page-hero {
+      padding: 34px; border-radius: 28px; border: 1px solid rgba(117, 141, 181, 0.16);
+      background: linear-gradient(180deg, rgba(12,22,44,0.92), rgba(10,18,36,0.96));
+      box-shadow: var(--glow); margin-bottom: 24px;
+    }
+
+    .mini-card { padding: 24px; }
+    .mini-card h4 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .mini-card p, .body-copy, .muted, .notice, .inline-info { color: var(--text-muted); line-height: 1.7; }
+
+    .app-layout {
+      display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start;
+    }
+    .sidebar-card, .content-card, .subscribe-card { padding: 24px; }
+    .sidebar-card h3, .content-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 14px; }
+
+    .content-grid { display: grid; gap: 24px; }
+    .row-head {
+      display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 24px;
+    }
+    .row-head h2 { font-size: clamp(28px, 3vw, 42px); line-height: 1; font-weight: 900; margin-bottom: 8px; }
+
+    .price-box { text-align: right; min-width: 180px; }
+    .price-box .price { font-size: clamp(30px, 4vw, 48px); line-height: 0.95; font-weight: 900; }
+    .price-box .change { margin-top: 8px; font-size: 15px; font-weight: 800; }
+    .price-box .change.pos { color: var(--success); }
+    .price-box .change.neg { color: var(--danger); }
+
+    .fact-card {
+      padding: 18px; border-radius: 18px; background: rgba(8, 16, 30, 0.56);
+      border: 1px solid rgba(117, 141, 181, 0.14);
+    }
+    .fact-card .label {
+      color: var(--text-soft); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .fact-card .value {
+      color: var(--text); font-size: 17px; font-weight: 800; line-height: 1.35; word-break: break-word;
+    }
+
+    .toolbar-field {
+      padding: 18px; border-radius: 24px;
       background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
       border: 1px solid rgba(117, 141, 181, 0.16);
-      color: var(--text-muted);
-      line-height: 1.8;
-      font-size: 15px;
+    }
+    .toolbar-field label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); font-weight: 700; }
+
+    .chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .chip {
+      padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(117, 141, 181, 0.14);
+      background: rgba(8, 16, 30, 0.56); color: var(--text-muted); font-size: 13px; font-weight: 700;
+    }
+
+    .content-split { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; }
+
+    .chart-card { overflow: hidden; }
+    .chart-header { padding: 20px 20px 12px; border-bottom: 1px solid rgba(117, 141, 181, 0.16); }
+    .chart-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .chart-subtitle { color: var(--text-muted); font-size: 14px; line-height: 1.5; }
+    .chart-wrap { padding: 20px; }
+    .chart-box {
+      width: 100%; border: 1px solid rgba(117, 141, 181, 0.16); border-radius: 14px;
+      overflow: hidden; background: #000;
+    }
+    .tv-container { width: 100%; height: 640px; }
+
+    .search-stack, .favorites-stack, .results-stack, .alert-list, .opportunity-list {
+      display: grid; gap: 14px;
+    }
+
+    .search-box { display: grid; grid-template-columns: 1fr auto; gap: 12px; }
+    .search-result-card, .favorite-card { padding: 16px; }
+    .search-result-top, .favorite-top {
+      display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; margin-bottom: 10px;
+    }
+    .symbol-meta { color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+
+    .star-btn, .mini-btn, .danger-btn {
+      border: 1px solid rgba(117,141,181,0.18); background: rgba(7,16,31,0.66); color: white;
+      border-radius: 12px; cursor: pointer; font-family: inherit; font-weight: 700;
+    }
+    .star-btn { min-width: 48px; height: 44px; font-size: 20px; }
+    .star-btn.active { color: #ffd56b; border-color: rgba(255,213,107,0.4); }
+    .mini-btn, .danger-btn { min-height: 42px; padding: 0 14px; font-size: 14px; }
+    .danger-btn { color: #ffb8c2; border-color: rgba(255,124,145,0.25); }
+    .inline-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .alert-builder {
+      margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(117,141,181,0.14);
+      display: grid; gap: 12px;
+    }
+    .alert-builder-row { display: grid; grid-template-columns: 1.2fr .8fr auto; gap: 12px; }
+
+    .pill-count {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 34px;
+      padding: 0 14px; border-radius: 999px; background: rgba(7,16,31,0.56);
+      border: 1px solid rgba(117,141,181,0.16); color: var(--text-muted); font-size: 13px; font-weight: 700;
+    }
+
+    .search-empty {
+      color: var(--text-muted); font-size: 14px; line-height: 1.7; padding: 10px 0;
+    }
+
+    .opportunity-item {
+      width: 100%; text-align: left; padding: 16px; border-radius: 18px;
+      border: 1px solid rgba(117, 141, 181, 0.14); background: rgba(8, 16, 30, 0.56);
+      color: var(--text); cursor: pointer; transition: 180ms ease; font-family: inherit;
+    }
+    .opportunity-item:hover, .opportunity-item.active {
+      border-color: rgba(26, 182, 255, 0.64);
+      box-shadow: 0 0 0 1px rgba(22,169,255,0.18), 0 12px 26px rgba(0,0,0,0.18);
+    }
+    .opportunity-item strong { display: block; font-size: 16px; margin-bottom: 8px; }
+    .opportunity-item span { display: block; color: var(--text-muted); font-size: 13px; line-height: 1.55; }
+
+    .subscribe-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .notice {
+      padding: 16px 18px; border-radius: 18px; background: rgba(12, 20, 38, 0.72);
+      border: 1px solid rgba(117, 141, 181, 0.14); font-size: 14px;
+    }
+
+    .status-line {
+      font-size: 13px;
+      color: var(--success);
+      min-height: 18px;
+      margin-top: 10px;
     }
 
     @media (max-width: 1180px) {
-      .app-layout, .content-split { grid-template-columns: 1fr; }
+      .app-layout, .content-split, .subscribe-grid { grid-template-columns: 1fr; }
       .facts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .controls-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
     @media (max-width: 820px) {
@@ -1198,17 +541,14 @@
       .feature-grid, .pricing-grid, .field-grid, .stats-grid, .grid-3, .toolbar-grid, .facts-grid {
         grid-template-columns: 1fr;
       }
-      .compare-box { padding: 18px 18px 10px; border-radius: 22px; }
-      .compare-head, .compare-row { grid-template-columns: 1.5fr 0.5fr 0.5fr; gap: 10px; }
-      .compare-row { min-height: 54px; font-size: 14px; }
-      .compare-cell { font-size: 16px; }
       .hero { min-height: auto; padding: 54px 0 68px; }
       .hero h1, .page-hero h1 { font-size: clamp(38px, 10vw, 56px); }
       .hero-copy, .page-hero-copy { font-size: 16px; }
       .hero-actions, .nav-actions { width: 100%; }
       .hero-actions .btn, .btn-hero-primary, .btn-hero-secondary { width: 100%; }
-      .controls-grid, .alert-builder-row, .search-box { grid-template-columns: 1fr; }
-      #tv-chart-container { height: 560px; }
+      .search-box, .alert-builder-row { grid-template-columns: 1fr; }
+      .tv-container { height: 500px; }
+      .app-layout { grid-template-columns: 1fr; }
       .price { font-size: 52px; }
     }
   </style>
@@ -1219,6 +559,10 @@
       <div class="brand" onclick="goToRoute('/')">
         <span class="brand-mark"></span>
         <span class="brand-text">AnlageKompass</span>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn btn-top-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Idee</button>
       </div>
 
       <div class="nav-actions" id="navLoggedOut">
@@ -1243,12 +587,12 @@
         <div class="hero-pill">⚡ Tagesaktuelle Investment-Ideen</div>
         <h1>Mehr Chancen.<br>Mehr Ideen.<br>Mehr Orientierung.</h1>
         <p class="hero-copy">
-          Erhalte täglich neue datenbasierte Investment-Ideen für Aktien, ETFs und Krypto –
-          passend zu deinem Risikoprofil, verständlich erklärt.
+          Erhalte datenbasierte Investment-Ideen für Aktien, ETFs und Krypto – verständlich erklärt,
+          sauber strukturiert und direkt mit Chartansicht.
         </p>
         <div class="hero-actions">
           <button class="btn btn-hero-primary" type="button" onclick="openAuthModal('register')">Kostenlos starten →</button>
-          <button class="btn btn-hero-secondary" type="button" onclick="openAuthModal('login')">Anmelden</button>
+          <button class="btn btn-hero-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Dienstags-Idee</button>
         </div>
       </div>
     </section>
@@ -1263,92 +607,43 @@
           <article class="feature-card">
             <span class="emoji">💡</span>
             <h3>Konkrete Investment-Ideen</h3>
-            <p>Keine vagen Tipps – jede Idee kommt mit Ticker, Preis, Begründung und Risikoeinschätzung.</p>
+            <p>Keine vagen Tipps – jede Idee kommt mit Symbol, Preis, Begründung, Risiko und Chart.</p>
           </article>
           <article class="feature-card">
             <span class="emoji">⚡</span>
             <h3>Tagesaktuelle Chancen</h3>
-            <p>Der Chancen-Feed zeigt dir täglich aktualisierte Marktchancen – kompakt, verständlich und schnell erfassbar.</p>
+            <p>Der Chancen-Feed zeigt dir regelmäßig aktualisierte Marktchancen – kompakt und verständlich.</p>
           </article>
           <article class="feature-card">
-            <span class="emoji">📬</span>
-            <h3>Kursregeln & Hinweise</h3>
-            <p>Lege Preisregeln fest und erhalte im Browser Benachrichtigungen, sobald eine Regel ausgelöst wird.</p>
-          </article>
-          <article class="feature-card">
-            <span class="emoji">🧭</span>
-            <h3>Verständliche Sprache</h3>
-            <p>Kein unnötiger Börsenjargon. Jede Idee wird so erklärt, dass Nutzer direkt verstehen, worum es geht.</p>
+            <span class="emoji">📈</span>
+            <h3>Direkte Chartansicht</h3>
+            <p>Jede Premium-Chance und jede Watchlist-Aktie lässt sich sofort mit TradingView öffnen.</p>
           </article>
           <article class="feature-card">
             <span class="emoji">🏷️</span>
-            <h3>Watchlist &amp; Favoriten</h3>
-            <p>Speichere bis zu 30 Werte, öffne direkt den Chart und hinterlege individuelle Kursregeln.</p>
+            <h3>Watchlist &amp; Alerts</h3>
+            <p>Speichere Werte, öffne sie direkt im Chart und hinterlege individuelle Kursregeln.</p>
           </article>
           <article class="feature-card">
-            <span class="emoji">🔎</span>
-            <h3>Aktiensuche</h3>
-            <p>Suche schnell nach Unternehmen und Symbolen und füge relevante Titel direkt zur Watchlist hinzu.</p>
+            <span class="emoji">🗓️</span>
+            <h3>Jeden Dienstag eine Gratis-Idee</h3>
+            <p>Eine kostenlose Premium-Idee bleibt öffentlich sichtbar – ideal für neue Interessenten.</p>
+          </article>
+          <article class="feature-card">
+            <span class="emoji">📬</span>
+            <h3>E-Mail-Erinnerung</h3>
+            <p>Besucher können sich an die wöchentliche Gratis-Idee erinnern lassen – serverseitig gesteuert.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section compare-wrap">
-      <div class="container">
-        <div class="section-head">
-          <h2>Was Free kann – und was Plus zusätzlich bringt</h2>
-          <p>Free ist ein guter Einstieg. Plus ist die Version für intensive Nutzung.</p>
-        </div>
-
-        <div class="compare-box">
-          <div class="compare-head">
-            <div></div>
-            <div style="text-align:center">Free</div>
-            <div style="text-align:center">Plus</div>
-          </div>
-
-          <div class="compare-row">
-            <div class="compare-feature">2–3 Ideen pro Analyse</div>
-            <div class="compare-cell yes">✓</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">5–10 Ideen pro Analyse</div>
-            <div class="compare-cell">–</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Dauerhaft kostenlos nutzbar</div>
-            <div class="compare-cell yes">✓</div>
-            <div class="compare-cell">–</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Chancen-Feed</div>
-            <div class="compare-cell yes">✓</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Watchlist &amp; Alerts</div>
-            <div class="compare-cell yes">✓</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-          <div class="compare-row">
-            <div class="compare-feature">Mehr Ideen &amp; Orientierung</div>
-            <div class="compare-cell">–</div>
-            <div class="compare-cell yes">✓</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section pricing-wrap" id="preise">
+    <section class="section">
       <div class="container">
         <div class="section-head">
           <h2>Preise</h2>
-          <p>Starte kostenlos und erweitere später serverseitig den Zahlungsflow.</p>
+          <p>Free ist der Einstieg. Premium zeigt dir alle Chancen im Detail.</p>
         </div>
-
         <div class="pricing-grid">
           <article class="price-card">
             <div class="plan-name">Free</div>
@@ -1357,27 +652,26 @@
               <div class="per">/ Monat</div>
             </div>
             <ul class="feature-list">
-              <li class="available"><span class="tick">✓</span><strong>Basis-Zugang</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Watchlist bis 30 Favoriten</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Kursregeln speichern</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Premium-Chancen ansehen</strong></li>
-              <li><span class="minus">–</span>Serverseitiger Billing-Flow</li>
+              <li><span class="tick">✓</span>Öffentliche Dienstags-Idee</li>
+              <li><span class="tick">✓</span>Watchlist bis 30 Favoriten</li>
+              <li><span class="tick">✓</span>Kursregeln speichern</li>
+              <li><span class="tick">✓</span>Registrierung & Login</li>
             </ul>
             <button class="btn btn-card-secondary" type="button" onclick="openAuthModal('register')">Kostenlos starten</button>
           </article>
 
           <article class="price-card plus">
-            <div class="recommend">⭐ Später erweiterbar</div>
+            <div class="recommend">⭐ Premium</div>
             <div class="plan-name">AnlageKompass Plus</div>
             <div class="price-line">
               <div class="price">9,99€</div>
               <div class="per">/ Monat</div>
             </div>
             <ul class="feature-list">
-              <li class="available"><span class="tick">✓</span><strong>Billing vorbereitbar</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Stripe serverseitig anschließbar</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Klares Upgrade-Popup</strong></li>
-              <li class="available"><span class="tick">✓</span><strong>Keine leeren Klicks mehr</strong></li>
+              <li><span class="tick">✓</span>Alle Premium-Chancen</li>
+              <li><span class="tick">✓</span>Detailansicht je Chance</li>
+              <li><span class="tick">✓</span>Direkter Chart pro Chance</li>
+              <li><span class="tick">✓</span>Später Stripe serverseitig anschließbar</li>
             </ul>
             <button class="btn btn-card-primary" type="button" onclick="openPremiumModal()">Plus freischalten</button>
           </article>
@@ -1398,30 +692,29 @@
         <div class="kicker">📌 Watchlist & Alerts</div>
         <h1>Beobachte Aktien, lege Kursregeln fest und öffne direkt den Chart</h1>
         <p class="page-hero-copy">
-          Suche nach Aktien, füge interessante Werte per Stern zu deinen Favoriten hinzu,
-          verwalte bis zu 30 Titel und hinterlege Benachrichtigungsregeln für Preisbewegungen.
+          Suche nach Aktien, füge Werte zur Watchlist hinzu und öffne den Chart ohne Umweg.
         </p>
       </section>
 
       <section class="stats-grid">
         <article class="mini-card">
-          <h4>Aktien suchen</h4>
-          <p>Finde Unternehmen schnell über Namen oder Symbol und übernimm passende Werte direkt in deine Watchlist.</p>
+          <h4>Aktiensuche</h4>
+          <p>Finde Unternehmen über Namen oder Symbol und übernimm sie direkt in die Watchlist.</p>
         </article>
         <article class="mini-card">
-          <h4>Favoriten speichern</h4>
-          <p>Speichere bis zu 30 Aktien gleichzeitig und öffne Details oder den Chart mit einem Klick.</p>
+          <h4>Favoriten</h4>
+          <p>Speichere bis zu 30 Titel gleichzeitig und springe direkt in die Detailansicht.</p>
         </article>
         <article class="mini-card">
-          <h4>Kursregeln definieren</h4>
-          <p>Lege pro Favorit Regeln für Preisziele oder prozentuale Bewegungen fest.</p>
+          <h4>Kursregeln</h4>
+          <p>Lege Preis- oder Prozent-Regeln an und erhalte Browser-Benachrichtigungen.</p>
         </article>
       </section>
 
       <section class="app-layout">
         <aside class="sidebar-card">
           <h3>Aktiensuche</h3>
-          <p class="muted">Suche nach Symbol oder Unternehmensname. Beispiel: Apple, Microsoft, NVDA, ASML</p>
+          <p class="muted">Beispiele: Apple, Microsoft, NVDA, ASML</p>
 
           <div class="search-stack">
             <div class="search-box">
@@ -1430,8 +723,7 @@
             </div>
 
             <div class="inline-info">
-              Finnhub API ist eingebunden. Falls ein Markt-Symbol nicht perfekt gefunden wird,
-              kannst du den Eintrag trotzdem auswählen und im Chart später feinjustieren.
+              Falls Finnhub einen Titel nicht exakt findet, kannst du das Symbol im Chart jederzeit anpassen.
             </div>
 
             <div class="results-stack" id="searchResults">
@@ -1465,7 +757,7 @@
             <div class="row-head" style="margin-bottom: 18px;">
               <div>
                 <h3>Meine Favoriten</h3>
-                <p class="muted">Verwalte deine gespeicherten Werte. Maximal 30 Favoriten gleichzeitig.</p>
+                <p class="muted">Maximal 30 Favoriten gleichzeitig.</p>
               </div>
               <div class="pill-count" id="favoritesCountPill">0 / 30 Favoriten</div>
             </div>
@@ -1478,16 +770,15 @@
             <div class="row-head" style="margin-bottom: 18px;">
               <div>
                 <h3>Aktive Kursregeln</h3>
-                <p class="muted">Die Regeln bleiben im Browser erhalten und können Benachrichtigungen auslösen.</p>
+                <p class="muted">Die Regeln bleiben lokal im Browser gespeichert.</p>
               </div>
               <div class="inline-actions">
                 <button class="mini-btn" type="button" onclick="enableBrowserNotifications()">Benachrichtigungen aktivieren</button>
               </div>
             </div>
             <div class="alert-list" id="watchAlertList">
-              <div class="alert-item">
-                <strong>Noch keine Kursregeln</strong>
-                <p>Wähle zuerst einen Favoriten aus und speichere danach Regeln für Preisziele oder prozentuale Bewegungen.</p>
+              <div class="fact-card">
+                <div class="value">Noch keine Kursregeln gespeichert.</div>
               </div>
             </div>
           </section>
@@ -1495,131 +786,12 @@
           <section class="chart-card">
             <div class="chart-header">
               <h2 class="chart-title">Aktienchart</h2>
-              <p class="chart-subtitle">
-                Interaktiver TradingView-Chart mit Symbol, Intervall, Theme, Sprache, Zeitzone und Höhe.
-              </p>
+              <p class="chart-subtitle">Interaktiver TradingView-Chart für deine Watchlist-Aktie.</p>
             </div>
-
-            <div class="controls">
-              <div class="controls-grid">
-                <div class="field-inline">
-                  <label for="symbol">Symbol</label>
-                  <input id="symbol" type="text" value="NASDAQ:AAPL" placeholder="z. B. NASDAQ:AAPL" />
-                </div>
-
-                <div class="field-inline">
-                  <label for="interval">Intervall</label>
-                  <select id="interval">
-                    <option value="1">1 Minute</option>
-                    <option value="5">5 Minuten</option>
-                    <option value="15">15 Minuten</option>
-                    <option value="30">30 Minuten</option>
-                    <option value="60">1 Stunde</option>
-                    <option value="120">2 Stunden</option>
-                    <option value="240">4 Stunden</option>
-                    <option value="D" selected>1 Tag</option>
-                    <option value="W">1 Woche</option>
-                    <option value="M">1 Monat</option>
-                  </select>
-                </div>
-
-                <div class="field-inline">
-                  <label for="theme">Theme</label>
-                  <select id="theme">
-                    <option value="dark" selected>Dunkel</option>
-                    <option value="light">Hell</option>
-                  </select>
-                </div>
-
-                <div class="field-inline">
-                  <label for="locale">Sprache</label>
-                  <select id="locale">
-                    <option value="de_DE" selected>Deutsch</option>
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                    <option value="es">Español</option>
-                    <option value="it">Italiano</option>
-                  </select>
-                </div>
-
-                <div class="field-inline">
-                  <label for="timezone">Zeitzone</label>
-                  <select id="timezone">
-                    <option value="Europe/Berlin" selected>Europe/Berlin</option>
-                    <option value="Etc/UTC">UTC</option>
-                    <option value="America/New_York">America/New_York</option>
-                    <option value="America/Chicago">America/Chicago</option>
-                    <option value="America/Los_Angeles">America/Los_Angeles</option>
-                    <option value="Asia/Tokyo">Asia/Tokyo</option>
-                  </select>
-                </div>
-
-                <div class="field-inline">
-                  <label for="height">Höhe in px</label>
-                  <input id="height" type="number" value="700" min="350" max="1400" step="10" />
-                </div>
-
-                <div class="field-inline">
-                  <label>Symbolwechsel im Widget</label>
-                  <div class="checkbox-row-inline">
-                    <input id="allowSymbolChange" type="checkbox" checked />
-                    <span>Aktiv</span>
-                  </div>
-                </div>
-
-                <div class="field-inline">
-                  <label for="style">Chart-Stil</label>
-                  <select id="style">
-                    <option value="1" selected>Candles</option>
-                    <option value="0">Bars</option>
-                    <option value="2">Line</option>
-                    <option value="3">Area</option>
-                  </select>
-                </div>
-
-                <div class="field-inline">
-                  <label for="toolbarBg">Toolbar-Farbe</label>
-                  <select id="toolbarBg">
-                    <option value="#0f1115" selected>Dunkel</option>
-                    <option value="#ffffff">Hell</option>
-                    <option value="#171a21">Anthrazit</option>
-                  </select>
-                </div>
-
-                <div class="field-inline">
-                  <label for="withdateranges">Datumsbereiche</label>
-                  <div class="checkbox-row-inline">
-                    <input id="withdateranges" type="checkbox" checked />
-                    <span>Anzeigen</span>
-                  </div>
-                </div>
-
-                <div class="field-inline">
-                  <label for="hidelegend">Legende ausblenden</label>
-                  <div class="checkbox-row-inline">
-                    <input id="hidelegend" type="checkbox" />
-                    <span>Aktiv</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="actions">
-                <button class="chart-btn chart-btn-primary" id="applyBtn">Chart aktualisieren</button>
-                <button class="chart-btn chart-btn-secondary" id="resetBtn">Zurücksetzen</button>
-              </div>
-
-              <div class="status" id="statusText"></div>
-            </div>
-
             <div class="chart-wrap">
               <div class="chart-box">
-                <div id="tv-chart-container"></div>
+                <div id="tv-chart-watchlist" class="tv-container"></div>
               </div>
-            </div>
-
-            <div class="info-bar">
-              <div class="info-chip" id="infoSymbolChip">Standard-Symbol: NASDAQ:AAPL</div>
-              <div class="info-chip">Beispiele: NASDAQ:AAPL, NASDAQ:MSFT, NASDAQ:NVDA, NYSE:KO</div>
             </div>
           </section>
         </div>
@@ -1630,12 +802,12 @@
   <main id="view-premium" class="page-view">
     <div class="container app-shell">
       <section class="page-hero">
-        <div class="kicker">⭐ Chancen & Detailansicht</div>
+        <div class="kicker">⭐ Premium Chancen</div>
         <div class="row-head">
           <div>
             <h1 id="premiumHeroTitle">Chance wird geladen …</h1>
             <p class="page-hero-copy" id="premiumHeroCopy">
-              Tägliche Chancen mit Kurzüberblick, Einordnung, Risiken und möglicher Alternative.
+              Tägliche Chancen mit Kurzüberblick, Einordnung, Risiken und direkter Chartansicht.
             </p>
             <div class="chips" id="premiumHeroChips"></div>
           </div>
@@ -1659,7 +831,8 @@
 
       <section class="app-layout">
         <aside class="sidebar-card">
-          <h3>Chancen der letzten 5 Tage</h3>
+          <h3>Chancen der letzten Tage</h3>
+          <p class="muted">Hier werden die letzten Opportunity-Gruppen angezeigt.</p>
           <div class="opportunity-list" id="opportunityList">
             <div class="search-empty">Chancen werden geladen …</div>
           </div>
@@ -1675,7 +848,6 @@
                 <h3 style="margin-top:24px;">Warum könnte das gerade interessant sein?</h3>
                 <p class="body-copy" id="premiumWhyText"></p>
               </div>
-
               <div>
                 <div class="facts-grid" id="premiumFactsGrid"></div>
               </div>
@@ -1699,6 +871,18 @@
             </div>
           </section>
 
+          <section class="chart-card">
+            <div class="chart-header">
+              <h2 class="chart-title">Chart zur Premium-Chance</h2>
+              <p class="chart-subtitle">Die aktuell ausgewählte Premium-Chance wird hier direkt visualisiert.</p>
+            </div>
+            <div class="chart-wrap">
+              <div class="chart-box">
+                <div id="tv-chart-premium" class="tv-container"></div>
+              </div>
+            </div>
+          </section>
+
           <section class="content-card">
             <div class="notice">
               Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen,
@@ -1711,9 +895,101 @@
     </div>
   </main>
 
+  <main id="view-public-idea" class="page-view">
+    <div class="container app-shell">
+      <section class="page-hero">
+        <div class="kicker">🎁 Kostenlose Dienstags-Idee</div>
+        <div class="row-head">
+          <div>
+            <h1 id="publicHeroTitle">Kostenlose Idee wird geladen …</h1>
+            <p class="page-hero-copy" id="publicHeroCopy">
+              Jeden Dienstag veröffentlichen wir hier eine kostenlose Premium-Idee.
+            </p>
+            <div class="chips" id="publicHeroChips"></div>
+          </div>
+          <div class="price-box">
+            <div class="price" id="publicHeroPrice">—</div>
+            <div class="change" id="publicHeroChange">—</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="subscribe-grid">
+        <section class="subscribe-card">
+          <h3>Diese Woche kostenlos sichtbar</h3>
+          <p class="muted" style="margin-bottom:18px;">
+            Die öffentliche Seite zeigt die beste Idee aus deiner neuesten Dienstags-Veröffentlichung.
+            Falls für Dienstag noch keine Gruppe vorhanden ist, wird ersatzweise die beste Idee aus dem neuesten Tag verwendet.
+          </p>
+
+          <div class="content-split">
+            <div>
+              <h3>Was macht die Aktie?</h3>
+              <p class="body-copy" id="publicAboutText"></p>
+
+              <h3 style="margin-top:24px;">Warum könnte das gerade interessant sein?</h3>
+              <p class="body-copy" id="publicWhyText"></p>
+            </div>
+            <div>
+              <div class="facts-grid" id="publicFactsGrid"></div>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-top:24px;">
+            <article class="mini-card">
+              <h4>Chancen</h4>
+              <p id="publicChanceText"></p>
+            </article>
+            <article class="mini-card">
+              <h4>Risiken</h4>
+              <p id="publicRiskText"></p>
+            </article>
+            <article class="mini-card">
+              <h4>Alternative Idee</h4>
+              <p id="publicAlternativeText"></p>
+            </article>
+          </div>
+        </section>
+
+        <aside class="subscribe-card">
+          <h3>Am Dienstag erinnern lassen</h3>
+          <p class="muted" style="margin-bottom:18px;">
+            Trage deine E-Mail ein. Sobald die kostenlose Dienstags-Idee veröffentlicht wurde,
+            kann dein serverseitiger Job am Dienstag eine Erinnerungs-Mail mit Link zu dieser Seite versenden.
+          </p>
+
+          <div class="field">
+            <label for="freeIdeaReminderEmail">E-Mail-Adresse</label>
+            <input id="freeIdeaReminderEmail" type="email" placeholder="deine@email.de" />
+          </div>
+
+          <button class="submit-btn" type="button" onclick="subscribeFreeIdeaReminder()">Dienstags erinnern</button>
+          <div class="status-line" id="freeIdeaReminderStatus"></div>
+
+          <div class="notice" style="margin-top:18px;">
+            Diese Seite ist bewusst ohne Login erreichbar. Sie soll Interessenten jede Woche zur Website zurückholen.
+          </div>
+        </aside>
+      </section>
+
+      <section class="chart-card" style="margin-top:24px;">
+        <div class="chart-header">
+          <h2 class="chart-title">Chart zur kostenlosen Idee</h2>
+          <p class="chart-subtitle">Die öffentliche Gratis-Idee wird hier genau wie im Premium-Bereich dargestellt.</p>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-box">
+            <div id="tv-chart-public" class="tv-container"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
   <div class="modal-overlay" id="authModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
       <button class="close" type="button" aria-label="Schließen" onclick="closeAuthModal()">×</button>
+
       <div class="auth-tabs">
         <button class="auth-tab active" id="tabLogin" type="button" onclick="switchAuth('login')">Anmelden</button>
         <button class="auth-tab" id="tabRegister" type="button" onclick="switchAuth('register')">Registrieren</button>
@@ -1725,7 +1001,7 @@
 
       <section id="panelLogin">
         <h3 id="authTitle">Willkommen zurück</h3>
-        <p class="intro">Melde dich an, um Watchlist und Chancen zu sehen.</p>
+        <p class="intro">Melde dich an, um Watchlist und Premium-Chancen zu sehen.</p>
         <div class="field">
           <label for="loginEmail">E-Mail</label>
           <input id="loginEmail" type="email" placeholder="deine@email.de" autocomplete="email">
@@ -1739,29 +1015,34 @@
 
       <section id="panelRegister" class="hidden">
         <h3>Konto erstellen</h3>
-        <p class="intro">Nach dem Registrieren erhältst du einen Bestätigungslink per E-Mail. Erst danach wird das Konto aktiv genutzt.</p>
+        <p class="intro">Nach dem Registrieren erhältst du einen Bestätigungslink per E-Mail.</p>
+
         <div class="field-grid">
           <div class="field">
             <label for="registerFirstName">Vorname</label>
-            <input id="registerFirstName" type="text" placeholder="Max" autocomplete="given-name">
+            <input id="registerFirstName" type="text" placeholder="Max">
           </div>
           <div class="field">
             <label for="registerLastName">Nachname</label>
-            <input id="registerLastName" type="text" placeholder="Mustermann" autocomplete="family-name">
+            <input id="registerLastName" type="text" placeholder="Mustermann">
           </div>
         </div>
+
         <div class="field">
           <label for="registerEmail">E-Mail</label>
-          <input id="registerEmail" type="email" placeholder="deine@email.de" autocomplete="email">
+          <input id="registerEmail" type="email" placeholder="deine@email.de">
         </div>
+
         <div class="field">
           <label for="registerPassword">Passwort</label>
-          <input id="registerPassword" type="password" placeholder="Mindestens 6 Zeichen" autocomplete="new-password">
+          <input id="registerPassword" type="password" placeholder="Mindestens 6 Zeichen">
         </div>
+
         <label class="check-row">
           <input id="registerTerms" type="checkbox">
-          <span>Ich bestätige die <button class="linklike" type="button" onclick="openLegalModal('agb')">AGB</button> und habe die <button class="linklike" type="button" onclick="openLegalModal('datenschutz')">Datenschutzhinweise</button> gelesen.</span>
+          <span>Ich bestätige die AGB und Datenschutzhinweise.</span>
         </label>
+
         <button class="submit-btn" id="registerBtn" type="button" onclick="handleRegister()">Konto erstellen</button>
         <div style="margin-top:12px;">
           <button class="linklike" type="button" onclick="resendConfirmation()">Bestätigungs-Mail erneut senden</button>
@@ -1775,34 +1056,46 @@
       <button class="close" type="button" aria-label="Schließen" onclick="closePremiumModal()">×</button>
       <h3 id="premiumTitle">AnlageKompass Plus</h3>
       <p class="intro">
-        Der bisherige Klick wirkte leer, weil dort noch kein echter Zahlungsflow hinterlegt war.
-        Diese Version zeigt jetzt bewusst eine klare Zwischenstufe.
+        Der Premium-Bereich ist UI-seitig vorbereitet. Den echten Zahlungsflow kannst du später serverseitig mit Stripe ergänzen.
       </p>
       <ul class="feature-list" style="margin-top:8px; margin-bottom:22px;">
-        <li class="available"><span class="tick">✓</span><strong>UI für Upgrade vorbereitet</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>Kein verwirrender Doppelklick mehr</strong></li>
-        <li class="available"><span class="tick">✓</span><strong>Serverseitiger Stripe-Checkout später anschließbar</strong></li>
+        <li><span class="tick">✓</span>Premium-Chancen mit Detailansicht</li>
+        <li><span class="tick">✓</span>Chart pro Chance</li>
+        <li><span class="tick">✓</span>Serverseitiger Billing-Flow später anschließbar</li>
       </ul>
-      <div class="inline-actions" style="margin-top:12px;">
+      <div class="inline-actions">
         <button class="submit-btn" type="button" onclick="handlePremiumInterest()">Verstanden</button>
       </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="legalModal" aria-hidden="true">
-    <div class="modal legal-modal" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
-      <button class="close" type="button" aria-label="Schließen" onclick="closeLegalModal()">×</button>
-      <h3 id="legalTitle">Rechtliche Hinweise</h3>
-      <div id="legalContent"></div>
     </div>
   </div>
 
   <script>
     const CONFIG = {
       supabaseUrl: 'https://wksfnfhlnynrkqzjcqxb.supabase.co',
-      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indrc2ZuZmhsbnlucmtxempjcXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyNjQ1MjcsImV4cCI6MjA4OTg0MDUyN30.hs-9YKdo-vjzR9EIxYzCqalDc90CiRhcH6ALOvd_WXs',
-      finnhubApiKey: 'd13dvc9r01qs7glh0ijgd13dvc9r01qs7glh0ik0',
-      opportunitiesTables: ['opportunities', 'Opportunities', 'opportunitis', 'Opportunitis']
+      supabaseAnonKey: 'DEIN_SUPABASE_ANON_KEY',
+      finnhubApiKey: 'DEIN_FINNHUB_KEY',
+      opportunitiesTable: 'opportunities',
+      profilesTable: 'profiles',
+      freeIdeaReminderFunctionUrl: 'https://wksfnfhlnynrkqzjcqxb.supabase.co/functions/v1/free-idea-reminder-subscribe'
+    };
+
+    const ALERT_TEMPLATES = [
+      { value: "drop_pct_2", label: "Benachrichtige mich, wenn der Kurs um 2 % fällt" },
+      { value: "drop_pct_5", label: "Benachrichtige mich, wenn der Kurs um 5 % fällt" },
+      { value: "rise_pct_3", label: "Benachrichtige mich, wenn der Kurs um 3 % steigt" },
+      { value: "rise_pct_5", label: "Benachrichtige mich, wenn der Kurs um 5 % steigt" },
+      { value: "target_price", label: "Benachrichtige mich, wenn der Kurs einen Zielpreis erreicht" },
+      { value: "below_price", label: "Benachrichtige mich, wenn der Kurs unter einen Preis fällt" }
+    ];
+
+    const chartDefaults = {
+      symbol: 'NASDAQ:AAPL',
+      interval: 'D',
+      timezone: 'Europe/Berlin',
+      theme: 'dark',
+      style: '1',
+      locale: 'de_DE',
+      toolbarBg: '#0f1115'
     };
 
     let supabaseClient = null;
@@ -1811,12 +1104,13 @@
     let currentFavorite = null;
     let currentOpportunity = null;
     let currentOpportunityDays = [];
-    let tradingViewWidget = null;
-    let pendingConfirmationEmail = '';
+    let publicWeeklyIdea = null;
     let authInitialized = false;
     let searchState = { query: '', results: [] };
     let premiumRefreshTimer = null;
     let alertMonitorTimer = null;
+
+    const chartWidgets = {};
 
     try {
       if (window.supabase?.createClient) {
@@ -1832,29 +1126,6 @@
       console.error('Supabase konnte nicht initialisiert werden:', e);
     }
 
-    const chartDefaults = {
-      symbol: "NASDAQ:AAPL",
-      interval: "D",
-      theme: "dark",
-      locale: "de_DE",
-      timezone: "Europe/Berlin",
-      height: 700,
-      allowSymbolChange: true,
-      style: "1",
-      toolbarBg: "#0f1115",
-      withdateranges: true,
-      hidelegend: false
-    };
-
-    const ALERT_TEMPLATES = [
-      { value: "drop_pct_2", label: "Benachrichtige mich, wenn der Kurs um 2 % fällt" },
-      { value: "drop_pct_5", label: "Benachrichtige mich, wenn der Kurs um 5 % fällt" },
-      { value: "rise_pct_3", label: "Benachrichtige mich, wenn der Kurs um 3 % steigt" },
-      { value: "rise_pct_5", label: "Benachrichtige mich, wenn der Kurs um 5 % steigt" },
-      { value: "target_price", label: "Benachrichtige mich, wenn der Kurs einen Zielpreis erreicht" },
-      { value: "below_price", label: "Benachrichtige mich, wenn der Kurs unter einen Preis fällt" }
-    ];
-
     function getEl(id) {
       return document.getElementById(id);
     }
@@ -1868,28 +1139,6 @@
         .replace(/'/g, '&#039;');
     }
 
-    function formatMoney(value, currency = 'USD') {
-      if (value === null || value === undefined || value === '' || Number.isNaN(Number(value))) return '—';
-      try {
-        return new Intl.NumberFormat('de-DE', {
-          style: 'currency',
-          currency,
-          maximumFractionDigits: 2
-        }).format(Number(value));
-      } catch {
-        return `${Number(value).toFixed(2)} ${currency}`;
-      }
-    }
-
-    function formatDateLabel(dateStr) {
-      return new Date(dateStr + 'T12:00:00').toLocaleDateString('de-DE', {
-        weekday: 'short',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
-    }
-
     function showBanner(message) {
       const banner = getEl('globalBanner');
       banner.textContent = message;
@@ -1897,12 +1146,79 @@
     }
 
     function clearBanner() {
-      getEl('globalBanner').classList.remove('show');
-      getEl('globalBanner').textContent = '';
+      const banner = getEl('globalBanner');
+      banner.textContent = '';
+      banner.classList.remove('show');
     }
 
     function cryptoRandomId() {
       return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
+
+    function formatMoney(value, currency = 'USD') {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return '—';
+      try {
+        return new Intl.NumberFormat('de-DE', {
+          style: 'currency',
+          currency,
+          maximumFractionDigits: 2
+        }).format(num);
+      } catch {
+        return `${num.toFixed(2)} ${currency}`;
+      }
+    }
+
+    function formatPercent(value) {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return '—';
+      const sign = num >= 0 ? '+' : '';
+      return `${sign}${num.toFixed(1)} %`;
+    }
+
+    function parseDateSafe(value) {
+      if (!value) return null;
+
+      if (value instanceof Date && !Number.isNaN(value.getTime())) return value;
+
+      const raw = String(value).trim();
+      if (!raw) return null;
+
+      let d = new Date(raw);
+      if (!Number.isNaN(d.getTime())) return d;
+
+      const deMatch = raw.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+      if (deMatch) {
+        const [, day, month, year, hh = '12', mm = '00', ss = '00'] = deMatch;
+        d = new Date(`${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}T${hh.padStart(2,'0')}:${mm}:${ss}`);
+        if (!Number.isNaN(d.getTime())) return d;
+      }
+
+      const fallback = raw.replace(' ', 'T');
+      d = new Date(fallback);
+      if (!Number.isNaN(d.getTime())) return d;
+
+      return null;
+    }
+
+    function toDateKey(value) {
+      const d = parseDateSafe(value);
+      if (!d) return null;
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function formatDateLabel(dateStr) {
+      const d = parseDateSafe(dateStr);
+      if (!d) return 'Unbekanntes Datum';
+      return d.toLocaleDateString('de-DE', {
+        weekday: 'short',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
     }
 
     function getStorageKey(base) {
@@ -1934,14 +1250,6 @@
       localStorage.setItem(getStorageKey('ak_alerts'), JSON.stringify(alerts));
     }
 
-    function getFavoriteById(id) {
-      return loadFavorites().find(item => item.id === id) || null;
-    }
-
-    function isFavorite(symbol) {
-      return loadFavorites().some(item => item.symbol === symbol);
-    }
-
     function getTickerFromSymbol(symbol = '') {
       if (!symbol) return '';
       return symbol.includes(':') ? symbol.split(':').pop().trim() : symbol.trim();
@@ -1953,9 +1261,9 @@
         NASDAQ: 'NASDAQ',
         NYSE: 'NYSE',
         XETRA: 'XETR',
+        XETR: 'XETR',
         EURONEXT: 'EURONEXT',
         FWB: 'FWB',
-        OMXCOP: 'OMXCOP',
         SIX: 'SIX',
         LSE: 'LSE'
       };
@@ -1982,104 +1290,142 @@
         country,
         currency,
         sector: '—',
-        industry: '—',
+        industry: 'Aktie',
         price: null,
         changePct: null
       };
     }
 
     function normalizeOpportunityRow(row) {
-      const symbolRaw = row.symbol || '';
-      const assetName = row.asset_name || getTickerFromSymbol(symbolRaw) || 'Unbekannt';
-      const tradingViewSymbol = symbolRaw.includes(':') ? symbolRaw : normalizeExchangeToTradingView(row.exchange || row.region || '', symbolRaw);
-      const ticker = getTickerFromSymbol(symbolRaw);
-      const createdAt = row.created_at || new Date().toISOString();
-      const region = row.region || '—';
-      const assetType = row.asset_type || 'Aktie';
-      const strategyTag = row.strategy_tag || 'Marktchance';
-      const currency = row.currency || 'USD';
-      const currentPrice = row.current_price !== null && row.current_price !== undefined && row.current_price !== '' ? Number(row.current_price) : null;
-      const changePercent = row.change_percent !== null && row.change_percent !== undefined && row.change_percent !== '' ? Number(row.change_percent) : null;
+      const symbolRaw = String(row.symbol || '').trim();
+      const ticker = getTickerFromSymbol(symbolRaw || row.id || '');
+      const createdAtRaw = row.created_at || new Date().toISOString();
+      const createdAtDate = parseDateSafe(createdAtRaw) || new Date();
+      const createdDate = toDateKey(createdAtDate) || toDateKey(new Date());
+      const exchangeGuess = symbolRaw.includes(':') ? symbolRaw.split(':')[0] : (row.region || row.asset_type || '');
+      const tradingViewSymbol = symbolRaw.includes(':')
+        ? symbolRaw
+        : normalizeExchangeToTradingView(exchangeGuess, symbolRaw || ticker);
+
+      const scoreNum = Number(row.score);
+      const currentPriceNum = Number(row.current_price);
+      const changePctNum = Number(row.change_percent);
 
       return {
-        id: String(row.id || cryptoRandomId()),
-        name: assetName,
-        ticker,
-        symbol: tradingViewSymbol || ticker,
+        id: String(row.id || `${ticker || 'item'}-${createdDate || cryptoRandomId()}`),
+        name: row.asset_name || ticker || 'Unbekannt',
+        ticker: ticker || row.asset_name || '—',
+        symbol: tradingViewSymbol || ticker || chartDefaults.symbol,
         displaySymbol: symbolRaw,
-        price: currentPrice,
-        changePct: changePercent,
-        currency,
-        country: region,
-        sector: strategyTag,
-        industry: assetType,
-        theme: strategyTag,
         exchange: tradingViewSymbol?.includes(':') ? tradingViewSymbol.split(':')[0] : '—',
-        marketCap: '—',
-        description: '',
-        whyNow: row.reason_text || 'Der Opportunity-Eintrag liefert aktuell einen relevanten Marktkontext für diese Aktie.',
-        chance: '',
-        risk: row.risk_text || 'Bitte beachte die allgemeinen Markt- und Unternehmensrisiken.',
-        alternative: '',
-        source: `Opportunity-Eintrag vom ${new Date(createdAt).toLocaleString('de-DE')}`,
+        country: row.region || '—',
+        region: row.region || '—',
+        assetType: row.asset_type || 'Aktie',
+        strategyTag: row.strategy_tag || 'Marktchance',
+        currency: row.currency || 'USD',
+        price: Number.isFinite(currentPriceNum) ? currentPriceNum : null,
+        changePct: Number.isFinite(changePctNum) ? changePctNum : null,
+        score: Number.isFinite(scoreNum) ? scoreNum : null,
+        whyNow: row.reason_text || '',
+        chance: row.context_text || '',
+        risk: row.risk_text || '',
         contextText: row.context_text || '',
         reasonText: row.reason_text || '',
         riskText: row.risk_text || '',
-        score: row.score || null,
-        strategyTag,
-        assetType,
-        region,
-        isPremium: row.is_premium,
-        status: row.status,
-        createdAt,
-        createdDate: new Date(createdAt).toISOString().slice(0, 10)
+        status: row.status || '',
+        createdAt: createdAtDate.toISOString(),
+        createdDate,
+        targetPrice: row.target_price || null,
+        targetPriceLow: row.target_price_low || null,
+        targetPriceHigh: row.target_price_high || null,
+        stopPrice: row.stop_price || null,
+        rr: row.rr || null,
+        expReturn: row.exp_return || null,
+        expReturnMin: row.exp_return_min || null,
+        expReturnMax: row.exp_return_max || null,
+        signalMode: row.signal_mode || null,
+        signalDetails: row.signal_details || null,
+        isPremium: row.is_premium || null
       };
+    }
+
+    function isOpportunityVisible(item) {
+      const s = String(item.status || '').trim().toLowerCase();
+      if (!s) return true;
+      if (['deleted', 'archived', 'inactive', 'hidden'].includes(s)) return false;
+      return true;
     }
 
     function groupOpportunitiesByDate(items) {
       const grouped = {};
       items.forEach(item => {
-        if (!grouped[item.createdDate]) grouped[item.createdDate] = [];
-        grouped[item.createdDate].push(item);
+        const key = item.createdDate || toDateKey(item.createdAt) || 'undated';
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(item);
       });
 
       return Object.keys(grouped)
-        .sort((a, b) => new Date(b) - new Date(a))
-        .slice(0, 5)
+        .sort((a, b) => {
+          const da = parseDateSafe(a)?.getTime() || 0;
+          const db = parseDateSafe(b)?.getTime() || 0;
+          return db - da;
+        })
         .map(date => ({
           date,
-          opportunities: grouped[date].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          opportunities: grouped[date].sort((a, b) => {
+            const ta = parseDateSafe(a.createdAt)?.getTime() || 0;
+            const tb = parseDateSafe(b.createdAt)?.getTime() || 0;
+            return tb - ta;
+          })
         }));
     }
 
+    function getBestOpportunity(items = []) {
+      if (!items.length) return null;
+      const sorted = [...items].sort((a, b) => {
+        const scoreA = Number.isFinite(Number(a.score)) ? Number(a.score) : -999999;
+        const scoreB = Number.isFinite(Number(b.score)) ? Number(b.score) : -999999;
+        if (scoreB !== scoreA) return scoreB - scoreA;
+        const dateA = parseDateSafe(a.createdAt)?.getTime() || 0;
+        const dateB = parseDateSafe(b.createdAt)?.getTime() || 0;
+        return dateB - dateA;
+      });
+      return sorted[0];
+    }
+
+    function getLatestTuesdayGroup(groups) {
+      return groups.find(group => {
+        const d = parseDateSafe(group.date);
+        return d && d.getDay() === 2;
+      }) || null;
+    }
+
+    function selectPublicWeeklyIdea(groups) {
+      if (!groups.length) return null;
+      const tuesdayGroup = getLatestTuesdayGroup(groups);
+      if (tuesdayGroup) {
+        return { group: tuesdayGroup, idea: getBestOpportunity(tuesdayGroup.opportunities) };
+      }
+      return { group: groups[0], idea: getBestOpportunity(groups[0].opportunities) };
+    }
+
     function showView(viewId) {
-      document.querySelectorAll('.page-view').forEach((view) => view.classList.remove('active'));
+      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
       getEl(viewId).classList.add('active');
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
 
     function parseRoute() {
       let path = location.pathname || '/';
-
       if (path === '/' || path === '/index.html') {
         const hash = location.hash || '';
-        if (hash.startsWith('#/')) {
-          path = hash.slice(1);
-        } else {
-          path = '/';
-        }
+        if (hash.startsWith('#/')) path = hash.slice(1);
+        else path = '/';
       }
-
       return path;
     }
 
     function goToRoute(path) {
-      if (path.startsWith('/#')) {
-        path = path.replace('/#', '#');
-        location.hash = path;
-        return;
-      }
-
       if (location.pathname === '/' || location.pathname.endsWith('.html') || location.protocol === 'file:') {
         location.hash = '#' + path;
         handleRoute();
@@ -2089,6 +1435,55 @@
       }
     }
 
+    function refreshNavUI() {
+      const loggedOut = getEl('navLoggedOut');
+      const loggedIn = getEl('navLoggedIn');
+      const navUserText = getEl('navUserText');
+
+      if (currentUser) {
+        loggedOut.classList.add('hidden');
+        loggedIn.classList.remove('hidden');
+        navUserText.textContent = currentUser.user_metadata?.full_name || currentUser.email || 'Eingeloggt';
+      } else {
+        loggedOut.classList.remove('hidden');
+        loggedIn.classList.add('hidden');
+      }
+    }
+
+    function requireLogin() {
+      if (!currentUser) {
+        openAuthModal('login');
+        return false;
+      }
+      return true;
+    }
+
+    function renderTradingViewChart(containerId, symbol) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      if (!window.TradingView?.widget) return;
+
+      container.innerHTML = '';
+
+      chartWidgets[containerId] = new TradingView.widget({
+        autosize: true,
+        symbol: symbol || chartDefaults.symbol,
+        interval: chartDefaults.interval,
+        timezone: chartDefaults.timezone,
+        theme: chartDefaults.theme,
+        style: chartDefaults.style,
+        locale: chartDefaults.locale,
+        allow_symbol_change: true,
+        withdateranges: true,
+        hide_side_toolbar: false,
+        hide_top_toolbar: false,
+        hide_legend: false,
+        save_image: true,
+        toolbar_bg: chartDefaults.toolbarBg,
+        container_id: containerId
+      });
+    }
+
     function mapAuthError(message) {
       const known = {
         'Invalid login credentials': 'Falsche E-Mail oder falsches Passwort.',
@@ -2096,7 +1491,7 @@
         'User already registered': 'Diese E-Mail-Adresse ist bereits registriert.',
         'Password should be at least 6 characters': 'Das Passwort muss mindestens 6 Zeichen lang sein.'
       };
-      return known[message] || message || 'Die Anmeldung konnte gerade nicht abgeschlossen werden.';
+      return known[message] || message || 'Die Authentifizierung konnte gerade nicht abgeschlossen werden.';
     }
 
     function clearMessages() {
@@ -2148,16 +1543,12 @@
     }
 
     function switchAuth(mode) {
-      const login = mode === 'login';
-      getEl('tabLogin').classList.toggle('active', login);
-      getEl('tabRegister').classList.toggle('active', !login);
-      getEl('panelLogin').classList.toggle('hidden', !login);
-      getEl('panelRegister').classList.toggle('hidden', login);
+      const isLogin = mode === 'login';
+      getEl('tabLogin').classList.toggle('active', isLogin);
+      getEl('tabRegister').classList.toggle('active', !isLogin);
+      getEl('panelLogin').classList.toggle('hidden', !isLogin);
+      getEl('panelRegister').classList.toggle('hidden', isLogin);
       clearMessages();
-
-      if (!login && pendingConfirmationEmail) {
-        showInfo(`Für ${pendingConfirmationEmail} kann bei Bedarf erneut eine Bestätigungs-Mail gesendet werden.`);
-      }
     }
 
     function openPremiumModal() {
@@ -2172,71 +1563,24 @@
 
     function handlePremiumInterest() {
       closePremiumModal();
-      showBanner('Der Upgrade-Bereich ist vorbereitet. Für echte Zahlungen brauchst du als Nächstes einen serverseitigen Stripe-Checkout-Endpunkt.');
-      goToRoute('/#preise');
-    }
-
-    function openLegalModal(type) {
-      const title = getEl('legalTitle');
-      const content = getEl('legalContent');
-
-      if (type === 'agb') {
-        title.textContent = 'Allgemeine Geschäftsbedingungen';
-        content.innerHTML = `
-          <p>Diese Platzhalter-AGB sind für den Registrierungsflow vorbereitet. Du kannst hier später deine finalen AGB einfügen.</p>
-          <h4>1. Leistungsbeschreibung</h4>
-          <p>AnlageKompass stellt Informationen, Einordnungen und datenbasierte Investment-Ideen bereit. Die Inhalte dienen ausschließlich Informationszwecken.</p>
-          <h4>2. Kein Beratungsverhältnis</h4>
-          <p>Es wird keine Anlageberatung, Finanzberatung oder individuelle Empfehlung erbracht.</p>
-          <h4>3. Nutzung</h4>
-          <p>Nach Registrierung und ggf. Bestätigung der E-Mail-Adresse kann der Nutzer die Plattformfunktionen verwenden.</p>
-        `;
-      } else {
-        title.textContent = 'Datenschutzhinweise';
-        content.innerHTML = `
-          <p>Diese Platzhalter-Datenschutzhinweise sind für den Registrierungsflow vorbereitet. Du kannst hier später deine finalen Datenschutzhinweise einfügen.</p>
-          <h4>1. Verarbeitete Daten</h4>
-          <p>Bei der Registrierung werden insbesondere Name, E-Mail-Adresse und technische Nutzungsdaten verarbeitet.</p>
-          <h4>2. Zweck</h4>
-          <p>Die Daten werden zur Kontoverwaltung, Authentifizierung und Nutzung der Plattform verarbeitet.</p>
-          <h4>3. Hinweise</h4>
-          <p>Bitte ergänze hier später deine rechtsverbindlichen Angaben zu Verantwortlichen, Speicherfristen und Betroffenenrechten.</p>
-        `;
-      }
-
-      getEl('legalModal').classList.add('open');
-      getEl('legalModal').setAttribute('aria-hidden', 'false');
-    }
-
-    function closeLegalModal() {
-      getEl('legalModal').classList.remove('open');
-      getEl('legalModal').setAttribute('aria-hidden', 'true');
+      showBanner('Der Premium-Flow ist vorbereitet. Für echte Zahlungen brauchst du als Nächstes einen serverseitigen Stripe-Checkout.');
     }
 
     async function upsertProfileForUser(user, firstName = '', lastName = '', email = '') {
       if (!supabaseClient || !user?.id) return;
-
-      const profilePayload = {
-        id: user.id,
-        email: email || user.email || null,
-        name: `${firstName} ${lastName}`.trim() || user.user_metadata?.full_name || null,
-        first_name: firstName || user.user_metadata?.first_name || null,
-        last_name: lastName || user.user_metadata?.last_name || null,
-        is_premium: false,
-        plan: 'free',
-        risk_level: null,
-        investment_budget: null,
-        investment_horizon: null,
-        wants_crypto: false,
-        alert_frequency: 'daily',
-        email_alerts_enabled: true
-      };
-
-      const { error } = await supabaseClient
-        .from('profiles')
-        .upsert(profilePayload, { onConflict: 'id' });
-
-      if (error) console.error('profiles upsert error:', error);
+      try {
+        await supabaseClient.from(CONFIG.profilesTable).upsert({
+          id: user.id,
+          email: email || user.email || null,
+          name: `${firstName} ${lastName}`.trim() || user.user_metadata?.full_name || null,
+          first_name: firstName || user.user_metadata?.first_name || null,
+          last_name: lastName || user.user_metadata?.last_name || null,
+          is_premium: false,
+          plan: 'free'
+        }, { onConflict: 'id' });
+      } catch (e) {
+        console.error('profile upsert error', e);
+      }
     }
 
     async function loadCurrentProfile() {
@@ -2247,21 +1591,19 @@
 
       try {
         const { data, error } = await supabaseClient
-          .from('profiles')
+          .from(CONFIG.profilesTable)
           .select('*')
           .eq('id', currentUser.id)
           .maybeSingle();
 
         if (error) {
-          console.error('profile load error:', error);
           currentProfile = null;
           return null;
         }
 
         currentProfile = data || null;
         return currentProfile;
-      } catch (error) {
-        console.error(error);
+      } catch {
         currentProfile = null;
         return null;
       }
@@ -2277,7 +1619,7 @@
         return;
       }
       if (!supabaseClient) {
-        showError('Supabase ist nicht verfügbar. Bitte prüfe die Frontend-Konfiguration.');
+        showError('Supabase ist nicht verfügbar.');
         return;
       }
 
@@ -2286,9 +1628,7 @@
 
       try {
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
         if (error) {
-          console.error('Supabase login error:', error);
           showError(mapAuthError(error.message));
           return;
         }
@@ -2299,15 +1639,14 @@
           await loadCurrentProfile();
         }
 
-        showSuccess('Anmeldung erfolgreich. Du wirst jetzt weitergeleitet …');
-
+        showSuccess('Anmeldung erfolgreich.');
         setTimeout(() => {
           closeAuthModal();
           refreshNavUI();
           goToRoute('/watchlist');
-        }, 700);
-      } catch (error) {
-        console.error(error);
+        }, 500);
+      } catch (e) {
+        console.error(e);
         showError('Die Anmeldung konnte nicht ausgeführt werden.');
       } finally {
         setLoading(button, false, 'Anmelden');
@@ -2336,7 +1675,7 @@
         return;
       }
       if (!supabaseClient) {
-        showError('Supabase ist nicht verfügbar. Bitte prüfe die Frontend-Konfiguration.');
+        showError('Supabase ist nicht verfügbar.');
         return;
       }
 
@@ -2345,7 +1684,6 @@
 
       try {
         const emailRedirectTo = `${window.location.origin}${window.location.pathname}#/email-bestaetigt`;
-
         const { data, error } = await supabaseClient.auth.signUp({
           email,
           password,
@@ -2360,33 +1698,18 @@
         });
 
         if (error) {
-          console.error('Supabase signUp error:', error);
           showError(mapAuthError(error.message));
           return;
         }
-
-        pendingConfirmationEmail = email;
 
         if (data?.user) {
           await upsertProfileForUser(data.user, firstName, lastName, email);
         }
 
-        if (data?.session) {
-          currentUser = data.user || null;
-          await loadCurrentProfile();
-          showSuccess('Konto erstellt und direkt angemeldet.');
-          setTimeout(() => {
-            closeAuthModal();
-            refreshNavUI();
-            goToRoute('/watchlist');
-          }, 700);
-          return;
-        }
-
-        showSuccess('Konto erstellt. Bitte bestätige jetzt zuerst deine E-Mail-Adresse. Erst danach kannst du dich anmelden.');
-        showInfo('Nach Klick auf den Bestätigungslink landest du wieder auf dieser Seite und erhältst dort eine Erfolgsmeldung.');
-      } catch (error) {
-        console.error(error);
+        showSuccess('Konto erstellt. Bitte bestätige deine E-Mail-Adresse.');
+        showInfo('Nach Klick auf den Bestätigungslink kannst du dich normal anmelden.');
+      } catch (e) {
+        console.error(e);
         showError('Die Registrierung konnte nicht abgeschlossen werden.');
       } finally {
         setLoading(button, false, 'Konto erstellen');
@@ -2395,17 +1718,11 @@
 
     async function resendConfirmation() {
       clearMessages();
-
-      const email = getEl('registerEmail').value.trim() || pendingConfirmationEmail;
+      const email = getEl('registerEmail').value.trim();
       if (!email) {
-        showError('Bitte gib zuerst die registrierte E-Mail-Adresse ein.');
+        showError('Bitte gib zuerst die E-Mail-Adresse ein.');
         return;
       }
-      if (!supabaseClient) {
-        showError('Supabase ist nicht verfügbar.');
-        return;
-      }
-
       try {
         const emailRedirectTo = `${window.location.origin}${window.location.pathname}#/email-bestaetigt`;
         const { error } = await supabaseClient.auth.resend({
@@ -2413,150 +1730,65 @@
           email,
           options: { emailRedirectTo }
         });
-
         if (error) {
           showError(mapAuthError(error.message));
           return;
         }
-
-        pendingConfirmationEmail = email;
         showSuccess('Die Bestätigungs-Mail wurde erneut versendet.');
-      } catch (error) {
-        console.error(error);
+      } catch (e) {
+        console.error(e);
         showError('Die Bestätigungs-Mail konnte nicht erneut versendet werden.');
       }
     }
 
     async function logout() {
-      if (supabaseClient) {
-        await supabaseClient.auth.signOut();
-      }
+      if (supabaseClient) await supabaseClient.auth.signOut();
       currentUser = null;
       currentProfile = null;
       currentFavorite = null;
       currentOpportunity = null;
-      currentOpportunityDays = [];
+      refreshNavUI();
       stopPremiumAutoRefresh();
       stopAlertMonitoring();
-      refreshNavUI();
-      clearBanner();
       goToRoute('/');
     }
 
-    function refreshNavUI() {
-      const loggedOut = getEl('navLoggedOut');
-      const loggedIn = getEl('navLoggedIn');
-      const navUserText = getEl('navUserText');
-
-      if (currentUser) {
-        loggedOut.classList.add('hidden');
-        loggedIn.classList.remove('hidden');
-        navUserText.textContent = currentUser.user_metadata?.full_name || currentUser.email || 'Eingeloggt';
-      } else {
-        loggedOut.classList.remove('hidden');
-        loggedIn.classList.add('hidden');
-      }
+    function getFavoriteById(id) {
+      return loadFavorites().find(item => item.id === id) || null;
     }
 
-    function requireLogin() {
-      if (!currentUser) {
-        openAuthModal('login');
-        return false;
-      }
-      return true;
-    }
-
-    function setChartStatus(message) {
-      getEl("statusText").textContent = message;
-    }
-
-    function getChartSettings() {
-      return {
-        symbol: getEl("symbol").value.trim() || chartDefaults.symbol,
-        interval: getEl("interval").value,
-        theme: getEl("theme").value,
-        locale: getEl("locale").value,
-        timezone: getEl("timezone").value,
-        height: parseInt(getEl("height").value, 10) || chartDefaults.height,
-        allowSymbolChange: getEl("allowSymbolChange").checked,
-        style: getEl("style").value,
-        toolbarBg: getEl("toolbarBg").value,
-        withdateranges: getEl("withdateranges").checked,
-        hidelegend: getEl("hidelegend").checked
-      };
-    }
-
-    function setChartFormValues(values) {
-      getEl("symbol").value = values.symbol;
-      getEl("interval").value = values.interval;
-      getEl("theme").value = values.theme;
-      getEl("locale").value = values.locale;
-      getEl("timezone").value = values.timezone;
-      getEl("height").value = values.height;
-      getEl("allowSymbolChange").checked = values.allowSymbolChange;
-      getEl("style").value = values.style;
-      getEl("toolbarBg").value = values.toolbarBg;
-      getEl("withdateranges").checked = values.withdateranges;
-      getEl("hidelegend").checked = values.hidelegend;
-    }
-
-    function sanitizeHeight(height) {
-      if (height < 350) return 350;
-      if (height > 1400) return 1400;
-      return height;
-    }
-
-    function loadTradingViewChart() {
-      const settings = getChartSettings();
-      settings.height = sanitizeHeight(settings.height);
-
-      const container = getEl("tv-chart-container");
-      if (!container || !window.TradingView?.widget) {
-        setChartStatus("TradingView konnte noch nicht geladen werden.");
-        return;
-      }
-
-      container.innerHTML = "";
-      container.style.height = settings.height + "px";
-
-      try {
-        tradingViewWidget = new TradingView.widget({
-          autosize: true,
-          symbol: settings.symbol,
-          interval: settings.interval,
-          timezone: settings.timezone,
-          theme: settings.theme,
-          style: settings.style,
-          locale: settings.locale,
-          allow_symbol_change: settings.allowSymbolChange,
-          withdateranges: settings.withdateranges,
-          hide_side_toolbar: false,
-          hide_top_toolbar: false,
-          hide_legend: settings.hidelegend,
-          save_image: true,
-          toolbar_bg: settings.toolbarBg,
-          container_id: "tv-chart-container"
-        });
-
-        setChartStatus("Chart geladen: " + settings.symbol);
-        getEl("infoSymbolChip").textContent = `Standard-Symbol: ${settings.symbol}`;
-      } catch (error) {
-        console.error(error);
-        setChartStatus("Chart konnte nicht geladen werden.");
-      }
-    }
-
-    function resetChartSettings() {
-      const symbol = getEl("symbol").value.trim() || chartDefaults.symbol;
-      setChartFormValues({ ...chartDefaults, symbol });
-      loadTradingViewChart();
-      setChartStatus("Standardwerte wurden wiederhergestellt.");
+    function isFavorite(symbol) {
+      return loadFavorites().some(item => item.symbol === symbol);
     }
 
     function updateFavoritesCounter() {
-      const favorites = loadFavorites();
-      getEl('favoritesCountPill').textContent = `${favorites.length} / 30 Favoriten`;
-      getEl('favoritesCountBox').textContent = `${favorites.length} / 30`;
+      const count = loadFavorites().length;
+      getEl('favoritesCountPill').textContent = `${count} / 30 Favoriten`;
+      getEl('favoritesCountBox').textContent = `${count} / 30`;
+    }
+
+    async function searchStocks() {
+      const query = getEl('stockSearchInput').value.trim();
+      searchState.query = query;
+
+      if (!query) {
+        renderSearchResults([]);
+        return;
+      }
+
+      const root = getEl('searchResults');
+      root.innerHTML = `<div class="search-empty">Suche läuft…</div>`;
+
+      try {
+        const url = `https://finnhub.io/api/v1/search?q=${encodeURIComponent(query)}&token=${CONFIG.finnhubApiKey}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const results = Array.isArray(data?.result) ? data.result.slice(0, 12) : [];
+        renderSearchResults(results);
+      } catch (e) {
+        console.error(e);
+        root.innerHTML = `<div class="search-empty">Die Suche konnte gerade nicht geladen werden.</div>`;
+      }
     }
 
     function renderSearchResults(results) {
@@ -2578,10 +1810,10 @@
                 <strong>${escapeHtml(normalized.name)}</strong>
                 <div class="symbol-meta">
                   ${escapeHtml(normalized.ticker || '—')} · ${escapeHtml(normalized.exchange || '—')} · ${escapeHtml(normalized.country || '—')}<br>
-                  Symbol für Chart: ${escapeHtml(normalized.symbol || '—')}
+                  Symbol: ${escapeHtml(normalized.symbol || '—')}
                 </div>
               </div>
-              <button class="star-btn ${fav ? 'active' : ''}" data-symbol="${escapeHtml(normalized.symbol)}" data-item='${encodeURIComponent(JSON.stringify(normalized))}' title="Zu Favoriten hinzufügen">★</button>
+              <button class="star-btn ${fav ? 'active' : ''}" data-item='${encodeURIComponent(JSON.stringify(normalized))}'>★</button>
             </div>
             <div class="inline-actions">
               <button class="mini-btn" data-open='${encodeURIComponent(JSON.stringify(normalized))}'>Im Chart öffnen</button>
@@ -2605,46 +1837,15 @@
       });
     }
 
-    async function searchStocks() {
-      const query = getEl('stockSearchInput').value.trim();
-      searchState.query = query;
-
-      if (!query) {
-        renderSearchResults([]);
-        return;
-      }
-
-      const root = getEl('searchResults');
-      root.innerHTML = `<div class="search-empty">Suche läuft…</div>`;
-
-      try {
-        const url = `https://finnhub.io/api/v1/search?q=${encodeURIComponent(query)}&token=${CONFIG.finnhubApiKey}`;
-        const res = await fetch(url);
-        const data = await res.json();
-
-        const results = Array.isArray(data?.result) ? data.result.slice(0, 12) : [];
-        renderSearchResults(results);
-      } catch (error) {
-        console.error(error);
-        root.innerHTML = `<div class="search-empty">Die Suche konnte gerade nicht geladen werden.</div>`;
-      }
-    }
-
-    function rerenderSearchResultsIfNeeded() {
-      if (searchState.query && searchState.results.length) {
-        renderSearchResults(searchState.results);
-      }
-    }
-
     function toggleFavorite(item) {
       if (!requireLogin()) return;
 
       const favorites = loadFavorites();
-      const exists = favorites.findIndex(f => f.symbol === item.symbol);
+      const idx = favorites.findIndex(f => f.symbol === item.symbol);
 
-      if (exists >= 0) {
-        const removed = favorites[exists];
-        favorites.splice(exists, 1);
+      if (idx >= 0) {
+        const removed = favorites[idx];
+        favorites.splice(idx, 1);
         saveFavorites(favorites);
 
         const alerts = loadAlerts();
@@ -2653,15 +1854,12 @@
 
         if (currentFavorite?.symbol === removed.symbol) {
           currentFavorite = favorites[0] || null;
-          if (currentFavorite) {
-            renderFavoriteDetail(currentFavorite);
-          } else {
-            renderEmptyFavoriteState();
-          }
+          if (currentFavorite) renderFavoriteDetail(currentFavorite);
+          else renderEmptyFavoriteState();
         }
 
         renderFavoritesList();
-        rerenderSearchResultsIfNeeded();
+        renderSearchResults(searchState.results);
         return;
       }
 
@@ -2670,40 +1868,15 @@
         return;
       }
 
-      const finalItem = {
-        ...item,
-        id: item.id || cryptoRandomId()
-      };
-
+      const finalItem = { ...item, id: item.id || cryptoRandomId() };
       favorites.unshift(finalItem);
       saveFavorites(favorites);
       currentFavorite = finalItem;
 
       renderFavoritesList();
       renderFavoriteDetail(finalItem);
-      rerenderSearchResultsIfNeeded();
+      renderSearchResults(searchState.results);
       startAlertMonitoring();
-    }
-
-    function removeFavorite(id) {
-      const favorites = loadFavorites().filter(item => item.id !== id);
-      saveFavorites(favorites);
-
-      const alerts = loadAlerts();
-      delete alerts[id];
-      saveAlerts(alerts);
-
-      if (currentFavorite?.id === id) {
-        currentFavorite = favorites[0] || null;
-        if (currentFavorite) {
-          renderFavoriteDetail(currentFavorite);
-        } else {
-          renderEmptyFavoriteState();
-        }
-      }
-
-      renderFavoritesList();
-      rerenderSearchResultsIfNeeded();
     }
 
     function renderFavoritesList() {
@@ -2729,7 +1902,6 @@
               <button class="danger-btn" data-remove-id="${escapeHtml(item.id)}">Entfernen</button>
             </div>
           </div>
-
           <div class="alert-builder">
             <div class="field-inline">
               <label>Neue Kursregel hinzufügen</label>
@@ -2766,6 +1938,24 @@
       });
     }
 
+    function removeFavorite(id) {
+      const favorites = loadFavorites().filter(item => item.id !== id);
+      saveFavorites(favorites);
+
+      const alerts = loadAlerts();
+      delete alerts[id];
+      saveAlerts(alerts);
+
+      if (currentFavorite?.id === id) {
+        currentFavorite = favorites[0] || null;
+        if (currentFavorite) renderFavoriteDetail(currentFavorite);
+        else renderEmptyFavoriteState();
+      }
+
+      renderFavoritesList();
+      renderSearchResults(searchState.results);
+    }
+
     function getAlertLabel(rule) {
       switch (rule.type) {
         case 'drop_pct_2': return 'Kurs fällt um 2 % oder mehr';
@@ -2790,11 +1980,8 @@
       }
 
       const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        showBanner('Browser-Benachrichtigungen wurden aktiviert.');
-      } else {
-        showBanner('Benachrichtigungen wurden nicht freigegeben.');
-      }
+      if (permission === 'granted') showBanner('Benachrichtigungen wurden aktiviert.');
+      else showBanner('Benachrichtigungen wurden nicht freigegeben.');
     }
 
     function saveAlertRule(favoriteId, type, targetPrice) {
@@ -2819,13 +2006,8 @@
       });
 
       saveAlerts(alerts);
-
-      if (currentFavorite?.id === favoriteId) {
-        renderAlertList(favoriteId);
-      }
-
+      if (currentFavorite?.id === favoriteId) renderAlertList(favoriteId);
       showBanner('Kursregel gespeichert.');
-      enableBrowserNotifications();
       startAlertMonitoring();
     }
 
@@ -2842,19 +2024,17 @@
 
       if (!alerts.length) {
         root.innerHTML = `
-          <div class="alert-item">
-            <strong>Noch keine Kursregeln</strong>
-            <p>Für diesen Favoriten wurden noch keine Regeln gespeichert.</p>
+          <div class="fact-card">
+            <div class="value">Für diesen Favoriten wurden noch keine Regeln gespeichert.</div>
           </div>
         `;
         return;
       }
 
       root.innerHTML = alerts.map((rule, idx) => `
-        <div class="alert-item">
-          <strong>Kursregel ${idx + 1}</strong>
-          <p>${escapeHtml(getAlertLabel(rule))}</p>
-          <p style="margin-top:8px;">Erstellt: ${new Date(rule.createdAt).toLocaleString('de-DE')}</p>
+        <div class="fact-card">
+          <div class="label">Kursregel ${idx + 1}</div>
+          <div class="value">${escapeHtml(getAlertLabel(rule))}</div>
           <div class="inline-actions" style="margin-top:12px;">
             <button class="danger-btn" data-delete-alert="${escapeHtml(rule.id)}">Löschen</button>
           </div>
@@ -2871,7 +2051,7 @@
       if (!ticker) return null;
 
       try {
-        const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(ticker)}&token=${CONFIG.finnubApiKey || CONFIG.finnhubApiKey}`;
+        const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(ticker)}&token=${CONFIG.finnhubApiKey}`;
         const res = await fetch(url);
         const data = await res.json();
         if (!data || typeof data !== 'object') return null;
@@ -2881,15 +2061,14 @@
           previousClose: Number(data.pc || 0),
           changePercent: data.pc ? ((Number(data.c || 0) - Number(data.pc || 0)) / Number(data.pc || 1)) * 100 : 0
         };
-      } catch (error) {
-        console.error('quote fetch error', error);
+      } catch (e) {
+        console.error('quote fetch error', e);
         return null;
       }
     }
 
     function shouldTriggerAlert(rule, quote) {
       if (!quote || !quote.current) return false;
-
       switch (rule.type) {
         case 'drop_pct_2': return quote.changePercent <= -2;
         case 'drop_pct_5': return quote.changePercent <= -5;
@@ -2904,19 +2083,13 @@
     function isRuleOnCooldown(rule) {
       if (!rule.lastTriggeredAt) return false;
       const diffMs = Date.now() - new Date(rule.lastTriggeredAt).getTime();
-      const cooldownMinutes = Number(rule.cooldownMinutes || 180);
-      return diffMs < cooldownMinutes * 60 * 1000;
+      return diffMs < (Number(rule.cooldownMinutes || 180) * 60 * 1000);
     }
 
     function fireBrowserNotification(title, body) {
       if (!('Notification' in window)) return;
       if (Notification.permission !== 'granted') return;
-
-      try {
-        new Notification(title, { body });
-      } catch (error) {
-        console.error(error);
-      }
+      try { new Notification(title, { body }); } catch (e) { console.error(e); }
     }
 
     async function checkAlertsNow() {
@@ -2947,22 +2120,17 @@
           fireBrowserNotification('AnlageKompass Kursregel ausgelöst', message);
         });
 
-        if (changed) {
-          alerts[favorite.id] = rules;
-        }
+        if (changed) alerts[favorite.id] = rules;
       }
 
       saveAlerts(alerts);
-
-      if (currentFavorite?.id) {
-        renderAlertList(currentFavorite.id);
-      }
+      if (currentFavorite?.id) renderAlertList(currentFavorite.id);
     }
 
     function startAlertMonitoring() {
       stopAlertMonitoring();
-
       if (!currentUser) return;
+
       const alerts = loadAlerts();
       const hasRules = Object.values(alerts).some(arr => Array.isArray(arr) && arr.length);
       if (!hasRules) return;
@@ -2978,23 +2146,6 @@
       }
     }
 
-    function renderEmptyFavoriteState() {
-      getEl('watchTitle').textContent = 'Noch kein Favorit ausgewählt';
-      getEl('watchSubtitle').textContent = 'Wähle einen Favoriten oder suche zuerst nach einer Aktie.';
-      getEl('watchPrice').textContent = '—';
-      getEl('watchChange').textContent = '—';
-      getEl('watchChange').className = 'change';
-      getEl('watchFactsGrid').innerHTML = `
-        <div class="fact-card"><div class="label">Status</div><div class="value">Keine Auswahl</div></div>
-        <div class="fact-card"><div class="label">Favoriten</div><div class="value">${loadFavorites().length} / 30</div></div>
-        <div class="fact-card"><div class="label">Hinweis</div><div class="value">Suche starten</div></div>
-        <div class="fact-card"><div class="label">Chart</div><div class="value">Bereit</div></div>
-      `;
-      renderAlertList('__empty__');
-      getEl('symbol').value = chartDefaults.symbol;
-      loadTradingViewChart();
-    }
-
     async function hydrateFavoriteWithQuote(item) {
       const quote = await fetchQuoteForSymbol(item.symbol);
       if (!quote) return item;
@@ -3002,8 +2153,26 @@
       return {
         ...item,
         price: quote.current || item.price,
-        changePct: typeof quote.changePercent === 'number' ? quote.changePercent : item.changePct
+        changePct: Number.isFinite(quote.changePercent) ? quote.changePercent : item.changePct
       };
+    }
+
+    function renderEmptyFavoriteState() {
+      getEl('watchTitle').textContent = 'Noch kein Favorit ausgewählt';
+      getEl('watchSubtitle').textContent = 'Wähle einen Favoriten oder suche zuerst nach einer Aktie.';
+      getEl('watchPrice').textContent = '—';
+      getEl('watchChange').textContent = '—';
+      getEl('watchChange').className = 'change';
+
+      getEl('watchFactsGrid').innerHTML = `
+        <div class="fact-card"><div class="label">Status</div><div class="value">Keine Auswahl</div></div>
+        <div class="fact-card"><div class="label">Favoriten</div><div class="value">${loadFavorites().length} / 30</div></div>
+        <div class="fact-card"><div class="label">Hinweis</div><div class="value">Suche starten</div></div>
+        <div class="fact-card"><div class="label">Chart</div><div class="value">Bereit</div></div>
+      `;
+
+      renderAlertList('__empty__');
+      renderTradingViewChart('tv-chart-watchlist', chartDefaults.symbol);
     }
 
     async function renderFavoriteDetail(item) {
@@ -3011,17 +2180,13 @@
       const liveItem = await hydrateFavoriteWithQuote(item);
 
       getEl('watchTitle').textContent = `${liveItem.name}${liveItem.ticker ? ' (' + liveItem.ticker + ')' : ''}`;
-      getEl('watchSubtitle').innerHTML = `
-        ${escapeHtml(liveItem.country || '—')} · ${escapeHtml(liveItem.exchange || '—')} ·
-        <button class="linklike" type="button" onclick="goToRoute('/premium/chancen')">Chancen öffnen</button>
-      `;
-
+      getEl('watchSubtitle').innerHTML = `${escapeHtml(liveItem.country || '—')} · ${escapeHtml(liveItem.exchange || '—')}`;
       getEl('watchPrice').textContent = liveItem.price ? formatMoney(liveItem.price, liveItem.currency || 'USD') : 'Livekurs extern';
+
       const changeEl = getEl('watchChange');
-      if (typeof liveItem.changePct === 'number' && !Number.isNaN(liveItem.changePct)) {
-        const sign = liveItem.changePct >= 0 ? '+' : '';
-        changeEl.textContent = `${sign}${liveItem.changePct.toFixed(1)} % heute`;
-        changeEl.className = `change ${liveItem.changePct >= 0 ? 'pos' : 'neg'}`;
+      if (Number.isFinite(Number(liveItem.changePct))) {
+        changeEl.textContent = `${formatPercent(liveItem.changePct)} heute`;
+        changeEl.className = `change ${Number(liveItem.changePct) >= 0 ? 'pos' : 'neg'}`;
       } else {
         changeEl.textContent = 'Chart aktiv';
         changeEl.className = 'change';
@@ -3035,8 +2200,7 @@
       `;
 
       renderAlertList(liveItem.id);
-      getEl('symbol').value = liveItem.symbol || chartDefaults.symbol;
-      loadTradingViewChart();
+      renderTradingViewChart('tv-chart-watchlist', liveItem.symbol || chartDefaults.symbol);
     }
 
     async function fetchCompanyProfile(symbol) {
@@ -3049,40 +2213,31 @@
         const data = await res.json();
         if (!data || !Object.keys(data).length) return null;
         return data;
-      } catch (error) {
-        console.error('profile fetch error', error);
+      } catch (e) {
+        console.error('profile fetch error', e);
         return null;
       }
     }
 
     function buildAssetDescription(opportunity, profile) {
       const company = opportunity.name || profile?.name || opportunity.ticker || 'Dieses Unternehmen';
-      const industry = profile?.finnhubIndustry || opportunity.industry || 'seinem Marktsegment';
+      const industry = profile?.finnhubIndustry || opportunity.assetType || 'seinem Marktsegment';
       const exchange = profile?.exchange || opportunity.exchange || 'dem Markt';
       const country = profile?.country || opportunity.country || 'dem jeweiligen Markt';
 
       let text = `${company} ist in ${industry} aktiv und wird über ${exchange} gehandelt. `;
       text += `Der Fokus liegt aktuell auf ${opportunity.assetType || 'dem Unternehmen'} in ${country}. `;
-
-      if (opportunity.contextText) {
-        text += opportunity.contextText.trim();
-      } else if (profile?.weburl) {
-        text += `Das Unternehmen gehört zu den Titeln, die aktuell wegen ihrer Marktsituation und ihres strategischen Umfelds näher beobachtet werden.`;
-      } else {
-        text += `Der Titel wird derzeit im Chancen-Feed geführt und gehört damit zu den Werten, die wir aktuell besonders beobachten.`;
-      }
-
+      text += opportunity.contextText
+        ? opportunity.contextText.trim()
+        : 'Der Titel wird derzeit im Chancen-Feed geführt und gehört damit zu den Werten, die aktuell besonders beobachtet werden.';
       return text;
     }
 
     function buildChanceText(opportunity) {
-      if (opportunity.contextText) {
-        return opportunity.contextText;
-      }
-
       const parts = [];
-      if (opportunity.strategyTag) parts.push(`Passend zum Thema ${opportunity.strategyTag}`);
+      if (opportunity.strategyTag) parts.push(`Thema: ${opportunity.strategyTag}.`);
       if (opportunity.reasonText) parts.push(opportunity.reasonText);
+      if (opportunity.contextText) parts.push(opportunity.contextText);
       if (!parts.length) parts.push('Die Chance ergibt sich aus dem aktuellen Markt-Setup und der Einordnung im Chancen-Feed.');
       return parts.join(' ');
     }
@@ -3096,50 +2251,39 @@
       const region = String(opportunity.region || '').toLowerCase();
       const tag = opportunity.strategyTag || 'die gleiche Marktidee';
 
-      if (assetType.includes('etf')) {
-        return `Als Alternative kann ein breiter diversifizierter ETF aus ${opportunity.region || 'dem gleichen Markt'} sinnvoll sein, wenn du ${tag} breiter und weniger einzelwertabhängig abbilden möchtest.`;
-      }
-
-      if (assetType.includes('crypto')) {
-        return `Als Alternative kann ein breiter Krypto-Ansatz oder ein kleiner gewichteter Proxy auf das gleiche Thema sinnvoll sein, wenn du die Volatilität eines Einzelwerts reduzieren möchtest.`;
-      }
-
-      if (region.includes('usa') || region.includes('us')) {
-        return `Als Alternative kann statt des Einzelwerts auch ein breiter US-Markt-ETF oder ein thematisch passender Qualitätswert genutzt werden, um die gleiche Idee defensiver umzusetzen.`;
-      }
-
-      if (region.includes('de') || region.includes('eu') || region.includes('euro')) {
-        return `Als Alternative kann ein breiter Europa-ETF oder ein anderer Qualitätswert aus dem gleichen Sektor genutzt werden, wenn du die Idee breiter streuen möchtest.`;
-      }
-
+      if (assetType.includes('etf')) return `Als Alternative kann ein breiter diversifizierter ETF sinnvoll sein, um ${tag} mit weniger Einzelwertrisiko abzubilden.`;
+      if (assetType.includes('crypto')) return `Als Alternative kann ein breiterer Krypto-Ansatz sinnvoll sein, wenn du die Volatilität eines Einzelwerts reduzieren möchtest.`;
+      if (region.includes('us') || region.includes('usa')) return `Als Alternative kann statt des Einzelwerts auch ein breiter US-Markt-ETF genutzt werden, um die gleiche Idee defensiver umzusetzen.`;
       return `Als Alternative kann ein breiter Markt- oder Sektor-ETF sinnvoll sein, wenn du ${tag} mit geringerer Einzelwertrisiko-Abhängigkeit umsetzen möchtest.`;
     }
 
     async function loadOpportunitiesFromSupabase() {
       if (!supabaseClient) return [];
 
-      for (const tableName of CONFIG.opportunitiesTables) {
-        try {
-          const { data, error } = await supabaseClient
-            .from(tableName)
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(300);
+      try {
+        const { data, error } = await supabaseClient
+          .from(CONFIG.opportunitiesTable)
+          .select('*')
+          .limit(500);
 
-          if (!error && Array.isArray(data)) {
-            return data;
-          }
-        } catch (error) {
-          console.error(`Opportunities load error on table ${tableName}:`, error);
+        if (error) {
+          console.error('Opportunities load error:', error);
+          showBanner(`Opportunities konnten nicht geladen werden: ${error.message}`);
+          return [];
         }
-      }
 
-      return [];
+        if (!Array.isArray(data)) return [];
+        return data;
+      } catch (e) {
+        console.error('Opportunities fetch failed:', e);
+        showBanner('Die Opportunities konnten nicht aus Supabase geladen werden.');
+        return [];
+      }
     }
 
     function findOpportunityById(opportunityId) {
       for (const day of currentOpportunityDays) {
-        const found = day.opportunities.find(item => item.id === opportunityId);
+        const found = day.opportunities.find(item => String(item.id) === String(opportunityId));
         if (found) return { day, opportunity: found };
       }
       return null;
@@ -3147,27 +2291,25 @@
 
     function populateDaySelect(days) {
       const select = getEl('daySelect');
-
       if (!days.length) {
         select.innerHTML = `<option value="">Keine Daten</option>`;
         return;
       }
 
-      select.innerHTML = days.map((day) => `
+      select.innerHTML = days.map(day => `
         <option value="${escapeHtml(day.date)}">${escapeHtml(formatDateLabel(day.date))}</option>
       `).join('');
     }
 
     function populateOpportunitySelect(day, selectedId = null) {
       const select = getEl('opportunitySelect');
-
       if (!day?.opportunities?.length) {
         select.innerHTML = `<option value="">Keine Chancen verfügbar</option>`;
         return;
       }
 
       select.innerHTML = day.opportunities.map(op => `
-        <option value="${escapeHtml(op.id)}" ${selectedId === op.id ? 'selected' : ''}>
+        <option value="${escapeHtml(op.id)}" ${String(selectedId) === String(op.id) ? 'selected' : ''}>
           ${escapeHtml(op.name)} (${escapeHtml(op.ticker || getTickerFromSymbol(op.symbol))})
         </option>
       `).join('');
@@ -3175,17 +2317,16 @@
 
     function renderOpportunityList(day, selectedId) {
       const list = getEl('opportunityList');
-
       if (!day?.opportunities?.length) {
         list.innerHTML = `<div class="search-empty">Keine Chancen verfügbar.</div>`;
         return;
       }
 
       list.innerHTML = day.opportunities.map(op => `
-        <button class="opportunity-item ${op.id === selectedId ? 'active' : ''}" data-id="${escapeHtml(op.id)}">
+        <button class="opportunity-item ${String(op.id) === String(selectedId) ? 'active' : ''}" data-id="${escapeHtml(op.id)}">
           <strong>${escapeHtml(op.name)} (${escapeHtml(op.ticker || getTickerFromSymbol(op.symbol))})</strong>
-          <span>${escapeHtml(op.country || '—')} · ${escapeHtml(op.industry || '—')}</span>
-          <span>${formatMoney(op.price, op.currency)} · ${typeof op.changePct === 'number' && !Number.isNaN(op.changePct) ? (op.changePct >= 0 ? '+' : '') + op.changePct.toFixed(1) + ' % heute' : 'Kursdaten folgen'}</span>
+          <span>${escapeHtml(op.country || '—')} · ${escapeHtml(op.assetType || '—')}</span>
+          <span>${formatMoney(op.price, op.currency)} · ${Number.isFinite(Number(op.changePct)) ? formatPercent(op.changePct) + ' heute' : 'Kursdaten folgen'}</span>
         </button>
       `).join('');
 
@@ -3204,12 +2345,32 @@
         { label: 'Region', value: opportunity.country || profile?.country || '—' },
         { label: 'Kategorie', value: opportunity.assetType || '—' },
         { label: 'Thema', value: opportunity.strategyTag || '—' },
-        { label: 'Score', value: opportunity.score || '—' },
+        { label: 'Score', value: opportunity.score ?? '—' },
         { label: 'Währung', value: opportunity.currency || '—' },
-        { label: 'Erfasst am', value: new Date(opportunity.createdAt).toLocaleString('de-DE') }
+        { label: 'Erfasst am', value: parseDateSafe(opportunity.createdAt)?.toLocaleString('de-DE') || '—' }
       ];
 
       getEl('premiumFactsGrid').innerHTML = facts.map(item => `
+        <div class="fact-card">
+          <div class="label">${escapeHtml(item.label)}</div>
+          <div class="value">${escapeHtml(item.value)}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderPublicFacts(opportunity, profile) {
+      const facts = [
+        { label: 'Ticker', value: opportunity.ticker || '—' },
+        { label: 'Markt', value: opportunity.exchange || profile?.exchange || '—' },
+        { label: 'Region', value: opportunity.country || profile?.country || '—' },
+        { label: 'Kategorie', value: opportunity.assetType || '—' },
+        { label: 'Thema', value: opportunity.strategyTag || '—' },
+        { label: 'Score', value: opportunity.score ?? '—' },
+        { label: 'Währung', value: opportunity.currency || '—' },
+        { label: 'Veröffentlichung', value: formatDateLabel(opportunity.createdDate || opportunity.createdAt) }
+      ];
+
+      getEl('publicFactsGrid').innerHTML = facts.map(item => `
         <div class="fact-card">
           <div class="label">${escapeHtml(item.label)}</div>
           <div class="value">${escapeHtml(item.value)}</div>
@@ -3222,21 +2383,19 @@
 
       const profile = await fetchCompanyProfile(opportunity.symbol);
       const quote = await fetchQuoteForSymbol(opportunity.symbol);
-
       const finalOpportunity = {
         ...opportunity,
         price: quote?.current || opportunity.price,
-        changePct: typeof quote?.changePercent === 'number' ? quote.changePercent : opportunity.changePct
+        changePct: Number.isFinite(Number(quote?.changePercent)) ? Number(quote.changePercent) : opportunity.changePct
       };
 
       getEl('premiumHeroTitle').textContent = `${finalOpportunity.name} (${finalOpportunity.ticker || getTickerFromSymbol(finalOpportunity.symbol)})`;
       getEl('premiumHeroPrice').textContent = finalOpportunity.price ? formatMoney(finalOpportunity.price, finalOpportunity.currency) : '—';
 
       const changeEl = getEl('premiumHeroChange');
-      if (typeof finalOpportunity.changePct === 'number' && !Number.isNaN(finalOpportunity.changePct)) {
-        const sign = finalOpportunity.changePct >= 0 ? '+' : '';
-        changeEl.textContent = `${sign}${finalOpportunity.changePct.toFixed(1)} % heute · ${finalOpportunity.currency}`;
-        changeEl.className = `change ${finalOpportunity.changePct >= 0 ? 'pos' : 'neg'}`;
+      if (Number.isFinite(Number(finalOpportunity.changePct))) {
+        changeEl.textContent = `${formatPercent(finalOpportunity.changePct)} heute · ${finalOpportunity.currency}`;
+        changeEl.className = `change ${Number(finalOpportunity.changePct) >= 0 ? 'pos' : 'neg'}`;
       } else {
         changeEl.textContent = finalOpportunity.currency || '—';
         changeEl.className = 'change';
@@ -3259,41 +2418,97 @@
       getEl('daySelect').value = day.date;
       populateOpportunitySelect(day, finalOpportunity.id);
       renderOpportunityList(day, finalOpportunity.id);
+      renderTradingViewChart('tv-chart-premium', finalOpportunity.symbol || chartDefaults.symbol);
+    }
 
-      getEl('symbol').value = finalOpportunity.symbol || chartDefaults.symbol;
-      loadTradingViewChart();
+    async function renderPublicIdea(opportunity) {
+      publicWeeklyIdea = opportunity;
+
+      const profile = await fetchCompanyProfile(opportunity.symbol);
+      const quote = await fetchQuoteForSymbol(opportunity.symbol);
+      const finalOpportunity = {
+        ...opportunity,
+        price: quote?.current || opportunity.price,
+        changePct: Number.isFinite(Number(quote?.changePercent)) ? Number(quote.changePercent) : opportunity.changePct
+      };
+
+      getEl('publicHeroTitle').textContent = `${finalOpportunity.name} (${finalOpportunity.ticker || getTickerFromSymbol(finalOpportunity.symbol)})`;
+      getEl('publicHeroPrice').textContent = finalOpportunity.price ? formatMoney(finalOpportunity.price, finalOpportunity.currency) : '—';
+
+      const changeEl = getEl('publicHeroChange');
+      if (Number.isFinite(Number(finalOpportunity.changePct))) {
+        changeEl.textContent = `${formatPercent(finalOpportunity.changePct)} heute · ${finalOpportunity.currency}`;
+        changeEl.className = `change ${Number(finalOpportunity.changePct) >= 0 ? 'pos' : 'neg'}`;
+      } else {
+        changeEl.textContent = finalOpportunity.currency || '—';
+        changeEl.className = 'change';
+      }
+
+      getEl('publicHeroChips').innerHTML = `
+        <span class="chip">${escapeHtml(finalOpportunity.country || '—')}</span>
+        <span class="chip">${escapeHtml(finalOpportunity.assetType || '—')}</span>
+        <span class="chip">${escapeHtml(finalOpportunity.strategyTag || '—')}</span>
+        <span class="chip">${escapeHtml(finalOpportunity.symbol || '—')}</span>
+      `;
+
+      getEl('publicAboutText').textContent = buildAssetDescription(finalOpportunity, profile);
+      getEl('publicWhyText').textContent = finalOpportunity.reasonText || finalOpportunity.whyNow || 'Diese Idee wurde als kostenlose Wochenidee ausgewählt.';
+      getEl('publicChanceText').textContent = buildChanceText(finalOpportunity);
+      getEl('publicRiskText').textContent = buildRiskText(finalOpportunity);
+      getEl('publicAlternativeText').textContent = buildAlternativeIdea(finalOpportunity);
+
+      renderPublicFacts(finalOpportunity, profile);
+      renderTradingViewChart('tv-chart-public', finalOpportunity.symbol || chartDefaults.symbol);
     }
 
     function renderPremiumEmptyState() {
       showView('view-premium');
       getEl('premiumHeroTitle').textContent = 'Noch keine Chancen verfügbar';
-      getEl('premiumHeroCopy').textContent = 'Sobald in Supabase neue Opportunities angelegt werden, erscheinen sie hier automatisch nach Datum.';
+      getEl('premiumHeroCopy').textContent = 'Sobald in Supabase neue Opportunities angelegt werden, erscheinen sie hier automatisch.';
       getEl('premiumHeroPrice').textContent = '—';
       getEl('premiumHeroChange').textContent = '—';
       getEl('premiumHeroChips').innerHTML = '';
-      getEl('premiumAboutText').textContent = 'Der Bereich ist live an Supabase angebunden. Aktuell wurden noch keine Einträge gefunden.';
-      getEl('premiumWhyText').textContent = 'Lege Datensätze in deiner Opportunities-Tabelle an. Die created_at-Spalte wird automatisch zur Tageszuordnung verwendet.';
-      getEl('premiumChanceText').textContent = 'Sobald Daten vorhanden sind, erscheinen hier die Chancen je Aktie.';
-      getEl('premiumRiskText').textContent = 'Sobald Daten vorhanden sind, erscheinen hier die Risiken je Aktie.';
-      getEl('premiumAlternativeText').textContent = 'Sobald Daten vorhanden sind, erscheint hier die alternative Idee je Aktie.';
+      getEl('premiumAboutText').textContent = 'Aktuell konnten keine sichtbaren Rows aus deiner opportunities-Tabelle geladen werden.';
+      getEl('premiumWhyText').textContent = 'Bitte prüfe RLS, Statuswerte und created_at.';
+      getEl('premiumChanceText').textContent = 'Noch keine Daten.';
+      getEl('premiumRiskText').textContent = 'Noch keine Daten.';
+      getEl('premiumAlternativeText').textContent = 'Noch keine Daten.';
       getEl('premiumFactsGrid').innerHTML = `
         <div class="fact-card"><div class="label">Status</div><div class="value">Keine Daten</div></div>
-        <div class="fact-card"><div class="label">Quelle</div><div class="value">Supabase</div></div>
-        <div class="fact-card"><div class="label">Tabelle</div><div class="value">Opportunities / Opportunitis</div></div>
-        <div class="fact-card"><div class="label">created_at</div><div class="value">Wird für Tage verwendet</div></div>
+        <div class="fact-card"><div class="label">Tabelle</div><div class="value">public.opportunities</div></div>
+        <div class="fact-card"><div class="label">Wahrscheinliche Ursache</div><div class="value">RLS, Status oder created_at</div></div>
+        <div class="fact-card"><div class="label">Hinweis</div><div class="value">Siehe SQL unten</div></div>
       `;
       getEl('opportunityList').innerHTML = `<div class="search-empty">Keine Chancen verfügbar.</div>`;
       getEl('daySelect').innerHTML = `<option value="">Keine Daten</option>`;
       getEl('opportunitySelect').innerHTML = `<option value="">Keine Daten</option>`;
+      renderTradingViewChart('tv-chart-premium', chartDefaults.symbol);
+    }
+
+    function renderPublicEmptyState() {
+      showView('view-public-idea');
+      getEl('publicHeroTitle').textContent = 'Noch keine kostenlose Idee verfügbar';
+      getEl('publicHeroCopy').textContent = 'Sobald Opportunities vorhanden sind, wird hier automatisch die beste Idee angezeigt.';
+      getEl('publicHeroPrice').textContent = '—';
+      getEl('publicHeroChange').textContent = '—';
+      getEl('publicHeroChips').innerHTML = '';
+      getEl('publicAboutText').textContent = 'Aktuell liegen noch keine geeigneten Opportunities für die öffentliche Wochenidee vor.';
+      getEl('publicWhyText').textContent = 'Sobald am Dienstag neue Ideen in opportunities stehen, kann hier die beste veröffentlicht werden.';
+      getEl('publicChanceText').textContent = 'Noch keine Daten.';
+      getEl('publicRiskText').textContent = 'Noch keine Daten.';
+      getEl('publicAlternativeText').textContent = 'Noch keine Daten.';
+      getEl('publicFactsGrid').innerHTML = `
+        <div class="fact-card"><div class="label">Status</div><div class="value">Keine Daten</div></div>
+        <div class="fact-card"><div class="label">Quelle</div><div class="value">public.opportunities</div></div>
+        <div class="fact-card"><div class="label">Auswahl</div><div class="value">Beste Idee des letzten Dienstag</div></div>
+        <div class="fact-card"><div class="label">Fallback</div><div class="value">Beste Idee des neuesten Tages</div></div>
+      `;
+      renderTradingViewChart('tv-chart-public', chartDefaults.symbol);
     }
 
     async function refreshPremiumData(keepCurrent = true) {
       const raw = await loadOpportunitiesFromSupabase();
-      const normalized = raw.map(normalizeOpportunityRow).filter(item => {
-        const status = String(item.status || '').toLowerCase();
-        return !status || status === 'active' || status === 'live' || status === 'published';
-      });
-
+      const normalized = raw.map(normalizeOpportunityRow).filter(isOpportunityVisible);
       currentOpportunityDays = groupOpportunitiesByDate(normalized);
 
       if (!currentOpportunityDays.length) {
@@ -3305,15 +2520,8 @@
       const routeId = route.startsWith('/premium/chancen/') ? decodeURIComponent(route.replace('/premium/chancen/', '').trim()) : null;
 
       let resolved = routeId ? findOpportunityById(routeId) : null;
-      if (!resolved && keepCurrent && currentOpportunity?.id) {
-        resolved = findOpportunityById(currentOpportunity.id);
-      }
-      if (!resolved) {
-        resolved = {
-          day: currentOpportunityDays[0],
-          opportunity: currentOpportunityDays[0].opportunities[0]
-        };
-      }
+      if (!resolved && keepCurrent && currentOpportunity?.id) resolved = findOpportunityById(currentOpportunity.id);
+      if (!resolved) resolved = { day: currentOpportunityDays[0], opportunity: currentOpportunityDays[0].opportunities[0] };
 
       populateDaySelect(currentOpportunityDays);
       populateOpportunitySelect(resolved.day, resolved.opportunity.id);
@@ -3321,12 +2529,31 @@
       return resolved;
     }
 
+    async function refreshPublicWeeklyIdea() {
+      const raw = await loadOpportunitiesFromSupabase();
+      const normalized = raw.map(normalizeOpportunityRow).filter(isOpportunityVisible);
+      const groups = groupOpportunitiesByDate(normalized);
+
+      if (!groups.length) {
+        renderPublicEmptyState();
+        return;
+      }
+
+      const picked = selectPublicWeeklyIdea(groups);
+      if (!picked?.idea) {
+        renderPublicEmptyState();
+        return;
+      }
+
+      await renderPublicIdea(picked.idea);
+    }
+
     function startPremiumAutoRefresh() {
       stopPremiumAutoRefresh();
       premiumRefreshTimer = setInterval(async () => {
-        if (parseRoute().startsWith('/premium/chancen')) {
-          await refreshPremiumData(true);
-        }
+        const route = parseRoute();
+        if (route.startsWith('/premium/chancen')) await refreshPremiumData(true);
+        if (route === '/kostenlose-idee') await refreshPublicWeeklyIdea();
       }, 60000);
     }
 
@@ -3335,6 +2562,23 @@
         clearInterval(premiumRefreshTimer);
         premiumRefreshTimer = null;
       }
+    }
+
+    async function renderWatchlistRoute() {
+      if (!requireLogin()) {
+        showView('view-landing');
+        return;
+      }
+
+      showView('view-watchlist');
+      renderFavoritesList();
+
+      const favorites = loadFavorites();
+      if (currentFavorite) await renderFavoriteDetail(currentFavorite);
+      else if (favorites.length) await renderFavoriteDetail(favorites[0]);
+      else renderEmptyFavoriteState();
+
+      startAlertMonitoring();
     }
 
     async function renderPremiumRoute(opportunityIdFromRoute = null) {
@@ -3356,39 +2600,68 @@
 
       getEl('opportunitySelect').onchange = async (event) => {
         const selectedDay = currentOpportunityDays.find(day => day.date === getEl('daySelect').value) || currentOpportunityDays[0];
-        const selectedOpportunity = selectedDay.opportunities.find(item => item.id === event.target.value) || selectedDay.opportunities[0];
+        const selectedOpportunity = selectedDay.opportunities.find(item => String(item.id) === String(event.target.value)) || selectedDay.opportunities[0];
         await renderPremiumOpportunity(selectedOpportunity, selectedDay);
       };
 
       if (opportunityIdFromRoute) {
         const found = findOpportunityById(opportunityIdFromRoute);
-        if (found) {
-          await renderPremiumOpportunity(found.opportunity, found.day);
-        }
+        if (found) await renderPremiumOpportunity(found.opportunity, found.day);
       }
 
       startPremiumAutoRefresh();
     }
 
-    async function renderWatchlistRoute() {
-      if (!requireLogin()) {
-        showView('view-landing');
+    async function renderPublicRoute() {
+      showView('view-public-idea');
+      await refreshPublicWeeklyIdea();
+      startPremiumAutoRefresh();
+    }
+
+    async function subscribeFreeIdeaReminder() {
+      const email = getEl('freeIdeaReminderEmail').value.trim();
+      const status = getEl('freeIdeaReminderStatus');
+
+      status.textContent = '';
+
+      if (!email) {
+        status.style.color = '#ffb8c2';
+        status.textContent = 'Bitte gib eine E-Mail-Adresse ein.';
         return;
       }
 
-      showView('view-watchlist');
-      renderFavoritesList();
-
-      const favorites = loadFavorites();
-      if (currentFavorite) {
-        await renderFavoriteDetail(currentFavorite);
-      } else if (favorites.length) {
-        await renderFavoriteDetail(favorites[0]);
-      } else {
-        renderEmptyFavoriteState();
+      if (!CONFIG.freeIdeaReminderFunctionUrl || CONFIG.freeIdeaReminderFunctionUrl.includes('DEINE_')) {
+        status.style.color = '#ffb8c2';
+        status.textContent = 'Die Edge Function URL ist noch nicht konfiguriert.';
+        return;
       }
 
-      startAlertMonitoring();
+      try {
+        const res = await fetch(CONFIG.freeIdeaReminderFunctionUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            page_url: `${window.location.origin}${window.location.pathname}#/kostenlose-idee`
+          })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          status.style.color = '#ffb8c2';
+          status.textContent = data?.error || 'Die Anmeldung konnte nicht gespeichert werden.';
+          return;
+        }
+
+        status.style.color = '#9cf6da';
+        status.textContent = 'Erinnerung gespeichert. Du wirst dienstags nach Veröffentlichung erinnert.';
+        getEl('freeIdeaReminderEmail').value = '';
+      } catch (e) {
+        console.error(e);
+        status.style.color = '#ffb8c2';
+        status.textContent = 'Die Anmeldung konnte nicht gesendet werden.';
+      }
     }
 
     async function handleRoute() {
@@ -3405,7 +2678,7 @@
       if (route === '/email-bestaetigt') {
         stopPremiumAutoRefresh();
         showView('view-landing');
-        showBanner('Deine E-Mail-Adresse wurde erfolgreich bestätigt. Du kannst dich jetzt anmelden bzw. bist – falls bereits eine Session aktiv ist – direkt eingeloggt.');
+        showBanner('Deine E-Mail-Adresse wurde erfolgreich bestätigt.');
         return;
       }
 
@@ -3426,6 +2699,11 @@
         return;
       }
 
+      if (route === '/kostenlose-idee') {
+        await renderPublicRoute();
+        return;
+      }
+
       stopPremiumAutoRefresh();
       showView('view-landing');
     }
@@ -3433,10 +2711,8 @@
     function extractAccessTokenFromHash() {
       const hash = window.location.hash || '';
       if (!hash.includes('access_token=')) return null;
-
       const raw = hash.startsWith('#') ? hash.slice(1) : hash;
-      const parts = raw.split('&');
-      const params = new URLSearchParams(parts.join('&'));
+      const params = new URLSearchParams(raw);
       return {
         access_token: params.get('access_token'),
         refresh_token: params.get('refresh_token')
@@ -3458,8 +2734,8 @@
         if (!error) {
           history.replaceState({}, '', `${window.location.pathname}#/email-bestaetigt`);
         }
-      } catch (error) {
-        console.error('Email redirect session error:', error);
+      } catch (e) {
+        console.error('Email redirect session error:', e);
       }
     }
 
@@ -3475,7 +2751,6 @@
       if (event.key === 'Escape') {
         closeAuthModal();
         closePremiumModal();
-        closeLegalModal();
       }
     });
 
@@ -3483,12 +2758,8 @@
     window.addEventListener('hashchange', handleRoute);
 
     window.addEventListener('DOMContentLoaded', async () => {
-      setChartFormValues(chartDefaults);
-
-      getEl("applyBtn").addEventListener("click", loadTradingViewChart);
-      getEl("resetBtn").addEventListener("click", resetChartSettings);
-      getEl("stockSearchBtn").addEventListener("click", searchStocks);
-      getEl("stockSearchInput").addEventListener("keydown", (e) => {
+      getEl('stockSearchBtn').addEventListener('click', searchStocks);
+      getEl('stockSearchInput').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') searchStocks();
       });
 
@@ -3505,27 +2776,23 @@
           refreshNavUI();
           updateFavoritesCounter();
 
-          if (currentUser) {
-            startAlertMonitoring();
-          } else {
-            stopAlertMonitoring();
-          }
+          if (currentUser) startAlertMonitoring();
+          else stopAlertMonitoring();
 
-          if (authInitialized) {
-            handleRoute();
-          }
+          if (authInitialized) handleRoute();
         });
       }
 
       refreshNavUI();
       updateFavoritesCounter();
-      loadTradingViewChart();
+      renderTradingViewChart('tv-chart-watchlist', chartDefaults.symbol);
+      renderTradingViewChart('tv-chart-premium', chartDefaults.symbol);
+      renderTradingViewChart('tv-chart-public', chartDefaults.symbol);
+
       authInitialized = true;
       await handleRoute();
 
-      if (currentUser) {
-        startAlertMonitoring();
-      }
+      if (currentUser) startAlertMonitoring();
     });
   </script>
 </body>
