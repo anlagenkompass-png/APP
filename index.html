@@ -23,13 +23,13 @@
   <link rel="apple-touch-icon" href='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%231ea8ff%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%2328d0b1%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23030817%22/%3E%3Cpath d=%22M14 42L26 28l8 8 16-20%22 fill=%22none%22 stroke=%22url(%23g)%22 stroke-width=%226%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3Ccircle cx=%2250%22 cy=%2216%22 r=%226%22 fill=%22%2328d0b1%22/%3E%3C/svg%3E' />
 
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "AnlageKompass",
-    "url": "https://meinanlagekompass.com/",
-    "description": "Kostenlose Top-Idee jeden Dienstag. Plus-Chancen mit potenziellem Kursbereich, Absicherungsniveau und Chance-Risiko. Keine Anlageberatung."
-  }
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AnlageKompass",
+      "url": "https://meinanlagekompass.com/",
+      "description": "Kostenlose Top-Idee jeden Dienstag. Plus-Chancen mit potenziellem Kursbereich, Absicherungsniveau und Chance-Risiko. Keine Anlageberatung."
+    }
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,7 +38,6 @@
 
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7040998516591666" crossorigin="anonymous"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://s3.tradingview.com/tv.js"></script>
 
@@ -69,15 +68,8 @@
       --input-bg: #0f1115;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -91,11 +83,7 @@
     }
 
     .hidden { display: none !important; }
-
-    .container {
-      width: min(1280px, calc(100% - 48px));
-      margin: 0 auto;
-    }
+    .container { width: min(1280px, calc(100% - 48px)); margin: 0 auto; }
 
     .nav-wrap {
       position: sticky;
@@ -140,17 +128,8 @@
       flex: 0 0 auto;
     }
 
-    .brand-logo svg {
-      width: 28px;
-      height: 28px;
-      display: block;
-    }
-
-    .brand-text {
-      color: #20c4ea;
-      display: inline-flex;
-      align-items: center;
-    }
+    .brand-logo svg { width: 28px; height: 28px; display: block; }
+    .brand-text { color: #20c4ea; display: inline-flex; align-items: center; }
 
     .nav-actions {
       display: flex;
@@ -264,7 +243,7 @@
       box-shadow: inset 0 0 0 1px rgba(4, 13, 28, 0.55);
     }
 
-    .hero h1, .page-hero h1 {
+    .hero h1, .page-hero h1, .legal-card h1 {
       font-size: clamp(46px, 5.1vw, 72px);
       line-height: 0.98;
       letter-spacing: -0.055em;
@@ -329,7 +308,8 @@
     .facts-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .detail-facts-grid { grid-template-columns: repeat(2, minmax(180px, 1fr)); align-content: start; }
 
-    .feature-card, .panel, .price-card, .benefit-card, .sidebar-card, .content-card, .search-result-card, .favorite-card, .mini-card, .chart-card, .subscribe-card, .ad-card, .promo-strip {
+    .feature-card, .panel, .price-card, .benefit-card, .sidebar-card, .content-card, .search-result-card,
+    .favorite-card, .mini-card, .chart-card, .subscribe-card, .ad-card, .promo-strip, .legal-card, .confirmation-card {
       background: linear-gradient(180deg, rgba(12,22,44,0.96), rgba(10,20,40,0.94));
       border: 1px solid rgba(117, 141, 181, 0.16);
       border-radius: 24px;
@@ -363,33 +343,11 @@
     }
 
     .plan-name { font-size: 22px; font-weight: 800; margin-bottom: 22px; }
+    .price-line { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 24px; }
+    .price { font-size: 62px; line-height: 0.95; font-weight: 900; letter-spacing: -0.06em; color: #f7fbff; }
+    .per { font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }
 
-    .price-line {
-      display: flex;
-      align-items: flex-end;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
-    .price {
-      font-size: 62px;
-      line-height: 0.95;
-      font-weight: 900;
-      letter-spacing: -0.06em;
-      color: #f7fbff;
-    }
-
-    .per {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .feature-list {
-      list-style: none;
-      margin: 0 0 26px;
-    }
-
+    .feature-list { list-style: none; margin: 0 0 26px; }
     .feature-list li {
       display: flex;
       align-items: center;
@@ -400,8 +358,8 @@
       font-size: 17px;
       line-height: 1.4;
     }
-
     .feature-list li:last-child { border-bottom: none; }
+
     .tick, .minus { width: 16px; font-size: 22px; }
     .tick { color: var(--success); }
     .minus { color: #788ca7; }
@@ -508,18 +466,8 @@
       background: rgba(13, 24, 45, 0.98);
     }
 
-    .modal h3 {
-      font-size: 30px;
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
-
-    .modal .intro {
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
+    .modal h3 { font-size: 30px; font-weight: 900; margin-bottom: 10px; }
+    .modal .intro { font-size: 16px; line-height: 1.7; color: var(--text-muted); margin-bottom: 20px; }
 
     .field-grid {
       display: grid;
@@ -537,8 +485,10 @@
       color: #cedced;
     }
 
-    .field input, .field select, .field textarea, .toolbar-field select, .toolbar-field input,
-    .field-inline input, .field-inline select, .search-box input {
+    .field input, .field select, .field textarea,
+    .toolbar-field select, .toolbar-field input,
+    .field-inline input, .field-inline select,
+    .search-box input {
       width: 100%;
       min-height: 50px;
       border-radius: 14px;
@@ -551,8 +501,10 @@
       font-family: inherit;
     }
 
-    .field input:focus, .field select:focus, .field textarea:focus, .toolbar-field select:focus,
-    .toolbar-field input:focus, .field-inline input:focus, .field-inline select:focus, .search-box input:focus {
+    .field input:focus, .field select:focus, .field textarea:focus,
+    .toolbar-field select:focus, .toolbar-field input:focus,
+    .field-inline input:focus, .field-inline select:focus,
+    .search-box input:focus {
       border-color: rgba(26, 182, 255, 0.64);
       box-shadow: 0 0 0 4px rgba(26, 182, 255, 0.08);
     }
@@ -572,7 +524,6 @@
       height: 18px;
       margin-top: 2px;
       accent-color: #1eb6ff;
-      flex: 0 0 auto;
     }
 
     .auth-message {
@@ -603,31 +554,26 @@
       display: block;
     }
 
-    .linklike, .footer-link {
+    .linklike {
       background: none;
       border: none;
       color: #29bbff;
       cursor: pointer;
       padding: 0;
       font: inherit;
+    }
+
+    .inline-legal-link {
+      color: #29bbff;
+      text-decoration: none;
       font-weight: 700;
     }
 
-    .linklike:hover, .footer-link:hover {
-      text-decoration: underline;
-    }
-
-    .legal-inline-links {
-      margin-top: -8px;
-      margin-bottom: 18px;
-      color: var(--text-soft);
-      font-size: 13px;
-      line-height: 1.7;
-    }
+    .inline-legal-link:hover { text-decoration: underline; }
 
     .app-shell { padding: 30px 0 70px; }
 
-    .page-hero {
+    .page-hero, .confirmation-card {
       padding: 34px;
       border-radius: 28px;
       border: 1px solid rgba(117, 141, 181, 0.16);
@@ -673,19 +619,8 @@
     }
 
     .price-box { text-align: right; min-width: 180px; }
-
-    .price-box .price {
-      font-size: clamp(30px, 4vw, 48px);
-      line-height: 0.95;
-      font-weight: 900;
-    }
-
-    .price-box .change {
-      margin-top: 8px;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
+    .price-box .price { font-size: clamp(30px, 4vw, 48px); line-height: 0.95; font-weight: 900; }
+    .price-box .change { margin-top: 8px; font-size: 15px; font-weight: 800; }
     .price-box .change.pos { color: var(--success); }
     .price-box .change.neg { color: var(--danger); }
 
@@ -767,18 +702,8 @@
       border-bottom: 1px solid rgba(117, 141, 181, 0.16);
     }
 
-    .chart-title {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .chart-subtitle {
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
+    .chart-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .chart-subtitle { color: var(--text-muted); font-size: 14px; line-height: 1.5; }
     .chart-subtitle:empty { display: none; }
 
     .chart-wrap { padding: 20px; }
@@ -791,22 +716,14 @@
       background: #000;
     }
 
-    .tv-container {
-      width: 100%;
-      height: 640px;
-    }
+    .tv-container { width: 100%; height: 640px; }
 
     .search-stack, .favorites-stack, .results-stack, .alert-list, .opportunity-list {
       display: grid;
       gap: 14px;
     }
 
-    .search-box {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-    }
-
+    .search-box { display: grid; grid-template-columns: 1fr auto; gap: 12px; }
     .search-result-card, .favorite-card { padding: 16px; }
 
     .search-result-top, .favorite-top {
@@ -817,11 +734,7 @@
       margin-bottom: 10px;
     }
 
-    .symbol-meta {
-      color: var(--text-muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
+    .symbol-meta { color: var(--text-muted); font-size: 13px; line-height: 1.6; }
 
     .star-btn, .mini-btn, .danger-btn {
       border: 1px solid rgba(117,141,181,0.18);
@@ -833,16 +746,8 @@
       font-weight: 700;
     }
 
-    .star-btn {
-      min-width: 48px;
-      height: 44px;
-      font-size: 20px;
-    }
-
-    .star-btn.active {
-      color: #ffd56b;
-      border-color: rgba(255,213,107,0.4);
-    }
+    .star-btn { min-width: 48px; height: 44px; font-size: 20px; }
+    .star-btn.active { color: #ffd56b; border-color: rgba(255,213,107,0.4); }
 
     .mini-btn, .danger-btn {
       min-height: 42px;
@@ -850,10 +755,7 @@
       font-size: 14px;
     }
 
-    .danger-btn {
-      color: #ffb8c2;
-      border-color: rgba(255,124,145,0.25);
-    }
+    .danger-btn { color: #ffb8c2; border-color: rgba(255,124,145,0.25); }
 
     .inline-actions {
       display: flex;
@@ -914,18 +816,8 @@
       box-shadow: 0 0 0 1px rgba(22,169,255,0.18), 0 12px 26px rgba(0,0,0,0.18);
     }
 
-    .opportunity-item strong {
-      display: block;
-      font-size: 16px;
-      margin-bottom: 8px;
-    }
-
-    .opportunity-item span {
-      display: block;
-      color: var(--text-muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
+    .opportunity-item strong { display: block; font-size: 16px; margin-bottom: 8px; }
+    .opportunity-item span { display: block; color: var(--text-muted); font-size: 13px; line-height: 1.55; }
 
     .subscribe-grid {
       display: grid;
@@ -934,12 +826,7 @@
       margin-top: 24px;
     }
 
-    .status-line {
-      font-size: 13px;
-      color: var(--success);
-      min-height: 18px;
-      margin-top: 10px;
-    }
+    .status-line { font-size: 13px; color: var(--success); min-height: 18px; margin-top: 10px; }
 
     .ad-card { margin-top: 24px; }
 
@@ -960,83 +847,73 @@
       font-size: 14px;
     }
 
-    .success-card {
-      width: min(860px, 100%);
+    .legal-shell { padding: 30px 0 70px; }
+
+    .legal-card {
+      width: min(980px, 100%);
       margin: 0 auto;
       padding: 34px;
+      box-shadow: var(--glow);
     }
 
-    .success-actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 24px;
-    }
-
-    .legal-shell { padding-bottom: 70px; }
-    .legal-card { padding: 0; overflow: hidden; }
-
-    .legal-content-wrap {
-      padding: 28px;
-    }
-
-    .legal-doc {
-      display: grid;
-      gap: 16px;
-    }
-
-    .legal-doc h2 {
-      font-size: 28px;
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 4px;
-    }
-
-    .legal-doc h3 {
-      font-size: 18px;
-      font-weight: 800;
-      margin-top: 10px;
-    }
-
-    .legal-doc p,
-    .legal-doc li {
-      color: var(--text-muted);
-      line-height: 1.8;
-      font-size: 15px;
-    }
-
-    .legal-doc ul {
-      padding-left: 20px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .legal-note {
-      padding: 16px 18px;
-      border-radius: 18px;
-      border: 1px dashed rgba(117, 141, 181, 0.24);
-      background: rgba(8, 16, 30, 0.42);
+    .legal-meta {
+      margin-top: 12px;
       color: var(--text-soft);
       font-size: 14px;
       line-height: 1.7;
     }
 
-    .site-footer {
-      border-top: 1px solid rgba(133, 157, 196, 0.12);
+    .legal-body {
+      margin-top: 30px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .legal-body h2 {
+      font-size: 24px;
+      font-weight: 900;
+      margin-top: 18px;
+      margin-bottom: 4px;
+      color: #f5f8fd;
+    }
+
+    .legal-body h3 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 10px;
+      color: #e8f1fb;
+    }
+
+    .legal-body p, .legal-body li {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .legal-body ul {
+      margin-left: 20px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .footer {
+      border-top: 1px solid rgba(117, 141, 181, 0.14);
       background: rgba(3, 8, 23, 0.72);
-      backdrop-filter: blur(12px);
-      padding: 24px 0 34px;
+      backdrop-filter: blur(18px);
+      margin-top: 20px;
     }
 
     .footer-inner {
+      min-height: 84px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 18px;
       flex-wrap: wrap;
+      padding: 20px 0;
     }
 
-    .footer-brand {
+    .footer-copy {
       color: var(--text-soft);
       font-size: 14px;
       line-height: 1.7;
@@ -1049,6 +926,15 @@
       flex-wrap: wrap;
     }
 
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .footer-link:hover { color: #f6fbff; }
+
     @media (max-width: 1180px) {
       .app-layout, .content-split, .subscribe-grid { grid-template-columns: 1fr; }
       .facts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1060,7 +946,7 @@
         grid-template-columns: 1fr;
       }
       .hero { min-height: auto; padding: 54px 0 68px; }
-      .hero h1, .page-hero h1 { font-size: clamp(38px, 10vw, 56px); }
+      .hero h1, .page-hero h1, .legal-card h1 { font-size: clamp(38px, 10vw, 56px); }
       .hero-copy, .page-hero-copy { font-size: 16px; }
       .hero-actions, .nav-actions { width: 100%; }
       .hero-actions .btn, .btn-hero-primary, .btn-hero-secondary { width: 100%; }
@@ -1068,9 +954,7 @@
       .tv-container { height: 500px; }
       .app-layout { grid-template-columns: 1fr; }
       .price { font-size: 52px; }
-      .success-actions .btn { width: 100%; }
       .footer-inner { align-items: flex-start; }
-      .footer-links { gap: 12px; }
     }
   </style>
 </head>
@@ -1223,7 +1107,7 @@
           <div class="promo-badge">📣 Warum Plus?</div>
           <h3>Mehr Klarheit statt mehr Lärm</h3>
           <p>
-            AnlageKompass Plus zielt auf eine im Durchschnitt hohe Trefferqualität ab – aber kein Modell und kein Mensch erreicht 100&nbsp;%.
+            AnlageKompass Plus zielt auf eine im Durchschnitt hohe Trefferqualität ab – aber kein Modell und kein Mensch erreicht 100 %.
             Genau deshalb bekommst du nicht nur eine Idee, sondern eine saubere Einordnung mit potenziellem Kursbereich,
             Absicherungsniveau und Chance-Risiko. Wichtig: Haltezeiten können sich je Aktie deutlich unterscheiden.
             Manche Ideen laufen schnell, andere brauchen Zeit.
@@ -1233,8 +1117,8 @@
     </section>
 
     <div class="disclaimer container">
-      Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen, aber keine Anlageberatung,
-      keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten.
+      Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen,
+      aber keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten.
       Investitionen sind mit Risiken verbunden.
     </div>
   </main>
@@ -1242,26 +1126,29 @@
   <!-- EMAIL CONFIRMED -->
   <main id="view-email-confirmed" class="page-view">
     <div class="container app-shell">
-      <section class="page-hero">
+      <section class="confirmation-card">
         <div class="kicker">✅ E-Mail bestätigt</div>
-        <h1>Deine E-Mail wurde erfolgreich bestätigt.</h1>
+        <h1>Deine E-Mail-Adresse wurde erfolgreich bestätigt.</h1>
         <p class="page-hero-copy">
-          Dein Konto ist jetzt aktiviert. Du kannst dich direkt anmelden und anschließend kostenlose Ideen,
-          Watchlist oder AnlageKompass Plus nutzen.
+          Perfekt – dein Konto ist jetzt aktiviert. Du kannst dich jetzt anmelden und direkt mit AnlageKompass starten.
         </p>
-      </section>
-
-      <section class="content-card success-card">
-        <h3 style="margin-bottom:14px;">Alles hat funktioniert</h3>
-        <p class="body-copy">
-          Die unschöne 404-Seite wird damit umgangen. Nach Klick auf den Bestätigungslink landest du jetzt auf dieser Erfolgsseite.
-        </p>
-        <div class="success-actions">
-          <button class="btn btn-card-primary" type="button" onclick="openAuthModal('login')">Jetzt anmelden</button>
-          <button class="btn btn-card-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Top-Idee ansehen</button>
-          <button class="btn btn-card-secondary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus ansehen</button>
+        <div class="hero-actions" style="justify-content:flex-start; margin-top:20px;">
+          <button class="btn btn-hero-primary" type="button" onclick="openAuthModal('login')">Jetzt anmelden</button>
+          <button class="btn btn-hero-secondary" type="button" onclick="goToRoute('/')">Zur Startseite</button>
         </div>
       </section>
+    </div>
+  </main>
+
+  <!-- LEGAL -->
+  <main id="view-legal" class="page-view">
+    <div class="container legal-shell">
+      <article class="legal-card">
+        <div class="kicker" id="legalKicker">Rechtliches</div>
+        <h1 id="legalTitle">Rechtliche Informationen</h1>
+        <p class="legal-meta" id="legalUpdated"></p>
+        <div class="legal-body" id="legalBody"></div>
+      </article>
     </div>
   </main>
 
@@ -1281,10 +1168,12 @@
           <h4>Aktiensuche</h4>
           <p>Finde Unternehmen über Namen oder Symbol und übernimm sie direkt in die Watchlist.</p>
         </article>
+
         <article class="mini-card">
           <h4>Favoriten</h4>
           <p>Speichere bis zu 30 Titel gleichzeitig und springe direkt in die Detailansicht.</p>
         </article>
+
         <article class="mini-card">
           <h4>Kursregeln</h4>
           <p>Lege Preis- oder Prozent-Regeln an und erhalte Browser-Benachrichtigungen.</p>
@@ -1386,8 +1275,7 @@
           <div>
             <h1 id="premiumHeroTitle">Chance wird geladen …</h1>
             <p class="page-hero-copy" id="premiumHeroCopy">
-              Mehrere Chancen pro Tag mit Kurzüberblick, Einordnung, potenziellem Kursbereich, Absicherungsniveau,
-              Chance-Risiko und direkter Chartansicht.
+              Mehrere Chancen pro Tag mit Kurzüberblick, Einordnung, potenziellem Kursbereich, Absicherungsniveau, Chance-Risiko und direkter Chartansicht.
             </p>
             <div class="chips" id="premiumHeroChips"></div>
           </div>
@@ -1423,11 +1311,9 @@
               <div>
                 <h3>Was macht die Aktie?</h3>
                 <p class="body-copy" id="premiumAboutText"></p>
-
                 <h3 style="margin-top:24px;">Warum könnte das gerade interessant sein?</h3>
                 <p class="body-copy" id="premiumWhyText"></p>
               </div>
-
               <div>
                 <div class="detail-facts-grid" id="premiumFactsGrid"></div>
               </div>
@@ -1440,10 +1326,12 @@
                 <h4>Chancen</h4>
                 <p id="premiumChanceText"></p>
               </article>
+
               <article class="mini-card">
                 <h4>Risiken</h4>
                 <p id="premiumRiskText"></p>
               </article>
+
               <article class="mini-card">
                 <h4>Alternative Idee</h4>
                 <p id="premiumAlternativeText"></p>
@@ -1507,11 +1395,9 @@
             <div>
               <h3>Was macht die Aktie?</h3>
               <p class="body-copy" id="publicAboutText"></p>
-
               <h3 style="margin-top:24px;">Warum könnte das gerade interessant sein?</h3>
               <p class="body-copy" id="publicWhyText"></p>
             </div>
-
             <div>
               <div class="detail-facts-grid" id="publicFactsGrid"></div>
             </div>
@@ -1522,10 +1408,12 @@
               <h4>Chancen</h4>
               <p id="publicChanceText"></p>
             </article>
+
             <article class="mini-card">
               <h4>Risiken</h4>
               <p id="publicRiskText"></p>
             </article>
+
             <article class="mini-card">
               <h4>Alternative Idee</h4>
               <p id="publicAlternativeText"></p>
@@ -1555,9 +1443,8 @@
             <div class="promo-badge">⭐ AnlageKompass Plus</div>
             <h3 style="margin-top:14px;">Mehr als nur die kostenlose Dienstags-Idee</h3>
             <p class="muted">
-              Wenn dir die kostenlose Idee gefällt, bekommst du mit Plus deutlich mehr:
-              mehrere Chancen pro Tag, potenziellen Kursbereich, Absicherungsniveau,
-              Chance-Risiko und deine eigene Watchlist.
+              Wenn dir die kostenlose Idee gefällt, bekommst du mit Plus deutlich mehr: mehrere Chancen pro Tag,
+              potenziellen Kursbereich, Absicherungsniveau, Chance-Risiko und deine eigene Watchlist.
             </p>
           </div>
           <div class="inline-actions">
@@ -1570,10 +1457,12 @@
             <h4>Mehr Chancen</h4>
             <p>Nicht nur eine Idee pro Woche, sondern mehrere Chancen pro Tag – kompakt und direkt erklärt.</p>
           </article>
+
           <article class="mini-card">
             <h4>Mehr Klarheit</h4>
             <p>Zu jeder Plus-Idee siehst du potenziellen Kursbereich, Absicherungsniveau und Chance-Risiko auf einen Blick.</p>
           </article>
+
           <article class="mini-card">
             <h4>Mehr Kontrolle</h4>
             <p>Mit der Watchlist speicherst du bis zu 30 Favoriten und legst eigene Kursregeln für Benachrichtigungen fest.</p>
@@ -1581,7 +1470,7 @@
         </div>
 
         <div class="notice" style="margin-top:20px; margin-bottom:0;">
-          AnlageKompass Plus zielt auf eine im Durchschnitt hohe Trefferqualität ab, aber niemand erreicht 100&nbsp;%.
+          AnlageKompass Plus zielt auf eine im Durchschnitt hohe Trefferqualität ab, aber niemand erreicht 100 %.
           Märkte bleiben unsicher und die Haltezeiten unterscheiden sich je Aktie.
         </div>
       </section>
@@ -1609,175 +1498,6 @@
       </section>
     </div>
   </main>
-
-  <!-- LEGAL -->
-  <main id="view-legal" class="page-view">
-    <div class="container app-shell legal-shell">
-      <section class="page-hero">
-        <div class="kicker" id="legalKicker">ℹ️ Rechtliches</div>
-        <h1 id="legalTitle">Rechtliches</h1>
-        <p class="page-hero-copy" id="legalIntro">
-          Hier findest du Impressum, AGB und Datenschutz.
-        </p>
-      </section>
-
-      <section class="content-card legal-card">
-        <div class="legal-content-wrap" id="legalBody"></div>
-      </section>
-    </div>
-  </main>
-
-  <!-- GLOBAL FOOTER -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        © <span id="footerYear"></span> AnlageKompass · Informationen, keine Anlageberatung
-      </div>
-
-      <div class="footer-links">
-        <button class="footer-link" type="button" onclick="openLegalPage('impressum')">Impressum</button>
-        <button class="footer-link" type="button" onclick="openLegalPage('agb')">AGB</button>
-        <button class="footer-link" type="button" onclick="openLegalPage('datenschutz')">Datenschutz</button>
-      </div>
-    </div>
-  </footer>
-
-  <!-- LEGAL TEMPLATES: HIER EINFACH DEINE TEXTE EINTRAGEN -->
-  <div id="legalTemplates" class="hidden">
-    <section data-legal-template="impressum">
-      <div class="legal-doc">
-        <div class="legal-note">
-          Dies ist ein Platzhalter. Ersetze diesen Bereich durch dein echtes Impressum.
-        </div>
-
-        <h2>Impressum</h2>
-
-        <h3>Angaben gemäß § 5 TMG</h3>
-        <p>
-          Max Mustermann<br>
-          AnlageKompass<br>
-          Musterstraße 1<br>
-          12345 Musterstadt<br>
-          Deutschland
-        </p>
-
-        <h3>Kontakt</h3>
-        <p>
-          E-Mail: kontakt@meinanlagekompass.com<br>
-          Telefon: +49 123 456789
-        </p>
-
-        <h3>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
-        <p>
-          Max Mustermann<br>
-          Musterstraße 1<br>
-          12345 Musterstadt
-        </p>
-
-        <h3>Hinweis</h3>
-        <p>
-          Die Inhalte dieser Website dienen ausschließlich Informationszwecken und stellen keine Anlageberatung,
-          keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten dar.
-        </p>
-      </div>
-    </section>
-
-    <section data-legal-template="agb">
-      <div class="legal-doc">
-        <div class="legal-note">
-          Dies ist ein Platzhalter. Ersetze diesen Bereich durch deine finalen AGB.
-        </div>
-
-        <h2>Allgemeine Geschäftsbedingungen (AGB)</h2>
-
-        <h3>1. Geltungsbereich</h3>
-        <p>
-          Diese Allgemeinen Geschäftsbedingungen gelten für die Nutzung der Website und der angebotenen Inhalte von AnlageKompass.
-        </p>
-
-        <h3>2. Leistungen</h3>
-        <p>
-          AnlageKompass stellt Informationen, Marktbeobachtungen, Watchlist-Funktionen und digitale Inhalte zu Aktien,
-          ETFs und Kryptowerten bereit. Es handelt sich nicht um eine Anlageberatung.
-        </p>
-
-        <h3>3. Registrierung</h3>
-        <p>
-          Für bestimmte Funktionen ist eine Registrierung erforderlich. Nutzer sind verpflichtet,
-          ihre Angaben wahrheitsgemäß zu machen und aktuell zu halten.
-        </p>
-
-        <h3>4. Preise und Laufzeiten</h3>
-        <p>
-          Kostenpflichtige Leistungen werden zu den jeweils auf der Website angegebenen Preisen angeboten.
-          Laufzeiten, Kündigungsfristen und Zahlungsbedingungen sind transparent im Angebot auszuweisen.
-        </p>
-
-        <h3>5. Haftung</h3>
-        <p>
-          Die bereitgestellten Inhalte werden mit größter Sorgfalt erstellt. Dennoch wird keine Gewähr für Vollständigkeit,
-          Richtigkeit oder Aktualität übernommen. Anlageentscheidungen erfolgen ausschließlich auf eigenes Risiko.
-        </p>
-
-        <h3>6. Schlussbestimmungen</h3>
-        <p>
-          Es gilt das Recht der Bundesrepublik Deutschland, soweit gesetzlich zulässig.
-        </p>
-      </div>
-    </section>
-
-    <section data-legal-template="datenschutz">
-      <div class="legal-doc">
-        <div class="legal-note">
-          Dies ist ein Platzhalter. Ersetze diesen Bereich durch deine finale Datenschutzerklärung.
-        </div>
-
-        <h2>Datenschutzerklärung</h2>
-
-        <h3>1. Allgemeine Hinweise</h3>
-        <p>
-          Der Schutz deiner personenbezogenen Daten ist uns wichtig. Nachfolgend informieren wir dich über Art,
-          Umfang und Zweck der Verarbeitung personenbezogener Daten auf dieser Website.
-        </p>
-
-        <h3>2. Verantwortlicher</h3>
-        <p>
-          Max Mustermann<br>
-          AnlageKompass<br>
-          Musterstraße 1<br>
-          12345 Musterstadt<br>
-          E-Mail: datenschutz@meinanlagekompass.com
-        </p>
-
-        <h3>3. Erhobene Daten</h3>
-        <p>
-          Bei der Nutzung unserer Website können insbesondere E-Mail-Adresse, Registrierungsdaten,
-          Nutzungsdaten sowie technisch erforderliche Server-Logdaten verarbeitet werden.
-        </p>
-
-        <h3>4. Zweck der Verarbeitung</h3>
-        <ul>
-          <li>Bereitstellung der Website und ihrer Funktionen</li>
-          <li>Registrierung und Login</li>
-          <li>Versand von E-Mails und Erinnerungen</li>
-          <li>Bearbeitung von Anfragen</li>
-          <li>Verbesserung von Stabilität und Sicherheit</li>
-        </ul>
-
-        <h3>5. Eingesetzte Dienste</h3>
-        <p>
-          Auf dieser Website können externe Dienste wie Supabase, TradingView, Google Fonts, AdSense,
-          Finnhub oder Resend eingesetzt werden. Dabei können personenbezogene Daten an diese Anbieter übertragen werden.
-        </p>
-
-        <h3>6. Deine Rechte</h3>
-        <p>
-          Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung,
-          Datenübertragbarkeit sowie Beschwerde bei einer Aufsichtsbehörde.
-        </p>
-      </div>
-    </section>
-  </div>
 
   <!-- AUTH MODAL -->
   <div class="modal-overlay" id="authModal" aria-hidden="true">
@@ -1808,15 +1528,6 @@
         </div>
 
         <button class="submit-btn" id="loginBtn" type="button" onclick="handleLogin()">Anmelden</button>
-
-        <div class="legal-inline-links">
-          Rechtliches:
-          <button class="linklike" type="button" onclick="openLegalPageFromModal('impressum')">Impressum</button>
-          ·
-          <button class="linklike" type="button" onclick="openLegalPageFromModal('agb')">AGB</button>
-          ·
-          <button class="linklike" type="button" onclick="openLegalPageFromModal('datenschutz')">Datenschutz</button>
-        </div>
       </section>
 
       <section id="panelRegister" class="hidden">
@@ -1844,20 +1555,15 @@
           <input id="registerPassword" type="password" placeholder="Mindestens 6 Zeichen">
         </div>
 
-        <div class="check-row">
+        <label class="check-row">
           <input id="registerTerms" type="checkbox">
           <span>
             Ich bestätige die
-            <button class="linklike" type="button" onclick="openLegalPageFromModal('agb')">AGB</button>
+            <a class="inline-legal-link" href="#/agb" onclick="goToRoute('/agb'); return false;">AGB</a>
             und die
-            <button class="linklike" type="button" onclick="openLegalPageFromModal('datenschutz')">Datenschutzerklärung</button>.
+            <a class="inline-legal-link" href="#/datenschutz" onclick="goToRoute('/datenschutz'); return false;">Datenschutzhinweise</a>.
           </span>
-        </div>
-
-        <div class="legal-inline-links">
-          Zusätzlich erreichbar über:
-          <button class="linklike" type="button" onclick="openLegalPageFromModal('impressum')">Impressum</button>
-        </div>
+        </label>
 
         <button class="submit-btn" id="registerBtn" type="button" onclick="handleRegister()">Konto erstellen</button>
 
@@ -1876,6 +1582,7 @@
       <p class="intro" id="premiumIntro">
         Plus ist für Nutzer gedacht, die nicht nur reinschauen wollen, sondern mehrere Chancen pro Tag mit klarer Einordnung sehen möchten.
       </p>
+
       <div id="premiumModalStatus" style="margin-bottom:18px;"></div>
 
       <ul class="feature-list" style="margin-top:8px; margin-bottom:22px;">
@@ -1891,6 +1598,20 @@
     </div>
   </div>
 
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-copy">
+        © <span id="footerYear"></span> AnlageKompass
+      </div>
+      <div class="footer-links">
+        <a class="footer-link" href="#/impressum" onclick="goToRoute('/impressum'); return false;">Impressum</a>
+        <a class="footer-link" href="#/agb" onclick="goToRoute('/agb'); return false;">AGB</a>
+        <a class="footer-link" href="#/datenschutz" onclick="goToRoute('/datenschutz'); return false;">Datenschutz</a>
+      </div>
+    </div>
+  </footer>
+
   <script>
     const CONFIG = {
       supabaseUrl: 'https://wksfnfhlnynrkqzjcqxb.supabase.co',
@@ -1904,6 +1625,162 @@
     const ADSENSE = {
       client: 'ca-pub-7040998516591666',
       freeIdeaSlot: 'DEINE_AD_SLOT_ID'
+    };
+
+    /* -------------------------------------------------------
+       HIER EINFACH DEINE RECHTSTEXTE EINFÜGEN
+       Du musst nur die html-Felder unten austauschen.
+    ------------------------------------------------------- */
+    const LEGAL_CONTENT = {
+      impressum: {
+        kicker: 'Impressum',
+        title: 'Impressum',
+        updated: 'Bitte vor Livegang vollständig mit deinen echten Unternehmensdaten befüllen.',
+        html: `
+          <p><strong>Wichtig:</strong> Ersetze diesen Platzhalter vollständig durch dein echtes Impressum.</p>
+
+          <h2>Angaben gemäß § 5 TMG</h2>
+          <p>
+            [Vor- und Nachname / Firmenname]<br>
+            [Straße und Hausnummer]<br>
+            [PLZ Ort]<br>
+            [Land]
+          </p>
+
+          <h2>Kontakt</h2>
+          <p>
+            Telefon: [Telefonnummer]<br>
+            E-Mail: [E-Mail-Adresse]
+          </p>
+
+          <h2>Vertreten durch</h2>
+          <p>[Name des Vertretungsberechtigten]</p>
+
+          <h2>Umsatzsteuer-ID</h2>
+          <p>[USt-IdNr., falls vorhanden]</p>
+
+          <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+          <p>
+            [Name]<br>
+            [Adresse]
+          </p>
+
+          <h2>Hinweis</h2>
+          <p>
+            AnlageKompass stellt keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von
+            Finanzinstrumenten dar.
+          </p>
+        `
+      },
+      agb: {
+        kicker: 'AGB',
+        title: 'Allgemeine Geschäftsbedingungen (AGB)',
+        updated: 'Bitte vor Livegang juristisch prüfen lassen und anschließend hier ersetzen.',
+        html: `
+          <p><strong>Wichtig:</strong> Das hier ist nur ein Platzhalter-Layout. Bitte deine finalen AGB vollständig hier einfügen.</p>
+
+          <h2>1. Geltungsbereich</h2>
+          <p>
+            Diese Allgemeinen Geschäftsbedingungen gelten für die Nutzung von AnlageKompass durch Verbraucher und Unternehmer.
+          </p>
+
+          <h2>2. Leistungen von AnlageKompass</h2>
+          <p>
+            AnlageKompass stellt Informationen, Datenaufbereitungen und Marktbeobachtungen zu Aktien, ETFs und Krypto bereit.
+            Es erfolgt keine Anlageberatung.
+          </p>
+
+          <h2>3. Vertragsschluss</h2>
+          <p>
+            Der Vertrag kommt zustande, sobald der Nutzer den Registrierungsprozess abschließt und – sofern erforderlich –
+            eine kostenpflichtige Leistung erfolgreich bucht.
+          </p>
+
+          <h2>4. Preise und Zahlungsbedingungen</h2>
+          <p>
+            Es gelten die auf der Website zum Zeitpunkt der Bestellung ausgewiesenen Preise.
+          </p>
+
+          <h2>5. Laufzeit und Kündigung</h2>
+          <p>
+            Hier bitte deine Regelungen zu Laufzeit, Verlängerung und Kündigung einfügen.
+          </p>
+
+          <h2>6. Haftung</h2>
+          <p>
+            AnlageKompass haftet nur im gesetzlichen Rahmen. Die bereitgestellten Inhalte stellen keine Garantie für Kursentwicklungen dar.
+          </p>
+
+          <h2>7. Keine Anlageberatung</h2>
+          <p>
+            Sämtliche Inhalte dienen ausschließlich Informationszwecken. Es erfolgt keine individuelle Beratung und keine Empfehlung
+            zum Kauf oder Verkauf von Finanzinstrumenten.
+          </p>
+
+          <h2>8. Schlussbestimmungen</h2>
+          <p>
+            Hier bitte Gerichtsstand, anwendbares Recht und salvatorische Klausel ergänzen.
+          </p>
+        `
+      },
+      datenschutz: {
+        kicker: 'Datenschutz',
+        title: 'Datenschutzerklärung',
+        updated: 'Bitte vor Livegang mit deinen echten Prozessen, Tools und Empfängern befüllen.',
+        html: `
+          <p><strong>Wichtig:</strong> Das hier ist nur ein Platzhalter-Layout. Bitte deine finale Datenschutzerklärung vollständig hier einfügen.</p>
+
+          <h2>1. Verantwortlicher</h2>
+          <p>
+            [Vor- und Nachname / Firmenname]<br>
+            [Adresse]<br>
+            [E-Mail-Adresse]
+          </p>
+
+          <h2>2. Verarbeitung personenbezogener Daten</h2>
+          <p>
+            Bei der Nutzung von AnlageKompass können insbesondere folgende Daten verarbeitet werden:
+          </p>
+          <ul>
+            <li>Bestandsdaten wie Name und E-Mail-Adresse</li>
+            <li>Nutzungsdaten</li>
+            <li>technische Daten wie IP-Adresse, Browserinformationen und Zeitpunkte</li>
+          </ul>
+
+          <h2>3. Zweck der Verarbeitung</h2>
+          <p>
+            Die Datenverarbeitung erfolgt zur Bereitstellung der Plattform, zur Kontoverwaltung, zum Versand von E-Mails
+            und zur technischen Sicherheit.
+          </p>
+
+          <h2>4. Eingesetzte Dienste</h2>
+          <p>
+            Hier bitte konkret aufführen, welche Dienste du wirklich nutzt, zum Beispiel:
+            Supabase, Resend, Finnhub, TradingView, Google Fonts, Google AdSense.
+          </p>
+
+          <h2>5. Rechtsgrundlagen</h2>
+          <p>
+            Hier bitte die zutreffenden Rechtsgrundlagen nach DSGVO ergänzen.
+          </p>
+
+          <h2>6. Speicherdauer</h2>
+          <p>
+            Hier bitte angeben, wie lange du welche Daten speicherst.
+          </p>
+
+          <h2>7. Betroffenenrechte</h2>
+          <p>
+            Nutzer haben im Rahmen der gesetzlichen Vorschriften insbesondere Rechte auf Auskunft, Berichtigung, Löschung,
+            Einschränkung der Verarbeitung und Widerspruch.
+          </p>
+
+          <h2>8. Kontakt</h2>
+          <p>
+            Für Datenschutzanfragen: [E-Mail-Adresse]
+          </p>
+        `
+      }
     };
 
     const ALERT_TEMPLATES = [
@@ -1931,30 +1808,6 @@
       chartSymbol: 6 * 60 * 60 * 1000,
       opportunities: 60 * 1000
     };
-
-    const LEGAL_PAGE_META = {
-      impressum: {
-        route: '/impressum',
-        kicker: 'ℹ️ Impressum',
-        title: 'Impressum',
-        intro: 'Hier kannst du dein Impressum direkt im HTML pflegen und jederzeit austauschen.'
-      },
-      agb: {
-        route: '/agb',
-        kicker: '📄 AGB',
-        title: 'Allgemeine Geschäftsbedingungen',
-        intro: 'Diese Seite ist absichtlich so gebaut, dass du deinen finalen AGB-Text direkt im HTML einfügen kannst.'
-      },
-      datenschutz: {
-        route: '/datenschutz',
-        kicker: '🔒 Datenschutz',
-        title: 'Datenschutzerklärung',
-        intro: 'Auch die Datenschutzerklärung kannst du unten im HTML zentral hinterlegen und später leicht ersetzen.'
-      }
-    };
-
-    const EMAIL_CONFIRM_QUERY_KEY = 'auth_action';
-    const EMAIL_CONFIRM_QUERY_VALUE = 'confirm_email';
 
     let supabaseClient = null;
     let currentUser = null;
@@ -2198,6 +2051,7 @@
         SIX: 'SIX',
         LSE: 'LSE'
       };
+
       const upper = String(exchange || '').toUpperCase();
       if (displaySymbol?.includes(':')) return displaySymbol;
       if (!displaySymbol) return '';
@@ -2373,63 +2227,49 @@
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
 
-    function parseRouteInfo() {
-      let path = location.pathname || '/';
-      let query = new URLSearchParams(location.search || '');
+    function getRouteState() {
+      const useHashRouting =
+        location.protocol === 'file:' ||
+        location.pathname === '/' ||
+        location.pathname.endsWith('.html');
 
-      if (path === '/' || path === '/index.html' || location.protocol === 'file:') {
-        const hash = location.hash || '';
-        if (hash.startsWith('#/')) {
-          const hashRaw = hash.slice(1);
-          const [hashPath, hashQueryString = ''] = hashRaw.split('?');
-          path = hashPath || '/';
-          query = new URLSearchParams(hashQueryString);
-        } else {
-          path = '/';
-        }
+      let raw = '/';
+
+      if (useHashRouting) {
+        const hash = location.hash || '#/';
+        raw = hash.startsWith('#/') ? hash.slice(1) : '/';
+      } else {
+        raw = `${location.pathname || '/'}${location.search || ''}`;
       }
 
-      return { path, query };
+      const qIndex = raw.indexOf('?');
+      const path = qIndex >= 0 ? raw.slice(0, qIndex) : raw;
+      const queryString = qIndex >= 0 ? raw.slice(qIndex + 1) : '';
+
+      return {
+        raw,
+        path: path || '/',
+        params: new URLSearchParams(queryString)
+      };
     }
 
     function parseRoute() {
-      return parseRouteInfo().path;
+      return getRouteState().path;
     }
 
     function goToRoute(path) {
-      if (location.pathname === '/' || location.pathname.endsWith('.html') || location.protocol === 'file:') {
+      const useHashRouting =
+        location.protocol === 'file:' ||
+        location.pathname === '/' ||
+        location.pathname.endsWith('.html');
+
+      if (useHashRouting) {
         location.hash = '#' + path;
         handleRoute();
       } else {
         history.pushState({}, '', path);
         handleRoute();
       }
-    }
-
-    function openLegalPage(pageKey) {
-      if (!LEGAL_PAGE_META[pageKey]) return;
-      closeAuthModal();
-      closePremiumModal();
-      goToRoute(LEGAL_PAGE_META[pageKey].route);
-    }
-
-    function openLegalPageFromModal(pageKey) {
-      openLegalPage(pageKey);
-    }
-
-    function renderLegalPage(pageKey) {
-      const meta = LEGAL_PAGE_META[pageKey];
-      if (!meta) {
-        showView('view-landing');
-        return;
-      }
-
-      const tpl = document.querySelector(`[data-legal-template="${pageKey}"]`);
-      getEl('legalKicker').textContent = meta.kicker;
-      getEl('legalTitle').textContent = meta.title;
-      getEl('legalIntro').textContent = meta.intro;
-      getEl('legalBody').innerHTML = tpl ? tpl.innerHTML : `<div class="legal-note">Für diese Seite wurde noch kein Inhalt hinterlegt.</div>`;
-      showView('view-legal');
     }
 
     function getUserDisplayName() {
@@ -2468,7 +2308,6 @@
     function refreshAuthModalUI() {
       const info = getEl('authInfo');
       if (!info) return;
-
       if (pendingPremiumIntent) {
         info.textContent = 'Nach der Anmeldung wirst du direkt zur Plus-Freischaltung weitergeleitet.';
         info.classList.remove('hidden');
@@ -2530,17 +2369,15 @@
             Eingeloggt als <strong>${escapeHtml(getUserDisplayName())}</strong>. Dein Zugang ist bereits freigeschaltet.
           </div>
         `;
-        cta.innerHTML = `
-          <button class="submit-btn" type="button" onclick="continueAfterPremiumModal()">Weiter</button>
-        `;
+        cta.innerHTML = `<button class="submit-btn" type="button" onclick="continueAfterPremiumModal()">Weiter</button>`;
         return;
       }
 
       intro.textContent = 'Dein Konto ist angemeldet, aber noch nicht für Plus freigeschaltet. Hier verbindest du später deinen echten Zahlungsflow.';
       status.innerHTML = `
         <div class="notice" style="width:100%; margin:0;">
-          Eingeloggt als <strong>${escapeHtml(getUserDisplayName())}</strong>.
-          Für Tests kannst du deinen Account in Supabase auf <strong>plan = plus</strong> / <strong>is_premium = true</strong> setzen.
+          Eingeloggt als <strong>${escapeHtml(getUserDisplayName())}</strong>. Für Tests kannst du deinen Account in Supabase auf
+          <strong>plan = plus</strong> / <strong>is_premium = true</strong> setzen.
         </div>
       `;
       cta.innerHTML = `
@@ -2768,6 +2605,7 @@
 
     async function upsertProfileForUser(user, firstName = '', lastName = '', email = '') {
       if (!supabaseClient || !user?.id) return;
+
       try {
         const metaFirstName = normalizeText(firstName || user.user_metadata?.first_name || '');
         const metaLastName = normalizeText(lastName || user.user_metadata?.last_name || '');
@@ -2835,6 +2673,7 @@
         showError('Bitte fülle E-Mail und Passwort aus.');
         return;
       }
+
       if (!supabaseClient) {
         showError('Supabase ist nicht verfügbar.');
         return;
@@ -2845,6 +2684,7 @@
 
       try {
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
         if (error) {
           showError(mapAuthError(error.message));
           return;
@@ -2897,14 +2737,17 @@
         showError('Bitte fülle alle Felder aus.');
         return;
       }
+
       if (!terms) {
         showError('Bitte bestätige die AGB und Datenschutzhinweise.');
         return;
       }
+
       if (password.length < 6) {
         showError('Das Passwort muss mindestens 6 Zeichen lang sein.');
         return;
       }
+
       if (!supabaseClient) {
         showError('Supabase ist nicht verfügbar.');
         return;
@@ -2914,7 +2757,12 @@
       setLoading(button, true, 'Konto erstellen');
 
       try {
-        const emailRedirectTo = `${window.location.origin}${window.location.pathname}?${EMAIL_CONFIRM_QUERY_KEY}=${EMAIL_CONFIRM_QUERY_VALUE}`;
+        /* WICHTIG:
+           Kein Hash im Redirect.
+           So landest du nach der Supabase-Mailbestätigung nicht auf einer unschönen 404,
+           sondern immer auf deiner echten Seite. Danach zeigen wir /email-bestaetigt im Frontend an.
+        */
+        const emailRedirectTo = `${window.location.origin}${window.location.pathname}`;
 
         const { data, error } = await supabaseClient.auth.signUp({
           email,
@@ -2954,15 +2802,16 @@
 
     async function resendConfirmation() {
       clearMessages();
-      const email = getEl('registerEmail').value.trim();
 
+      const email = getEl('registerEmail').value.trim();
       if (!email) {
         showError('Bitte gib zuerst die E-Mail-Adresse ein.');
         return;
       }
 
       try {
-        const emailRedirectTo = `${window.location.origin}${window.location.pathname}?${EMAIL_CONFIRM_QUERY_KEY}=${EMAIL_CONFIRM_QUERY_VALUE}`;
+        const emailRedirectTo = `${window.location.origin}${window.location.pathname}`;
+
         const { error } = await supabaseClient.auth.resend({
           type: 'signup',
           email,
@@ -3014,6 +2863,7 @@
           previousClose: Number(data.pc || 0),
           changePercent: data.pc ? ((Number(data.c || 0) - Number(data.pc || 0)) / Number(data.pc || 1)) * 100 : 0
         };
+
         quoteCache.set(ticker, { value: quote, at: Date.now() });
         return quote;
       } catch (e) {
@@ -3116,8 +2966,8 @@
 
     function updateFavoritesCounter() {
       const count = loadFavorites().length;
-      if (getEl('favoritesCountPill')) getEl('favoritesCountPill').textContent = `${count} / 30 Favoriten`;
-      if (getEl('favoritesCountBox')) getEl('favoritesCountBox').textContent = `${count} / 30`;
+      getEl('favoritesCountPill').textContent = `${count} / 30 Favoriten`;
+      getEl('favoritesCountBox').textContent = `${count} / 30`;
     }
 
     async function searchStocks() {
@@ -3166,7 +3016,6 @@
               </div>
               <button class="star-btn ${fav ? 'active' : ''}" data-item='${encodeURIComponent(JSON.stringify(normalized))}'>★</button>
             </div>
-
             <div class="inline-actions">
               <button class="mini-btn" data-open='${encodeURIComponent(JSON.stringify(normalized))}'>Im Chart öffnen</button>
             </div>
@@ -3225,7 +3074,6 @@
       favorites.unshift(finalItem);
       saveFavorites(favorites);
       currentFavorite = finalItem;
-
       renderFavoritesList();
       renderAlertList();
       renderFavoriteDetail(finalItem);
@@ -3235,10 +3083,8 @@
 
     function renderFavoritesList() {
       updateFavoritesCounter();
-
       const favorites = loadFavorites();
       const root = getEl('favoritesList');
-      if (!root) return;
 
       if (!favorites.length) {
         root.innerHTML = `<div class="search-empty">Noch keine Favoriten gespeichert.</div>`;
@@ -3253,13 +3099,11 @@
               <strong>${escapeHtml(item.name)}</strong>
               <div class="symbol-meta">${escapeHtml(item.ticker || '—')} · ${escapeHtml(item.exchange || '—')} · ${escapeHtml(item.country || '—')}<br>${escapeHtml(item.symbol)}</div>
             </div>
-
             <div class="inline-actions">
               <button class="mini-btn" data-open-id="${escapeHtml(item.id)}">Öffnen</button>
               <button class="danger-btn" data-remove-id="${escapeHtml(item.id)}">Entfernen</button>
             </div>
           </div>
-
           <div class="alert-builder">
             <div class="field-inline">
               <label>Neue Kursregel hinzufügen</label>
@@ -3338,11 +3182,7 @@
 
       Object.entries(alerts).forEach(([favoriteId, rules]) => {
         (Array.isArray(rules) ? rules : []).forEach(rule => {
-          entries.push({
-            favoriteId,
-            favorite: favoriteMap[favoriteId] || null,
-            rule
-          });
+          entries.push({ favoriteId, favorite: favoriteMap[favoriteId] || null, rule });
         });
       });
 
@@ -3358,7 +3198,6 @@
         showBanner('Dieser Browser unterstützt keine Benachrichtigungen.');
         return;
       }
-
       if (Notification.permission === 'granted') {
         showBanner('Browser-Benachrichtigungen sind bereits aktiviert.');
         return;
@@ -3406,8 +3245,6 @@
 
     function renderAlertList() {
       const root = getEl('watchAlertList');
-      if (!root) return;
-
       const entries = getAllAlertEntries();
 
       if (!entries.length) {
@@ -3484,6 +3321,7 @@
         if (!quote) continue;
 
         let changed = false;
+
         rules.forEach(rule => {
           if (isRuleOnCooldown(rule)) return;
           if (!shouldTriggerAlert(rule, quote)) return;
@@ -3542,8 +3380,8 @@
       getEl('watchPrice').textContent = '—';
       getEl('watchChange').textContent = '—';
       getEl('watchChange').className = 'change';
-
       setChartTitle('watchChartTitle', '', 'Chart zur Aktie');
+
       getEl('watchFactsGrid').innerHTML = `
         <div class="fact-card"><div class="label">Status</div><div class="value">Keine Auswahl</div></div>
         <div class="fact-card"><div class="label">Favoriten</div><div class="value">${loadFavorites().length} / 30</div></div>
@@ -3589,7 +3427,6 @@
       const industry = profile?.finnhubIndustry || opportunity.assetType || 'seinem Marktsegment';
       const exchange = profile?.exchange || opportunity.exchange || 'dem Markt';
       const country = profile?.country || opportunity.country || 'dem jeweiligen Markt';
-
       const context = simplifyInvestmentText(
         opportunity.contextText,
         'Der Titel wird derzeit im Chancen-Feed geführt und gehört damit zu den Werten, die aktuell besonders beobachtet werden.'
@@ -3669,10 +3506,29 @@
       return null;
     }
 
+    function findOpportunityBySymbol(symbol) {
+      const needle = String(symbol || '').trim().toUpperCase();
+      if (!needle) return null;
+
+      for (const day of currentOpportunityDays) {
+        const found = day.opportunities.find(item => {
+          const checks = [
+            String(item.symbol || '').toUpperCase(),
+            String(item.displaySymbol || '').toUpperCase(),
+            String(item.ticker || '').toUpperCase(),
+            String(getTickerFromSymbol(item.symbol || '')).toUpperCase()
+          ];
+          return checks.includes(needle);
+        });
+
+        if (found) return { day, opportunity: found };
+      }
+
+      return null;
+    }
+
     function populateDaySelect(days) {
       const select = getEl('daySelect');
-      if (!select) return;
-
       if (!days.length) {
         select.innerHTML = `<option value="">Keine Daten</option>`;
         return;
@@ -3685,8 +3541,6 @@
 
     function populateOpportunitySelect(day, selectedId = null) {
       const select = getEl('opportunitySelect');
-      if (!select) return;
-
       if (!day?.opportunities?.length) {
         select.innerHTML = `<option value="">Keine Chancen verfügbar</option>`;
         return;
@@ -3701,7 +3555,6 @@
 
     function renderOpportunityList(day, selectedId) {
       const list = getEl('opportunityList');
-      if (!list) return;
 
       if (!day?.opportunities?.length) {
         list.innerHTML = `<div class="search-empty">Keine Chancen verfügbar.</div>`;
@@ -3809,6 +3662,7 @@
       getEl('premiumAlternativeText').textContent = buildAlternativeIdea(finalOpportunity);
 
       renderPremiumFacts(finalOpportunity, profile);
+
       getEl('daySelect').value = day.date;
       populateOpportunitySelect(day, finalOpportunity.id);
       renderOpportunityList(day, finalOpportunity.id);
@@ -3860,6 +3714,7 @@
       getEl('publicAlternativeText').textContent = buildAlternativeIdea(finalOpportunity);
 
       renderPublicFacts(finalOpportunity, profile);
+
       setChartTitle('publicChartTitle', finalOpportunity.name, 'Chart zur kostenlosen Idee');
       renderTradingViewChart('tv-chart-public', finalOpportunity.chartSymbol || chartDefaults.symbol);
     }
@@ -3921,10 +3776,16 @@
         return null;
       }
 
-      const route = parseRoute();
-      const routeId = route.startsWith('/premium/chancen/') ? decodeURIComponent(route.replace('/premium/chancen/', '').trim()) : null;
-      let resolved = routeId ? findOpportunityById(routeId) : null;
+      const routeState = getRouteState();
+      const route = routeState.path;
+      const routeId = route.startsWith('/premium/chancen/')
+        ? decodeURIComponent(route.replace('/premium/chancen/', '').trim())
+        : (route === '/premium/chancen' ? routeState.params.get('opportunity_id') : null);
 
+      const routeSymbol = routeState.params.get('symbol');
+
+      let resolved = routeId ? findOpportunityById(routeId) : null;
+      if (!resolved && routeSymbol) resolved = findOpportunityBySymbol(routeSymbol);
       if (!resolved && keepCurrent && currentOpportunity?.id) resolved = findOpportunityById(currentOpportunity.id);
       if (!resolved) resolved = { day: currentOpportunityDays[0], opportunity: currentOpportunityDays[0].opportunities[0] };
 
@@ -3955,7 +3816,6 @@
 
     function startPremiumAutoRefresh() {
       stopPremiumAutoRefresh();
-
       premiumRefreshTimer = setInterval(async () => {
         const route = parseRoute();
         if (route.startsWith('/premium/chancen') && isPremiumUser()) await refreshPremiumData(true, true);
@@ -4007,12 +3867,40 @@
       }
     }
 
+    function renderLegalPage(key) {
+      const page = LEGAL_CONTENT[key] || LEGAL_CONTENT.impressum;
+      getEl('legalKicker').textContent = page.kicker || 'Rechtliches';
+      getEl('legalTitle').textContent = page.title || 'Rechtliche Informationen';
+      getEl('legalUpdated').textContent = page.updated || '';
+      getEl('legalBody').innerHTML = page.html || '<p>Kein Inhalt vorhanden.</p>';
+    }
+
+    function renderLegalRoute(route) {
+      showView('view-legal');
+
+      if (route === '/impressum') {
+        renderLegalPage('impressum');
+        return;
+      }
+      if (route === '/agb') {
+        renderLegalPage('agb');
+        return;
+      }
+      if (route === '/datenschutz') {
+        renderLegalPage('datenschutz');
+        return;
+      }
+
+      renderLegalPage('impressum');
+    }
+
     async function renderWatchlistRoute() {
       if (!currentUser) {
         showView('view-landing');
         openPremiumModal('/watchlist');
         return;
       }
+
       if (!isPremiumUser()) {
         showView('view-landing');
         openPremiumModal('/watchlist');
@@ -4031,12 +3919,13 @@
       startAlertMonitoring();
     }
 
-    async function renderPremiumRoute(opportunityIdFromRoute = null) {
+    async function renderPremiumRoute(opportunityIdFromRoute = null, symbolFromRoute = null) {
       if (!currentUser) {
         showView('view-landing');
         openPremiumModal('/premium/chancen');
         return;
       }
+
       if (!isPremiumUser()) {
         showView('view-landing');
         openPremiumModal('/premium/chancen');
@@ -4046,9 +3935,15 @@
       showView('view-premium');
 
       if (currentOpportunityDays.length) {
-        const routeId = opportunityIdFromRoute || currentOpportunity?.id || currentOpportunityDays[0]?.opportunities?.[0]?.id;
-        const found = routeId ? findOpportunityById(routeId) : null;
-        if (found) {
+        let found = null;
+        if (opportunityIdFromRoute) found = findOpportunityById(opportunityIdFromRoute);
+        if (!found && symbolFromRoute) found = findOpportunityBySymbol(symbolFromRoute);
+        if (!found && currentOpportunity?.id) found = findOpportunityById(currentOpportunity.id);
+        if (!found) {
+          found = { day: currentOpportunityDays[0], opportunity: currentOpportunityDays[0]?.opportunities?.[0] };
+        }
+
+        if (found?.opportunity) {
           populateDaySelect(currentOpportunityDays);
           populateOpportunitySelect(found.day, found.opportunity.id);
           renderOpportunityList(found.day, found.opportunity.id);
@@ -4072,8 +3967,9 @@
         await renderPremiumOpportunity(selectedOpportunity, selectedDay);
       };
 
-      if (opportunityIdFromRoute) {
-        const found = findOpportunityById(opportunityIdFromRoute);
+      if (opportunityIdFromRoute || symbolFromRoute) {
+        let found = opportunityIdFromRoute ? findOpportunityById(opportunityIdFromRoute) : null;
+        if (!found && symbolFromRoute) found = findOpportunityBySymbol(symbolFromRoute);
         if (found) await renderPremiumOpportunity(found.opportunity, found.day);
       }
 
@@ -4118,6 +4014,7 @@
         });
 
         const data = await res.json().catch(() => ({}));
+
         if (!res.ok) {
           status.style.color = '#ffb8c2';
           status.textContent = data?.error || 'Die Anmeldung konnte nicht gespeichert werden.';
@@ -4132,68 +4029,6 @@
         status.style.color = '#ffb8c2';
         status.textContent = 'Die Anmeldung konnte nicht gesendet werden.';
       }
-    }
-
-    async function handleRoute() {
-      if (!authInitialized) return;
-
-      const { path, query } = parseRouteInfo();
-
-      if (path === '/' || path === '') {
-        stopPremiumAutoRefresh();
-        showView('view-landing');
-        return;
-      }
-
-      if (path === '/email-bestaetigt') {
-        stopPremiumAutoRefresh();
-        showView('view-email-confirmed');
-        return;
-      }
-
-      if (path === '/impressum') {
-        stopPremiumAutoRefresh();
-        renderLegalPage('impressum');
-        return;
-      }
-
-      if (path === '/agb') {
-        stopPremiumAutoRefresh();
-        renderLegalPage('agb');
-        return;
-      }
-
-      if (path === '/datenschutz') {
-        stopPremiumAutoRefresh();
-        renderLegalPage('datenschutz');
-        return;
-      }
-
-      if (path === '/watchlist') {
-        stopPremiumAutoRefresh();
-        await renderWatchlistRoute();
-        return;
-      }
-
-      if (path === '/premium/chancen') {
-        const oppIdFromQuery = query.get('opportunity_id');
-        await renderPremiumRoute(oppIdFromQuery || null);
-        return;
-      }
-
-      if (path.startsWith('/premium/chancen/')) {
-        const opportunityId = decodeURIComponent(path.replace('/premium/chancen/', '').trim());
-        await renderPremiumRoute(opportunityId);
-        return;
-      }
-
-      if (path === '/kostenlose-idee') {
-        await renderPublicRoute();
-        return;
-      }
-
-      stopPremiumAutoRefresh();
-      showView('view-landing');
     }
 
     function extractAccessTokenFromHash() {
@@ -4213,15 +4048,7 @@
       if (!supabaseClient) return;
 
       const tokenData = extractAccessTokenFromHash();
-      const url = new URL(window.location.href);
-      const authAction = url.searchParams.get(EMAIL_CONFIRM_QUERY_KEY);
-
-      if (!tokenData?.access_token || !tokenData?.refresh_token) {
-        if (authAction === EMAIL_CONFIRM_QUERY_VALUE) {
-          history.replaceState({}, '', `${window.location.pathname}#/email-bestaetigt`);
-        }
-        return;
-      }
+      if (!tokenData?.access_token || !tokenData?.refresh_token) return;
 
       try {
         const { error } = await supabaseClient.auth.setSession({
@@ -4230,11 +4057,67 @@
         });
 
         if (!error) {
-          history.replaceState({}, '', `${window.location.pathname}#/email-bestaetigt`);
+          /* Danach zeigen wir sauber die Erfolgsseite an,
+             statt dass ein Server-Pfad gesucht wird und 404 erscheint. */
+          goToRoute('/email-bestaetigt');
         }
       } catch (e) {
         console.error('Email redirect session error:', e);
       }
+    }
+
+    async function handleRoute() {
+      if (!authInitialized) return;
+
+      const routeState = getRouteState();
+      const route = routeState.path;
+      const queryOpportunityId = routeState.params.get('opportunity_id');
+      const querySymbol = routeState.params.get('symbol');
+
+      clearBanner();
+
+      if (route === '/' || route === '') {
+        stopPremiumAutoRefresh();
+        showView('view-landing');
+        return;
+      }
+
+      if (route === '/email-bestaetigt') {
+        stopPremiumAutoRefresh();
+        showView('view-email-confirmed');
+        return;
+      }
+
+      if (route === '/impressum' || route === '/agb' || route === '/datenschutz') {
+        stopPremiumAutoRefresh();
+        renderLegalRoute(route);
+        return;
+      }
+
+      if (route === '/watchlist') {
+        stopPremiumAutoRefresh();
+        await renderWatchlistRoute();
+        return;
+      }
+
+      if (route === '/premium/chancen') {
+        await renderPremiumRoute(queryOpportunityId, querySymbol);
+        return;
+      }
+
+      if (route.startsWith('/premium/chancen/')) {
+        const opportunityId = decodeURIComponent(route.replace('/premium/chancen/', '').trim());
+        await renderPremiumRoute(opportunityId || queryOpportunityId, querySymbol);
+        return;
+      }
+
+      if (route === '/kostenlose-idee') {
+        await renderPublicRoute();
+        return;
+      }
+
+      stopPremiumAutoRefresh();
+      showView('view-landing');
     }
 
     document.querySelectorAll('.modal-overlay').forEach((overlay) => {
@@ -4258,8 +4141,8 @@
     window.addEventListener('DOMContentLoaded', async () => {
       getEl('footerYear').textContent = String(new Date().getFullYear());
 
-      getEl('stockSearchBtn')?.addEventListener('click', searchStocks);
-      getEl('stockSearchInput')?.addEventListener('keydown', (e) => {
+      getEl('stockSearchBtn').addEventListener('click', searchStocks);
+      getEl('stockSearchInput').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') searchStocks();
       });
 
