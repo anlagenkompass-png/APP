@@ -655,7 +655,6 @@
 
       <div class="nav-actions">
         <button class="btn btn-top-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Top-Idee</button>
-        <button class="btn btn-top-secondary" type="button" onclick="goToRoute('/premium/chancen')">Plus-Bereich</button>
       </div>
 
       <div class="nav-actions" id="navLoggedOut">
@@ -992,44 +991,6 @@
     </div>
   </main>
 
-  <main id="view-premium" class="page-view">
-    <div class="container app-shell">
-      <section class="page-hero">
-        <div class="kicker">⭐ AnlageKompass Plus</div>
-        <div class="row-head">
-          <div>
-            <h1>Mehrere Chancen pro Tag. Klar eingeordnet.</h1>
-            <p class="page-hero-copy">
-              Der Plus-Bereich ist vorhanden. Ohne aktive Zahlungsfreischaltung bleibt er gesperrt.
-              Nach dem späteren Stripe- oder Zahlungsanbieter-Checkout kannst du hier echten Premium-Content aus Supabase ausliefern.
-            </p>
-            <div class="chips">
-              <span class="chip">19,99 € / Monat</span>
-              <span class="chip">Mehrere Chancen pro Tag</span>
-              <span class="chip">Watchlist</span>
-              <span class="chip">Kursregeln</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="gate-card" id="premiumAccessGate">
-        <div class="gate-badge">🔒 Plus-Zugang</div>
-        <h3 id="premiumGateTitle">Anmeldung und aktives Plus erforderlich</h3>
-        <p id="premiumGateText">Für den Plus-Bereich brauchst du ein Konto und später eine echte Zahlungsfreischaltung.</p>
-        <div class="hero-actions" id="premiumGateActions" style="justify-content:flex-start; margin-top:18px;"></div>
-      </section>
-
-      <section id="premiumProtectedContent" class="hidden">
-        <section class="content-card">
-          <div class="promo-badge">Live-Ansicht</div>
-          <h3 style="margin-top:14px;">Dein Plus-Bereich ist freigeschaltet</h3>
-          <p class="muted">Hier kannst du später deine Premium-Chancen aus der opportunities-Tabelle rendern, z. B. nur mit is_premium = true.</p>
-        </section>
-      </section>
-    </div>
-  </main>
-
   <div class="modal-overlay" id="authModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
       <button class="close" type="button" aria-label="Schließen" onclick="closeAuthModal()">×</button>
@@ -1112,8 +1073,7 @@
         <li><span class="tick">✓</span>Kursregeln &amp; Benachrichtigungen</li>
       </ul>
       <div class="notice" style="width:100%; margin:0 0 16px;">
-        Produkt: AnlageKompass Plus · Preis: 19,99 € pro Monat · Laufzeit: monatlich · Verlängerung: automatische Verlängerung bis zur Kündigung · Kündigung: jederzeit zum Ende des laufenden Zeitraums.
-        Vor Livegang musst du noch deinen echten Zahlungsdienstleister und Webhook-Flow anbinden.
+        Produkt: AnlageKompass Plus · Preis: 19,99 € pro Monat · Laufzeit: [MONATLICH / ANDERE LAUFZEIT EINFÜGEN] · Verlängerung: [AUTOMATISCHE VERLÄNGERUNG BIS ZUR KÜNDIGUNG EINTRAGEN] · Kündigung: [JEDERZEIT ZUM ENDE DES LAUFENDEN ZEITRAUMS / ANDERS]. Lies vor dem Livegang auch die Widerrufsbelehrung und ergänze deinen echten Zahlungsdienstleister.
       </div>
       <label class="check-row">
         <input id="premiumTermsCheck" type="checkbox">
@@ -1128,8 +1088,7 @@
       <label class="check-row">
         <input id="premiumDigitalConsent" type="checkbox">
         <span>
-          Ich verlange ausdrücklich, dass der Anbieter vor Ablauf der Widerrufsfrist mit der Ausführung der digitalen Leistung beginnt.
-          Mir ist bekannt, dass ich mein Widerrufsrecht unter den gesetzlichen Voraussetzungen verliere.
+          Ich verlange ausdrücklich, dass [ANBIETERNAME] vor Ablauf der Widerrufsfrist mit der Ausführung der digitalen Leistung beginnt. Mir ist bekannt, dass ich mein Widerrufsrecht unter den gesetzlichen Voraussetzungen verliere.
         </span>
       </label>
       <div class="hero-actions" id="premiumModalCta" style="justify-content:flex-start;">
@@ -1675,7 +1634,7 @@
       if (isPremiumUser()) {
         intro.textContent = 'Dein Konto ist bereits als Plus markiert.';
         status.innerHTML = `<div class="notice" style="width:100%; margin:0;">Eingeloggt als <strong>${escapeHtml(getUserDisplayName())}</strong>. Dein Profil hat bereits Premium-Zugriff.</div>`;
-        cta.innerHTML = `<button class="btn btn-hero-primary" type="button" onclick="closePremiumModal(); goToRoute('/premium/chancen')">Zum Plus-Bereich</button>`;
+        cta.innerHTML = `<button class="btn btn-hero-primary" type="button" onclick="closePremiumModal(); showBanner('Dein Konto ist bereits als Plus markiert. Jetzt kannst du deinen echten Premium-Content an das Profil anbinden.')">Plus ist aktiv</button>`;
         return;
       }
 
@@ -1697,8 +1656,7 @@
         return;
       }
 
-      showBanner('Der Plus-Bereich ist vorhanden, aber ein echter Zahlungsanbieter-Checkout fehlt noch. Binde jetzt Stripe oder einen anderen Zahlungsdienst mit Webhook an und setze danach plan/is_premium im Profil.');
-      goToRoute('/premium/chancen');
+      showBanner('Der echte Zahlungsflow ist noch nicht eingebaut. Ergänze jetzt Strike, Laufzeit, Verlängerung, Kündigungslogik und den zahlungspflichtigen Checkout.');
     }
 
     function clearMessages() {
@@ -1812,7 +1770,6 @@
           closeAuthModal();
           refreshNavUI();
           refreshPremiumModalUI();
-          refreshPremiumGate();
 
           if (pendingRouteIntent) {
             const target = pendingRouteIntent;
@@ -2304,8 +2261,11 @@
       }
 
       if (route === '/premium/chancen') {
-        showView('view-premium');
-        refreshPremiumGate();
+        showView('view-landing');
+        refreshPremiumModalUI();
+        if (!getEl('premiumModal').classList.contains('open')) {
+          openPremiumModal('/premium/chancen');
+        }
         return;
       }
 
@@ -2347,7 +2307,6 @@
           refreshPremiumModalUI();
           refreshAuthModalUI();
           refreshPublicIdeaGate();
-          refreshPremiumGate();
           if (authInitialized) handleRoute();
         });
       }
@@ -2356,7 +2315,6 @@
       refreshPremiumModalUI();
       refreshAuthModalUI();
       refreshPublicIdeaGate();
-      refreshPremiumGate();
       authInitialized = true;
       await handleRoute();
     });
@@ -2367,7 +2325,6 @@
       currentProfile = null;
       clearPendingRouteIntent();
       refreshNavUI();
-      refreshPremiumGate();
       goToRoute('/');
     }
   </script>
