@@ -655,7 +655,46 @@
     async function renderPremiumOpportunity(op,day){if(!op)return;currentOpportunity=op;const q=await fetchFinnhubQuote(op.symbol),price=q?.current||op.price,change=Number.isFinite(q?.changePercent)?q.changePercent:op.changePct;getEl('premiumHeroTitle').textContent=`${op.name} (${op.ticker})`;getEl('premiumHeroPrice').textContent=price?formatMoney(price,op.currency):'—';const ce=getEl('premiumHeroChange');if(Number.isFinite(change)){ce.textContent=`${formatPercent(change)} heute`;ce.className=`change ${change>=0?'pos':'neg'}`}getEl('premiumHeroChips').innerHTML=`<span class="chip">${escapeHtml(op.region)}</span><span class="chip">${escapeHtml(op.assetType)}</span><span class="chip">${escapeHtml(op.strategyTag)}</span>`;getEl('premiumAboutText').textContent=op.contextText||`${op.name} wird aktuell als Chance geführt.`;getEl('premiumWhyText').textContent=op.reasonText||'Die Ausgangslage ist aktuell interessant.';getEl('premiumChanceText').textContent=op.contextText||'Mögliche Chance bei positiver Entwicklung.';getEl('premiumRiskText').textContent=op.riskText||'Kurse können jederzeit fallen. Kapitalverlust möglich.';getEl('premiumAlternativeText').textContent=op.alternativeText||'Als Alternative kann ein breiter ETF sinnvoll sein.';getEl('premiumFactsGrid').innerHTML=getPremiumFactsHtml(op);getEl('opportunityList').innerHTML=day.opportunities.map(o=>`<button class="opportunity-item ${o.id===op.id?'active':''}" data-opp-id="${escapeHtml(o.id)}"><strong>${escapeHtml(o.name)} (${escapeHtml(o.ticker)})</strong><span>${escapeHtml(o.assetType)} · ${escapeHtml(o.region)}</span></button>`).join('');getEl('opportunityList').querySelectorAll('[data-opp-id]').forEach(b=>b.onclick=()=>{const item=day.opportunities.find(x=>x.id===b.dataset.oppId);renderPremiumOpportunity(item,day)});renderTradingViewChart('tv-chart-premium',op.symbol)}
     function renderPremiumEmptyState(){showView('view-premium');getEl('premiumHeroTitle').textContent='Noch keine Chancen verfügbar';getEl('premiumAboutText').textContent='Aktuell konnten keine sichtbaren Rows aus deiner opportunities-Tabelle geladen werden.';getEl('opportunityList').innerHTML='<div class="search-empty">Keine Chancen verfügbar.</div>';renderTradingViewChart('tv-chart-premium',chartDefaults.symbol)}
     async function renderPremiumRoute(){if(!requirePremiumAccess('/premium/chancen')){showView('view-landing');return}showView('view-premium');await refreshPremiumData()}
-    async function subscribeFreeIdeaReminder(){const email=getEl('freeIdeaReminderEmail').value.trim(),status=getEl('freeIdeaReminderStatus'),btn=getEl('freeIdeaReminderBtn');if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){status.textContent='Bitte gib eine gültige E-Mail-Adresse ein.';return}setLoading(btn,true,'Dienstags erinnern');status.textContent='Anmeldung wird gespeichert …';const payload={email,email_normalized:email.toLowerCase(),source:'kostenlose-idee',is_active:true,created_at:new Date().toISOString(),page_url:`${SITE_URL}/#/kostenlose-idee`};try{let functionOk=false;if(CONFIG.freeIdeaReminderFunctionUrl){try{const res=await fetch(CONFIG.freeIdeaReminderFunctionUrl,{method:'POST',headers:{'Content-Type':'application/json','apikey':CONFIG.supabaseAnonKey},body:JSON.stringify(payload)});if(res.ok)functionOk=true}catch(e){console.warn('Reminder function failed, falling back to Supabase insert.',e)}}if(!functionOk){if(!supabaseClient)throw new Error('Supabase nicht verfügbar');const{error}=await supabaseClient.from(CONFIG.freeIdeaReminderTable).upsert(payload,{onConflict:'email'});if(error)throw error}status.textContent='Erledigt. Du wirst dienstags per E-Mail informiert, sobald die neue kostenlose Top-Idee online ist.';getEl('freeIdeaReminderEmail').value=''}catch(e){console.error(e);status.textContent='Die Anmeldung konnte nicht gespeichert werden. Bitte prüfe, ob die Tabelle free_idea_reminders und/oder die Edge Function free-idea-reminder-subscribe in Supabase existiert und CORS erlaubt.'}finally{setLoading(btn,false,'Dienstags erinnern')}}
+    async function subscribeFreeIdeaReminder(){
+      const email=getEl('freeIdeaReminderEmail').value.trim();
+      const status=getEl('freeIdeaReminderStatus');
+
+      if(!email){
+        status.textContent='Bitte gib eine E-Mail-Adresse ein.';
+        return;
+      }
+
+      const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if(!emailOk){
+        status.textContent='Bitte gib eine gültige E-Mail-Adresse ein.';
+        return;
+      }
+
+      status.textContent='Anmeldung wird gespeichert …';
+
+      try{
+        const res=await fetch(CONFIG.freeIdeaReminderFunctionUrl,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({
+            email,
+            page_url:`${location.origin}${location.pathname}#/kostenlose-idee`
+          })
+        });
+
+        const data=await res.json().catch(()=>({}));
+
+        if(!res.ok){
+          status.textContent=data?.error||'Die Anmeldung konnte nicht gespeichert werden.';
+          return;
+        }
+
+        status.textContent=data?.message||'Du bist angemeldet. Du erhältst dienstags eine E-Mail, sobald die kostenlose Top-Idee veröffentlicht wurde.';
+        getEl('freeIdeaReminderEmail').value='';
+      }catch(e){
+        status.textContent='Die Anmeldung konnte nicht gesendet werden. Bitte versuche es später erneut.';
+      }
+    }
     async function handleRoute(){if(!authInitialized)return;const route=getRouteState().path;clearBanner();if(route==='/'||route===''){showView('view-landing');return}if(route==='/email-bestaetigt'){showView('view-email-confirmed');return}if(route===CONFIG.stripeSuccessRoute||route==='/zahlung-erfolgreich'||route==='/success'){showView('view-payment-success');await notifyAdminPaymentIfConfigured();return}if(['/impressum','/agb','/datenschutz','/risikohinweis','/widerruf','/cookies'].includes(route)){renderLegalRoute(route);return}if(route==='/konto'){renderAccountPage();return}if(route==='/kostenlose-idee'){showView('view-public-idea');refreshPublicIdeaGate();if(hasAcceptedFreeIdeaTerms())await loadPublicOpportunity();return}if(route==='/watchlist'){await renderWatchlistRoute();return}if(route==='/premium/chancen'||route.startsWith('/premium/chancen/')){await renderPremiumRoute();return}showView('view-landing')}
     window.addEventListener('popstate',handleRoute);window.addEventListener('hashchange',handleRoute);document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o){o.classList.remove('open');o.setAttribute('aria-hidden','true')}}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAuthModal();closePremiumModal()}});
     window.addEventListener('DOMContentLoaded',async()=>{getEl('footerYear').textContent=String(new Date().getFullYear());loadPendingRouteIntent();if(supabaseClient){const{data}=await supabaseClient.auth.getSession();currentUser=data?.session?.user||null;await loadCurrentProfile();supabaseClient.auth.onAuthStateChange(async(_e,session)=>{currentUser=session?.user||null;await loadCurrentProfile();refreshNavUI();refreshPremiumModalUI();refreshAuthModalUI();refreshPublicIdeaGate();updateFavoritesCounter();if(authInitialized)handleRoute()})}getEl('stockSearchBtn')?.addEventListener('click',searchStocks);getEl('stockSearchInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')searchStocks()});getEl('navUserText')?.addEventListener('click',e=>{e.preventDefault();goToAccountRoute();});refreshNavUI();refreshPremiumModalUI();refreshAuthModalUI();refreshPublicIdeaGate();updateFavoritesCounter();initCookieConsent();renderTradingViewChart('tv-chart-watchlist',chartDefaults.symbol);renderTradingViewChart('tv-chart-premium',chartDefaults.symbol);authInitialized=true;handleRoute()});
