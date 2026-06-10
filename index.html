@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -164,6 +163,8 @@
     .ak-status-active{color:#cfe3ff;border-color:rgba(30,168,255,.28);background:rgba(30,168,255,.10)}
     .ak-status-success{color:#9cf6da;border-color:rgba(31,226,176,.24);background:rgba(31,226,176,.10)}
     .ak-status-failed{color:#ffd1d8;border-color:rgba(255,124,145,.24);background:rgba(255,124,145,.10)}
+    .ak-status-expired{color:#ffd56b;border-color:rgba(255,213,107,.30);background:rgba(255,213,107,.10)}
+    .ak-status-unknown{color:#d7dce8;border-color:rgba(117,141,181,.24);background:rgba(117,141,181,.10)}
     .ak-history-toolbar{width:min(1120px,100%);margin:0 auto 18px;display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}
     .ak-history-toolbar select{min-height:44px;border-radius:14px;border:1px solid rgba(117,141,181,.18);background:rgba(7,16,31,.66);color:white;padding:10px 14px;font-size:14px;outline:none;font-family:inherit}
     .ak-history-list{width:min(1120px,100%);margin:18px auto 0;display:grid;gap:12px}
@@ -268,11 +269,11 @@
 
     <section class="section" style="padding-top:0">
       <div class="container">
-        <div class="section-head"><h2>Transparente Erfolgshistorie</h2><p>Hier soll nachvollziehbar werden, was aus früher veröffentlichten Chancen geworden ist: Ziel zuerst erreicht, Absicherung zuerst erreicht oder noch aktiv.</p></div>
+        <div class="section-head"><h2>Transparente Erfolgshistorie</h2><p>Öffentlich sichtbar für alle Besucher: Hier wird nachvollziehbar, was aus früher veröffentlichten Chancen geworden ist – aber nur, wenn die Reihenfolge eindeutig geprüft wurde.</p></div>
         <div class="ak-history-toolbar">
           <div>
             <div class="promo-badge">📊 Modellhistorie</div>
-            <p class="makx-small" style="margin-top:10px">Ausgewertet werden Chancen, sobald sie alt genug sind. Als Standard gilt: nach 3 Wochen wird geprüft, ob nach Veröffentlichung zuerst der Zielbereich oder zuerst die Absicherung erreicht wurde.</p>
+            <p class="makx-small" style="margin-top:10px">Ausgewertet wird streng nach Reihenfolge: Nach Veröffentlichung zählt nur, ob zuerst die untere Grenze des Zielbereichs oder zuerst die Absicherung erreicht wurde. Unklare Fälle zählen nicht als Fehlschlag.</p>
           </div>
           <label class="makx-small">Monat wählen<br><select id="akHistoryMonthSelect" onchange="renderSuccessHistoryPreview()"><option value="all">Alle Monate</option></select></label>
         </div>
@@ -282,12 +283,12 @@
           <div class="fact-card"><div class="label">Modell-Gesamtergebnis</div><div class="value">—</div></div>
         </div>
         <div class="ak-explain-grid">
-          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-active">AKTIV</span></h3><p>Eine Chance ist aktiv, solange seit Veröffentlichung noch keine finale Auswertung vorliegt oder die 3-Wochen-Prüfung noch nicht erreicht ist.</p></article>
-          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-success">ERFOLGREICH</span></h3><p>Erfolgreich bedeutet: Nach Veröffentlichung wurde zuerst der Zielbereich erreicht, bevor die Absicherung ausgelöst wurde.</p></article>
-          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-failed">GESCHEITERT</span></h3><p>Gescheitert bedeutet: Nach Veröffentlichung wurde zuerst das Absicherungsniveau erreicht, bevor der Zielbereich erreicht wurde.</p></article>
+          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-active">AKTIV</span></h3><p>Aktiv bedeutet: Die Chance läuft noch und weder Zieluntergrenze noch Absicherung wurde eindeutig zuerst erreicht.</p></article>
+          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-success">ERFOLGREICH</span></h3><p>Erfolgreich bedeutet: Nach Veröffentlichung wurde zuerst die untere Grenze des Zielbereichs erreicht, bevor die Absicherung ausgelöst wurde.</p></article>
+          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-failed">GESCHEITERT</span></h3><p>Gescheitert bedeutet: Nach Veröffentlichung wurde zuerst das Absicherungsniveau erreicht, bevor die Zieluntergrenze erreicht wurde.</p></article>
         </div>
         <div class="ak-history-list" id="akHistoryList"></div>
-        <div class="ak-history-empty" id="akHistoryEmpty">Die Erfolgshistorie ist im Webseiten-Code vorbereitet. Damit echte Ergebnisse erscheinen, muss der Colab-Scanner danach die historischen Auswertungen in Supabase speichern.</div>
+        <div class="ak-history-empty" id="akHistoryEmpty">Noch keine öffentlich gespeicherten Ergebnisse gefunden. Sobald der Colab-Scanner die historischen Chancen in Supabase ausgewertet hat, erscheinen sie hier ohne Plus-Login.</div>
       </div>
     </section>
 
@@ -1188,11 +1189,64 @@
     async function loadOpportunitiesFromSupabase(force=false){if(!force&&opportunitiesState.items.length&&Date.now()-opportunitiesState.loadedAt<CACHE_MS.opportunities)return opportunitiesState.items;if(!supabaseClient)return[];try{const{data,error}=await supabaseClient.from(CONFIG.opportunitiesTable).select('*').limit(500);if(error)return opportunitiesState.items||[];opportunitiesState.items=Array.isArray(data)?data:[];opportunitiesState.loadedAt=Date.now();return opportunitiesState.items}catch{return opportunitiesState.items||[]}}
     let akHistoryRows=[];
     function akHistoryMonthKey(v){const d=parseDateSafe(v);return d?`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`:'unbekannt'}
-    function akHistoryStatus(row){const raw=String(row.result_status||row.outcome_status||row.final_status||row.status||'').toLowerCase();if(['success','successful','erfolgreich','ziel','target_hit'].includes(raw))return 'success';if(['failed','gescheitert','stop','stop_hit','loss'].includes(raw))return 'failed';return 'active'}
-    function akHistoryStatusLabel(s){if(s==='success')return '<span class="ak-status-pill ak-status-success">ERFOLGREICH</span>';if(s==='failed')return '<span class="ak-status-pill ak-status-failed">GESCHEITERT</span>';return '<span class="ak-status-pill ak-status-active">AKTIV</span>'}
-    function akNormalizeHistoryRow(row){const op=normalizeOpportunityRow(row),s=akHistoryStatus(row);return{...op,resultStatus:s,resultDate:row.result_at||row.evaluated_at||row.updated_at||op.createdAt,hitText:row.hit_text||row.result_text||row.outcome_text||'',resultPct:firstDefined(row,'result_percent','performance_percent','net_return_percent')}}
-    async function loadSuccessHistoryRows(){if(!supabaseClient)return[];try{const{data,error}=await supabaseClient.from('opportunity_results').select('*').order('created_at',{ascending:false}).limit(300);if(!error&&Array.isArray(data)&&data.length)return data.map(akNormalizeHistoryRow)}catch(e){}try{const raw=await loadOpportunitiesFromSupabase(true),cutoff=Date.now()-21*24*60*60*1000;return raw.map(akNormalizeHistoryRow).filter(r=>(parseDateSafe(r.createdAt)?.getTime()||0)<=cutoff||r.resultStatus!=='active')}catch(e){return[]}}
-    async function renderSuccessHistoryPreview(){const stats=getEl('akHistoryStats'),list=getEl('akHistoryList'),empty=getEl('akHistoryEmpty'),select=getEl('akHistoryMonthSelect');if(!stats||!list||!empty)return;if(!akHistoryRows.length)akHistoryRows=await loadSuccessHistoryRows();const months=Array.from(new Set(akHistoryRows.map(r=>akHistoryMonthKey(r.createdAt)))).filter(Boolean).sort().reverse();if(select&&select.options.length<=1){select.innerHTML='<option value="all">Alle Monate</option>'+months.map(m=>`<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('')}const chosen=select?.value||'all',rows=akHistoryRows.filter(r=>chosen==='all'||akHistoryMonthKey(r.createdAt)===chosen),closed=rows.filter(r=>r.resultStatus!=='active'),success=closed.filter(r=>r.resultStatus==='success').length,failed=closed.filter(r=>r.resultStatus==='failed').length,total=closed.length,rate=total?success/total*100:NaN,perf=closed.reduce((sum,r)=>sum+(Number(r.resultPct)||0),0);stats.innerHTML=`<div class="fact-card"><div class="label">Ausgewertete Chancen</div><div class="value">${total}</div></div><div class="fact-card"><div class="label">Erfolgsquote</div><div class="value">${Number.isFinite(rate)?formatPlainNumber(rate,2)+' %':'—'}</div></div><div class="fact-card"><div class="label">Modell-Gesamtergebnis</div><div class="value">${total?formatPercent(perf,2):'—'}<span class="ak-metric-note">Summe der gespeicherten Einzel-Ergebnisse im gewählten Zeitraum.</span></div></div>`;if(!rows.length){list.innerHTML='';empty.style.display='block';return}empty.style.display='none';list.innerHTML=rows.slice(0,12).map(r=>`<div class="ak-history-row"><div><strong>${escapeHtml(r.name)} (${escapeHtml(r.ticker)})</strong>${akHistoryStatusLabel(r.resultStatus)}<span class="ak-metric-note">Veröffentlicht: ${escapeHtml(formatDateLabel(r.createdAt))}</span></div><div><strong>Zielbereich</strong>${formatZoneValue(r.interestingZone||r.targetPrice,r.interestingZoneLow||r.targetPriceLow,r.interestingZoneHigh||r.targetPriceHigh,r.currency)}</div><div><strong>Absicherung</strong>${formatStopValue(r)}</div><div><strong>Ergebnis</strong>${r.resultStatus==='active'?'Noch aktiv / offen':escapeHtml(r.hitText||'historisch ausgewertet')}<span class="ak-metric-note">${Number.isFinite(Number(r.resultPct))?formatPercent(r.resultPct,2):''}</span></div></div>`).join('')}
+    function akHistoryStatus(row){
+      const raw=String(row.result_status||row.outcome_status||row.final_status||row.status||'').toLowerCase();
+      if(['success','successful','erfolgreich','ziel','target_hit'].includes(raw))return 'success';
+      if(['failed','gescheitert','stop','stop_hit','loss'].includes(raw))return 'failed';
+      if(['expired','abgelaufen','timeout'].includes(raw))return 'expired';
+      if(['not_evaluable','nicht_auswertbar','unclear','unklar','ambiguous'].includes(raw))return 'unknown';
+      return 'active';
+    }
+    function akHistoryStatusLabel(s){
+      if(s==='success')return '<span class="ak-status-pill ak-status-success">ERFOLGREICH</span>';
+      if(s==='failed')return '<span class="ak-status-pill ak-status-failed">GESCHEITERT</span>';
+      if(s==='expired')return '<span class="ak-status-pill ak-status-expired">ABGELAUFEN</span>';
+      if(s==='unknown')return '<span class="ak-status-pill ak-status-unknown">NICHT AUSWERTBAR</span>';
+      return '<span class="ak-status-pill ak-status-active">AKTIV</span>';
+    }
+    function akNormalizeHistoryRow(row){
+      const op=normalizeOpportunityRow({
+        ...row,
+        id:row.opportunity_id||row.id,
+        symbol:row.symbol,
+        asset_name:row.asset_name||row.company_name||row.name,
+        created_at:row.published_at||row.created_at,
+        current_price:row.entry_price,
+        target_price_low:row.target_price||row.target_price_low,
+        target_price:row.target_price,
+        stop_price:row.stop_price,
+        currency:row.currency||'USD'
+      });
+      const s=akHistoryStatus(row);
+      return{...op,resultStatus:s,resultDate:row.result_at||row.evaluated_at||row.updated_at||op.createdAt,hitText:row.hit_text||row.result_text||row.outcome_text||'',resultPct:firstDefined(row,'result_percent','performance_percent','net_return_percent'),targetHitAt:row.target_hit_at||'',stopHitAt:row.stop_hit_at||'',evaluationInterval:row.evaluation_interval||''}
+    }
+    async function loadSuccessHistoryRows(){
+      if(!supabaseClient)return[];
+      const tables=['opportunity_success_history','opportunity_results'];
+      for(const table of tables){
+        try{
+          const{data,error}=await supabaseClient.from(table).select('*').order('published_at',{ascending:false}).limit(500);
+          if(!error&&Array.isArray(data)&&data.length)return data.map(akNormalizeHistoryRow);
+        }catch(e){}
+      }
+      return[];
+    }
+    async function renderSuccessHistoryPreview(){
+      const stats=getEl('akHistoryStats'),list=getEl('akHistoryList'),empty=getEl('akHistoryEmpty'),select=getEl('akHistoryMonthSelect');
+      if(!stats||!list||!empty)return;
+      if(!akHistoryRows.length)akHistoryRows=await loadSuccessHistoryRows();
+      const months=Array.from(new Set(akHistoryRows.map(r=>akHistoryMonthKey(r.createdAt)))).filter(Boolean).sort().reverse();
+      if(select&&select.options.length<=1){select.innerHTML='<option value="all">Alle Monate</option>'+months.map(m=>`<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('')}
+      const chosen=select?.value||'all',rows=akHistoryRows.filter(r=>chosen==='all'||akHistoryMonthKey(r.createdAt)===chosen);
+      const closed=rows.filter(r=>['success','failed'].includes(r.resultStatus));
+      const success=closed.filter(r=>r.resultStatus==='success').length,failed=closed.filter(r=>r.resultStatus==='failed').length,total=closed.length;
+      const expired=rows.filter(r=>r.resultStatus==='expired').length,unknown=rows.filter(r=>r.resultStatus==='unknown').length,active=rows.filter(r=>r.resultStatus==='active').length;
+      const rate=total?success/total*100:NaN,perf=closed.reduce((sum,r)=>sum+(Number(r.resultPct)||0),0);
+      stats.innerHTML=`<div class="fact-card"><div class="label">Eindeutig ausgewertet</div><div class="value">${total}<span class="ak-metric-note">Nur Fälle mit eindeutig zuerst erreichtem Ziel oder Stop.</span></div></div><div class="fact-card"><div class="label">Erfolgsquote</div><div class="value">${Number.isFinite(rate)?formatPlainNumber(rate,2)+' %':'—'}<span class="ak-metric-note">Abgelaufen/nicht auswertbar zählen nicht als Fehlschlag.</span></div></div><div class="fact-card"><div class="label">Modell-Gesamtergebnis</div><div class="value">${total?formatPercent(perf,2):'—'}<span class="ak-metric-note">Summe eindeutig erfolgreicher/gescheiterter Einzel-Ergebnisse.</span></div></div><div class="fact-card"><div class="label">Offen / abgelaufen / unklar</div><div class="value">${active} / ${expired} / ${unknown}<span class="ak-metric-note">Diese Fälle werden separat gezeigt.</span></div></div>`;
+      if(!rows.length){list.innerHTML='';empty.style.display='block';return}
+      empty.style.display='none';
+      list.innerHTML=rows.slice(0,60).map(r=>`<div class="ak-history-row"><div><strong>${escapeHtml(r.name)} (${escapeHtml(r.ticker)})</strong>${akHistoryStatusLabel(r.resultStatus)}<span class="ak-metric-note">Veröffentlicht: ${escapeHtml(formatDateLabel(r.createdAt))}${r.evaluationInterval?' · Prüfung: '+escapeHtml(r.evaluationInterval):''}</span></div><div><strong>Zieluntergrenze</strong>${formatZoneValue(r.targetPrice||r.interestingZone,r.interestingZoneLow||r.targetPriceLow,r.interestingZoneHigh||r.targetPriceHigh,r.currency)}${r.targetHitAt?`<span class="ak-metric-note">Erreicht: ${escapeHtml(formatDateLabel(r.targetHitAt))}</span>`:''}</div><div><strong>Absicherung</strong>${formatStopValue(r)}${r.stopHitAt?`<span class="ak-metric-note">Erreicht: ${escapeHtml(formatDateLabel(r.stopHitAt))}</span>`:''}</div><div><strong>Ergebnis</strong>${r.resultStatus==='active'?'Noch aktiv / offen':escapeHtml(r.hitText||'historisch ausgewertet')}<span class="ak-metric-note">${Number.isFinite(Number(r.resultPct))?formatPercent(r.resultPct,2):''}</span></div></div>`).join('')
+    }
     function renderTradingViewChart(id,symbol){const c=getEl(id);if(!c)return;if(!window.TradingView?.widget){c.innerHTML='<div class="search-empty">Chart lädt …</div>';return}c.innerHTML='';new TradingView.widget({autosize:true,symbol:symbol||chartDefaults.symbol,interval:chartDefaults.interval,timezone:chartDefaults.timezone,theme:chartDefaults.theme,style:chartDefaults.style,locale:chartDefaults.locale,allow_symbol_change:true,withdateranges:true,hide_side_toolbar:false,container_id:id})}
     function isZeroLike(v){if(v===null||v===undefined||v==='')return false;const n=Number(String(v).replace(',','.'));return Number.isFinite(n)&&Math.abs(n)<0.0000001}
     function formatZoneValue(value,low,high,currency='USD'){if(value!==null&&value!==undefined&&value!==''&&!isZeroLike(value)){const n=Number(String(value).replace(',','.'));return Number.isFinite(n)?formatDualMoney(n,currency):escapeHtml(value)}const l=Number(low),h=Number(high);if(Number.isFinite(l)&&Number.isFinite(h)&&!isZeroLike(l)&&!isZeroLike(h))return `${formatDualMoney(l,currency)} – ${formatDualMoney(h,currency)}`;if(Number.isFinite(l)&&!isZeroLike(l))return `ab ${formatDualMoney(l,currency)}`;if(Number.isFinite(h)&&!isZeroLike(h))return `bis ${formatDualMoney(h,currency)}`;return '—'}
