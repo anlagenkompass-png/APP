@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -1137,7 +1136,27 @@
     function toUsd(value,currency='USD'){const n=Number(value),cur=String(currency||'USD').toUpperCase();if(!Number.isFinite(n))return NaN;return n*(AK_FX_TO_USD[cur]||1)}
     function toEurFromUsd(usd){const n=Number(usd);return Number.isFinite(n)?n*AK_USD_TO_EUR:NaN}
     function formatDualMoney(value,currency='USD'){const usd=toUsd(value,currency),eur=toEurFromUsd(usd);if(!Number.isFinite(usd))return'—';return `${formatDollar(usd)} / ${formatEuroApprox(eur)}`}
-    function formatDualMoneyKnown(nativeValue,currency='USD',usdValue=null,eurValue=null){const u=Number(usdValue),e=Number(eurValue);if(Number.isFinite(u)&&Number.isFinite(e))return `${formatDollar(u)} / ${formatEuroApprox(e)}`;return formatDualMoney(nativeValue,currency)}
+    function parseAkPrice(v){
+      if(v===null||v===undefined||v==='')return null;
+      if(typeof v==='number')return Number.isFinite(v)?v:null;
+      let s=String(v).trim();
+      if(!s||s==='—'||s==='-'||s.toLowerCase()==='null'||s.toLowerCase()==='undefined')return null;
+      s=s.replace(/[$€]/g,'').replace(/\s/g,'');
+      if(s.includes(',')&&!s.includes('.'))s=s.replace(',','.');
+      else if(s.includes(',')&&s.includes('.'))s=s.replace(/,/g,'');
+      s=s.replace(/[^0-9.\-]/g,'');
+      if(!s||s==='-'||s==='.'||s==='-.')return null;
+      const n=Number(s);
+      return Number.isFinite(n)?n:null;
+    }
+    function validAkPrice(v){const n=parseAkPrice(v);return n!==null&&n>0?n:null}
+    function formatDualMoneyKnown(nativeValue,currency='USD',usdValue=null,eurValue=null){
+      const u=validAkPrice(usdValue),e=validAkPrice(eurValue),native=validAkPrice(nativeValue);
+      if(u!==null&&e!==null)return `${formatDollar(u)} / ${formatEuroApprox(e)}`;
+      if(native!==null)return formatDualMoney(native,currency);
+      if(u!==null)return `${formatDollar(u)} / ${formatEuroApprox(toEurFromUsd(u))}`;
+      return '—';
+    }
     function formatPercent(v,digits=2){const n=Number(v);if(!Number.isFinite(n))return'—';return`${n>=0?'+':''}${n.toFixed(digits)} %`}
     function formatPlainNumber(v,digits=2){const n=Number(v);if(!Number.isFinite(n))return'—';return n.toFixed(digits).replace('.',',')}
     function parseDateSafe(v){if(!v)return null;const d=new Date(v);return Number.isNaN(d.getTime())?null:d}
@@ -1187,8 +1206,9 @@
       const ticker=getTickerFromSymbol(symbolRaw||row.id||'');
       const created=parseDateSafe(row.created_at)||new Date();
       const tv=symbolRaw.includes(':')?symbolRaw:normalizeExchangeToTradingView(row.region||row.asset_type||'',symbolRaw||ticker);
-      const price=Number.isFinite(Number(row.current_price))?Number(row.current_price):null;
-      const entry=Number.isFinite(Number(row.entry_price))?Number(row.entry_price):price;
+      const price=validAkPrice(row.current_price);
+      const entry=validAkPrice(row.entry_price) ?? price;
+      const pullback=validAkPrice(firstDefined(row,'pullback_price','stop_price','absicherungsniveau'));
       return {
         id:String(row.id||`${ticker}-${toDateKey(created)||cryptoRandomId()}`),
         name:row.asset_name||row.name||ticker||'Unbekannt',
@@ -1212,8 +1232,10 @@
         targetPriceLowEur:firstDefined(row,'target_price_low_eur'),
         targetPriceHighUsd:firstDefined(row,'target_price_high_usd'),
         targetPriceHighEur:firstDefined(row,'target_price_high_eur'),
-        stopPriceUsd:firstDefined(row,'stop_price_usd'),
-        stopPriceEur:firstDefined(row,'stop_price_eur'),
+        pullbackPriceUsd:firstDefined(row,'pullback_price_usd','stop_price_usd'),
+        pullbackPriceEur:firstDefined(row,'pullback_price_eur','stop_price_eur'),
+        stopPriceUsd:firstDefined(row,'pullback_price_usd','stop_price_usd'),
+        stopPriceEur:firstDefined(row,'pullback_price_eur','stop_price_eur'),
         changePct:Number.isFinite(Number(row.change_percent))?Number(row.change_percent):null,
         score:Number.isFinite(Number(row.score))?Number(row.score):null,
         contextText:row.context_text||row.description||'',
@@ -1228,7 +1250,8 @@
         targetPrice:firstDefined(row,'target_price','target'),
         targetPriceLow:firstDefined(row,'target_price_low','target_low','zielzone_low','sell_zone_low'),
         targetPriceHigh:firstDefined(row,'target_price_high','target_high','zielzone_high','sell_zone_high'),
-        stopPrice:firstDefined(row,'stop_price','absicherungsniveau'),
+        pullbackPrice:pullback,
+        stopPrice:firstDefined(row,'pullback_price','stop_price','absicherungsniveau'),
         rr:firstDefined(row,'rr','chance_risk'),
         // Legacy-Felder werden nur als Fallback gelesen. Angezeigt wird nur noch ein möglicher Einstiegswert.
         buyZone:firstDefined(row,'buy_zone','kaufzone','entry_zone','einstiegszone','observation_zone','beobachtungszone'),
@@ -1314,17 +1337,34 @@
       list.innerHTML=rows.slice(0,60).map(r=>`<div class="ak-history-row"><div><strong>${escapeHtml(r.name)} (${escapeHtml(r.ticker)})</strong>${akHistoryStatusLabel(r.resultStatus)}<span class="ak-metric-note">Veröffentlicht: ${escapeHtml(formatDateLabel(r.createdAt))}${r.evaluationInterval?' · Prüfung: '+escapeHtml(r.evaluationInterval):''}</span></div><div><strong>Zieluntergrenze</strong>${formatZoneValue(r.targetPrice||r.interestingZone,r.interestingZoneLow||r.targetPriceLow,r.interestingZoneHigh||r.targetPriceHigh,r.currency)}${r.targetHitAt?`<span class="ak-metric-note">Erreicht: ${escapeHtml(formatDateLabel(r.targetHitAt))}</span>`:''}</div><div><strong>Rücksetzbereich</strong>${formatStopValue(r)}${r.stopHitAt?`<span class="ak-metric-note">Berührt: ${escapeHtml(formatDateLabel(r.stopHitAt))}</span>`:''}</div><div><strong>Ergebnis</strong>${r.resultStatus==='active'?'Noch aktiv / offen':escapeHtml(r.hitText||'historisch ausgewertet')}<span class="ak-metric-note">${Number.isFinite(Number(r.resultPct))?formatPercent(r.resultPct,2):''}</span></div></div>`).join('')
     }
     function renderTradingViewChart(id,symbol){const c=getEl(id);if(!c)return;if(!window.TradingView?.widget){c.innerHTML='<div class="search-empty">Chart lädt …</div>';return}c.innerHTML='';new TradingView.widget({autosize:true,symbol:symbol||chartDefaults.symbol,interval:chartDefaults.interval,timezone:chartDefaults.timezone,theme:chartDefaults.theme,style:chartDefaults.style,locale:chartDefaults.locale,allow_symbol_change:true,withdateranges:true,hide_side_toolbar:false,container_id:id})}
-    function isZeroLike(v){if(v===null||v===undefined||v==='')return false;const n=Number(String(v).replace(',','.'));return Number.isFinite(n)&&Math.abs(n)<0.0000001}
-    function formatZoneValue(value,low,high,currency='USD'){if(value!==null&&value!==undefined&&value!==''&&!isZeroLike(value)){const n=Number(String(value).replace(',','.'));return Number.isFinite(n)?formatDualMoney(n,currency):escapeHtml(value)}const l=Number(low),h=Number(high);if(Number.isFinite(l)&&Number.isFinite(h)&&!isZeroLike(l)&&!isZeroLike(h))return `${formatDualMoney(l,currency)} – ${formatDualMoney(h,currency)}`;if(Number.isFinite(l)&&!isZeroLike(l))return `ab ${formatDualMoney(l,currency)}`;if(Number.isFinite(h)&&!isZeroLike(h))return `bis ${formatDualMoney(h,currency)}`;return '—'}
-    function formatEntryPrice(op,currentPrice=null){const base=Number(op.entryPrice||currentPrice||op.price);if(Number.isFinite(base)&&base>0)return formatDualMoneyKnown(base,op.currency,op.entryPriceUsd||op.currentPriceUsd,op.entryPriceEur||op.currentPriceEur);return '—'}
-    function formatTargetRange(op){
-      const l=Number(op.targetPriceLow||op.interestingZoneLow),h=Number(op.targetPriceHigh||op.interestingZoneHigh),single=Number(op.targetPrice||op.interestingZone);
-      if(Number.isFinite(l)&&Number.isFinite(h)&&!isZeroLike(l)&&!isZeroLike(h))return `${formatDualMoneyKnown(l,op.currency,op.targetPriceLowUsd,op.targetPriceLowEur)} – ${formatDualMoneyKnown(h,op.currency,op.targetPriceHighUsd,op.targetPriceHighEur)}`;
-      if(Number.isFinite(l)&&!isZeroLike(l))return `ab ${formatDualMoneyKnown(l,op.currency,op.targetPriceLowUsd,op.targetPriceLowEur)}`;
-      if(Number.isFinite(single)&&!isZeroLike(single))return formatDualMoneyKnown(single,op.currency,op.targetPriceUsd,op.targetPriceEur);
+    function isZeroLike(v){if(v===null||v===undefined||v==='')return false;const n=parseAkPrice(v);return n!==null&&Math.abs(n)<0.0000001}
+    function formatZoneValue(value,low,high,currency='USD'){
+      const single=validAkPrice(value),l=validAkPrice(low),h=validAkPrice(high);
+      if(single!==null)return formatDualMoney(single,currency);
+      if(l!==null&&h!==null)return `${formatDualMoney(l,currency)} – ${formatDualMoney(h,currency)}`;
+      if(l!==null)return `ab ${formatDualMoney(l,currency)}`;
+      if(h!==null)return `bis ${formatDualMoney(h,currency)}`;
       return '—';
     }
-    function formatStopValue(op){const s=Number(op.stopPrice);if(Number.isFinite(s)&&!isZeroLike(s))return formatDualMoneyKnown(s,op.currency,op.stopPriceUsd,op.stopPriceEur);return '—'}
+    function formatEntryPrice(op,currentPrice=null){
+      const base=validAkPrice(op.entryPrice) ?? validAkPrice(currentPrice) ?? validAkPrice(op.price);
+      return base!==null ? formatDualMoneyKnown(base,op.currency,op.entryPriceUsd||op.currentPriceUsd,op.entryPriceEur||op.currentPriceEur) : '—';
+    }
+    function formatTargetRange(op){
+      const l=validAkPrice(op.targetPriceLow) ?? validAkPrice(op.interestingZoneLow);
+      const h=validAkPrice(op.targetPriceHigh) ?? validAkPrice(op.interestingZoneHigh);
+      const single=validAkPrice(op.targetPrice) ?? validAkPrice(op.interestingZone);
+      if(l!==null&&h!==null)return `${formatDualMoneyKnown(l,op.currency,op.targetPriceLowUsd,op.targetPriceLowEur)} – ${formatDualMoneyKnown(h,op.currency,op.targetPriceHighUsd,op.targetPriceHighEur)}`;
+      if(l!==null)return `ab ${formatDualMoneyKnown(l,op.currency,op.targetPriceLowUsd,op.targetPriceLowEur)}`;
+      if(single!==null)return formatDualMoneyKnown(single,op.currency,op.targetPriceUsd,op.targetPriceEur);
+      return '—';
+    }
+    function formatStopValue(op){
+      const s=validAkPrice(op.pullbackPrice) ?? validAkPrice(op.stopPrice);
+      const u=validAkPrice(op.pullbackPriceUsd) ?? validAkPrice(op.stopPriceUsd);
+      const e=validAkPrice(op.pullbackPriceEur) ?? validAkPrice(op.stopPriceEur);
+      return s!==null || u!==null ? formatDualMoneyKnown(s,op.currency,u,e) : '—';
+    }
     function formatScoreValue(score){const n=Number(score);if(!Number.isFinite(n))return '—';return `${formatPlainNumber(n,2)} / 10<span class="ak-metric-note">Score bündelt Trend, Momentum, Volumen, Kursstruktur und Risikoqualität. Je höher der Wert, desto auffälliger das Setup.</span>`}
     function formatRiskRewardValue(rr){const n=Number(rr);if(!Number.isFinite(n))return '—';return `${formatPlainNumber(n,2)}<span class="ak-metric-note">Beispiel: 2,00 bedeutet, dass die modellierte Strecke bis zum Zielbereich ungefähr doppelt so groß ist wie der Abstand bis zum Rücksetzbereich. Der Rücksetzbereich ist kein automatischer Verkaufspunkt.</span>`}
     function renderFactCard(label,value){return`<div class="fact-card"><div class="label">${escapeHtml(label)}</div><div class="value">${value}</div></div>`}
