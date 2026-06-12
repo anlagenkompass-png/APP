@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -282,12 +281,11 @@
         <div class="stats-grid" id="akHistoryStats" style="width:min(1120px,100%);margin-left:auto;margin-right:auto">
           <div class="fact-card"><div class="label">Ausgewertete Chancen</div><div class="value">—</div></div>
           <div class="fact-card"><div class="label">Erfolgsquote</div><div class="value">—</div></div>
-          <div class="fact-card"><div class="label">Modell-Gesamtergebnis</div><div class="value">—</div></div>
         </div>
         <div class="ak-explain-grid">
-          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-active">AKTIV</span></h3><p>Aktiv bedeutet: Die Chance läuft noch und weder Zieluntergrenze noch kritisches Niveau wurde eindeutig erreicht.</p></article>
+          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-success">ABGESCHLOSSEN</span></h3><p>In der öffentlichen Historie werden nur abgeschlossene Chancen angezeigt. Laufende Ideen bleiben im Plus-Bereich und werden hier nicht veröffentlicht.</p></article>
           <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-success">ERFOLGREICH</span></h3><p>Erfolgreich bedeutet: Nach Veröffentlichung wurde die untere Grenze des Zielbereichs erreicht – direkt oder nach einem Rücksetzer.</p></article>
-          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-failed">GESCHEITERT</span></h3><p>Gescheitert bedeutet: Der Kurs ist deutlich unter den Rücksetzbereich gefallen beziehungsweise hat das kritische Niveau erreicht, bevor der Zielbereich erreicht wurde.</p></article>
+          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-failed">GESCHEITERT / ABGELAUFEN</span></h3><p>Gescheitert bedeutet: Das kritische Niveau wurde vor dem Zielbereich erreicht. Abgelaufen bedeutet: Die Idee wurde nach Ablauf der Prüfzeit geschlossen, ohne eindeutig Ziel oder kritisches Niveau zu erreichen.</p></article>
         </div>
         <div class="ak-history-list" id="akHistoryList"></div>
         <div class="ak-history-empty" id="akHistoryEmpty">Noch keine öffentlich gespeicherten Ergebnisse gefunden. Sobald der Colab-Scanner die historischen Chancen in Supabase ausgewertet hat, erscheinen sie hier ohne Plus-Login.</div>
@@ -1323,19 +1321,38 @@
       const stats=getEl('akHistoryStats'),list=getEl('akHistoryList'),empty=getEl('akHistoryEmpty'),select=getEl('akHistoryMonthSelect');
       if(!stats||!list||!empty)return;
       if(!akHistoryRows.length)akHistoryRows=await loadSuccessHistoryRows();
-      const months=Array.from(new Set(akHistoryRows.map(r=>akHistoryMonthKey(r.createdAt)))).filter(Boolean).sort().reverse();
+
+      // Öffentliche Erfolgshistorie:
+      // Nichtkunden sollen keine laufenden / aktiven Chancen sehen.
+      // Deshalb werden hier ausschließlich abgeschlossene Datensätze angezeigt.
+      const publicClosedRows=akHistoryRows.filter(r=>['success','success_pullback','failed','expired'].includes(r.resultStatus));
+
+      const months=Array.from(new Set(publicClosedRows.map(r=>akHistoryMonthKey(r.createdAt)))).filter(Boolean).sort().reverse();
       if(select&&select.options.length<=1){select.innerHTML='<option value="all">Alle Monate</option>'+months.map(m=>`<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('')}
-      const chosen=select?.value||'all',rows=akHistoryRows.filter(r=>chosen==='all'||akHistoryMonthKey(r.createdAt)===chosen);
-      const closed=rows.filter(r=>['success','success_pullback','failed'].includes(r.resultStatus));
-      const directSuccess=closed.filter(r=>r.resultStatus==='success').length;
-      const pullbackSuccess=closed.filter(r=>r.resultStatus==='success_pullback').length;
-      const success=directSuccess+pullbackSuccess,failed=closed.filter(r=>r.resultStatus==='failed').length,total=closed.length;
-      const expired=rows.filter(r=>r.resultStatus==='expired').length,unknown=rows.filter(r=>r.resultStatus==='unknown').length,active=rows.filter(r=>r.resultStatus==='active').length;
-      const rate=total?success/total*100:NaN,perf=closed.reduce((sum,r)=>sum+(Number(r.resultPct)||0),0);
-      stats.innerHTML=`<div class="fact-card"><div class="label">Eindeutig ausgewertet</div><div class="value">${total}<span class="ak-metric-note">Eindeutig sind Zielerreichung, Ziel nach Rücksetzer oder kritischer Bruch unter dem Rücksetzbereich.</span></div></div><div class="fact-card"><div class="label">Zielquote</div><div class="value">${Number.isFinite(rate)?formatPlainNumber(rate,2)+' %':'—'}<span class="ak-metric-note">Direkte Zielerreichung und Zielerreichung nach Rücksetzer zählen als erfolgreich. Kritischer Bruch unter dem Rücksetzbereich zählt als gescheitert.</span></div></div><div class="fact-card"><div class="label">Modell-Gesamtergebnis</div><div class="value">${total?formatPercent(perf,2):'—'}<span class="ak-metric-note">Summe eindeutig erfolgreicher/gescheiterter Einzel-Ergebnisse. Wichtiger als die reine Trefferquote.</span></div></div><div class="fact-card"><div class="label">Offen / abgelaufen / unklar</div><div class="value">${active} / ${expired} / ${unknown}<span class="ak-metric-note">Diese Fälle werden separat gezeigt.</span></div></div>`;
-      if(!rows.length){list.innerHTML='';empty.style.display='block';return}
+
+      const chosen=select?.value||'all';
+      const rows=publicClosedRows.filter(r=>chosen==='all'||akHistoryMonthKey(r.createdAt)===chosen);
+
+      const evaluated=rows.filter(r=>['success','success_pullback','failed'].includes(r.resultStatus));
+      const directSuccess=evaluated.filter(r=>r.resultStatus==='success').length;
+      const pullbackSuccess=evaluated.filter(r=>r.resultStatus==='success_pullback').length;
+      const success=directSuccess+pullbackSuccess;
+      const failed=evaluated.filter(r=>r.resultStatus==='failed').length;
+      const expired=rows.filter(r=>r.resultStatus==='expired').length;
+      const total=evaluated.length;
+      const rate=total?success/total*100:NaN;
+
+      stats.innerHTML=`<div class="fact-card"><div class="label">Abgeschlossene Chancen</div><div class="value">${rows.length}<span class="ak-metric-note">Öffentlich sichtbar sind nur abgeschlossene Chancen. Laufende Ideen werden hier bewusst nicht angezeigt.</span></div></div><div class="fact-card"><div class="label">Zielquote</div><div class="value">${Number.isFinite(rate)?formatPlainNumber(rate,2)+' %':'—'}<span class="ak-metric-note">Berechnet nur aus eindeutig erfolgreichen und eindeutig gescheiterten abgeschlossenen Chancen.</span></div></div><div class="fact-card"><div class="label">Erfolgreich / gescheitert / abgelaufen</div><div class="value">${success} / ${failed} / ${expired}<span class="ak-metric-note">Abgelaufene Chancen werden separat gezählt und nicht als aktive Ideen veröffentlicht.</span></div></div>`;
+
+      if(!rows.length){
+        list.innerHTML='';
+        empty.style.display='block';
+        empty.textContent='Noch keine abgeschlossenen öffentlichen Ergebnisse gefunden. Laufende Plus-Chancen werden in dieser öffentlichen Historie nicht angezeigt.';
+        return;
+      }
+
       empty.style.display='none';
-      list.innerHTML=rows.slice(0,60).map(r=>`<div class="ak-history-row"><div><strong>${escapeHtml(r.name)} (${escapeHtml(r.ticker)})</strong>${akHistoryStatusLabel(r.resultStatus)}<span class="ak-metric-note">Veröffentlicht: ${escapeHtml(formatDateLabel(r.createdAt))}${r.evaluationInterval?' · Prüfung: '+escapeHtml(r.evaluationInterval):''}</span></div><div><strong>Zieluntergrenze</strong>${formatZoneValue(r.targetPrice||r.interestingZone,r.interestingZoneLow||r.targetPriceLow,r.interestingZoneHigh||r.targetPriceHigh,r.currency)}${r.targetHitAt?`<span class="ak-metric-note">Erreicht: ${escapeHtml(formatDateLabel(r.targetHitAt))}</span>`:''}</div><div><strong>Rücksetzbereich</strong>${formatStopValue(r)}${r.stopHitAt?`<span class="ak-metric-note">Berührt: ${escapeHtml(formatDateLabel(r.stopHitAt))}</span>`:''}</div><div><strong>Ergebnis</strong>${r.resultStatus==='active'?'Noch aktiv / offen':escapeHtml(r.hitText||'historisch ausgewertet')}<span class="ak-metric-note">${Number.isFinite(Number(r.resultPct))?formatPercent(r.resultPct,2):''}</span></div></div>`).join('')
+      list.innerHTML=rows.slice(0,60).map(r=>`<div class="ak-history-row"><div><strong>${escapeHtml(r.name)} (${escapeHtml(r.ticker)})</strong>${akHistoryStatusLabel(r.resultStatus)}<span class="ak-metric-note">Veröffentlicht: ${escapeHtml(formatDateLabel(r.createdAt))}${r.evaluationInterval?' · Prüfung: '+escapeHtml(r.evaluationInterval):''}</span></div><div><strong>Zieluntergrenze</strong>${formatZoneValue(r.targetPrice||r.interestingZone,r.interestingZoneLow||r.targetPriceLow,r.interestingZoneHigh||r.targetPriceHigh,r.currency)}${r.targetHitAt?`<span class="ak-metric-note">Erreicht: ${escapeHtml(formatDateLabel(r.targetHitAt))}</span>`:''}</div><div><strong>Rücksetzbereich</strong>${formatStopValue(r)}${r.stopHitAt?`<span class="ak-metric-note">Berührt: ${escapeHtml(formatDateLabel(r.stopHitAt))}</span>`:''}</div><div><strong>Ergebnis</strong>${escapeHtml(r.hitText||'historisch abgeschlossen')}<span class="ak-metric-note">${Number.isFinite(Number(r.resultPct))?formatPercent(r.resultPct,2):''}</span></div></div>`).join('')
     }
     function renderTradingViewChart(id,symbol){const c=getEl(id);if(!c)return;if(!window.TradingView?.widget){c.innerHTML='<div class="search-empty">Chart lädt …</div>';return}c.innerHTML='';new TradingView.widget({autosize:true,symbol:symbol||chartDefaults.symbol,interval:chartDefaults.interval,timezone:chartDefaults.timezone,theme:chartDefaults.theme,style:chartDefaults.style,locale:chartDefaults.locale,allow_symbol_change:true,withdateranges:true,hide_side_toolbar:false,container_id:id})}
     function isZeroLike(v){if(v===null||v===undefined||v==='')return false;const n=parseAkPrice(v);return n!==null&&Math.abs(n)<0.0000001}
