@@ -979,10 +979,196 @@
     function mapAuthError(m){return{'Invalid login credentials':'Falsche E-Mail oder falsches Passwort.','Email not confirmed':'Bitte bestätige zuerst deine E-Mail-Adresse über den Link in der Mail.','User already registered':'Diese E-Mail-Adresse ist bereits registriert.','Password should be at least 6 characters':'Das Passwort muss mindestens 6 Zeichen lang sein.'}[m]||m||'Die Authentifizierung konnte gerade nicht abgeschlossen werden.'}
     function setLoading(b,l,t){if(!b)return;b.disabled=l;b.textContent=l?'Bitte warten…':t}
     async function upsertProfileForUser(user,first='',last='',email=''){if(!supabaseClient||!user?.id)return;try{const m=user.user_metadata||{},now=new Date().toISOString();await supabaseClient.from(CONFIG.profilesTable).upsert({id:user.id,email:email||user.email||null,first_name:first||m.first_name||null,last_name:last||m.last_name||null,plan:m.plan||'free',is_premium:!!m.is_premium,legal_terms_version:m.legal_terms_version||LEGAL_VERSION,legal_terms_accepted_at:m.legal_terms_accepted_at||now,privacy_version:m.privacy_version||LEGAL_VERSION,privacy_accepted_at:m.privacy_accepted_at||now,risk_notice_version:m.risk_notice_version||LEGAL_VERSION,risk_notice_accepted_at:m.risk_notice_accepted_at||now,free_idea_terms_version:m.free_idea_terms_version||null,free_idea_terms_accepted_at:m.free_idea_terms_accepted_at||null,email_alerts_enabled:m.email_alerts_enabled===false?false:true,plus_email_enabled:m.plus_email_enabled===false?false:true,free_idea_email_enabled:!!m.free_idea_email_enabled,newsletter_enabled:!!m.newsletter_enabled,notification_channel:'email',updated_at:now},{onConflict:'id'})}catch(e){console.error(e)}}
+    async function safeSaveEmailPreferencesViaRpc(payload){
+      if(!supabaseClient||!payload?.email)return {ok:false,skipped:true};
+      const cleanEmail=String(payload.email||'').trim().toLowerCase();
+      const cleanName=String(payload.name||'').trim();
+      const userId=payload.user_id||currentUser?.id||null;
+      try{
+        const {data,error}=await supabaseClient.rpc('ak_save_email_preferences',{
+          p_email:cleanEmail,
+          p_user_id:userId?String(userId):null,
+          p_name:cleanName||null,
+          p_free_idea:!!payload.free_idea_email_enabled,
+          p_newsletter:!!payload.newsletter_enabled,
+          p_source:payload.source||'website',
+          p_consent_version:payload.consent_version||LEGAL_VERSION
+        });
+        if(error){
+          console.warn('RPC ak_save_email_preferences fehlgeschlagen:',error);
+          return {ok:false,error};
+        }
+        return {ok:true,mode:'rpc',data};
+      }catch(e){
+        console.warn('RPC ak_save_email_preferences Ausnahme:',e);
+        return {ok:false,error:e};
+      }
+    }
+    async function safeSaveNewsletterSubscriber(payload){
+      if(!supabaseClient||!payload?.email)return {ok:false,skipped:true};
+      const rpcResult=await safeSaveEmailPreferencesViaRpc({...payload,newsletter_enabled:true});
+      if(rpcResult.ok)return rpcResult;
+      const cleanEmail=String(payload.email||'').trim().toLowerCase();
+      const cleanPayload={...payload,email:cleanEmail};
+      try{
+        const {error}=await supabaseClient.from('newsletter_subscribers').insert(cleanPayload);
+        if(!error)return {ok:true,mode:'insert'};
+        const msg=String(error.message||'').toLowerCase();
+        if(error.code==='23505'||msg.includes('duplicate')){
+          try{
+            const {error:updateError}=await supabaseClient.from('newsletter_subscribers').update({...cleanPayload,updated_at:cleanPayload.updated_at||new Date().toISOString()}).ilike('email',cleanEmail);
+            if(!updateError)return {ok:true,mode:'update'};
+          }catch(updateException){}
+          return {ok:true,mode:'duplicate_ignored'};
+        }
+        console.warn('Newsletter-Speicherung nicht möglich:',error);
+        return {ok:false,error};
+      }catch(e){
+        console.warn('Newsletter-Speicherung Ausnahme:',e);
+        return {ok:false,error:e};
+      }
+    }
+    async function safeSaveFreeIdeaReminder(payload){
+      if(!supabaseClient||!payload?.email)return {ok:false,skipped:true};
+      const rpcResult=await safeSaveEmailPreferencesViaRpc({...payload,free_idea_email_enabled:true});
+      if(rpcResult.ok)return rpcResult;
+      const cleanEmail=String(payload.email||'').trim().toLowerCase();
+      const cleanPayload={...payload,email:cleanEmail};
+      try{
+        const {error}=await supabaseClient.from('free_idea_reminders').insert(cleanPayload);
+        if(!error)return {ok:true,mode:'insert'};
+        const msg=String(error.message||'').toLowerCase();
+        if(error.code==='23505'||msg.includes('duplicate')){
+          try{
+            const {error:updateError}=await supabaseClient.from('free_idea_reminders').update({...cleanPayload,updated_at:cleanPayload.updated_at||new Date().toISOString()}).ilike('email',cleanEmail);
+            if(!updateError)return {ok:true,mode:'update'};
+          }catch(updateException){}
+          return {ok:true,mode:'duplicate_ignored'};
+        }
+        console.warn('Dienstagsidee-Erinnerung nicht möglich:',error);
+        return {ok:false,error};
+      }catch(e){
+        console.warn('Dienstagsidee-Erinnerung Ausnahme:',e);
+        return {ok:false,error:e};
+      }
+    }
     async function loadCurrentProductPurchases(){currentProductPurchases=[];if(!supabaseClient||!currentUser?.id)return[];try{const{data,error}=await supabaseClient.from('product_purchases').select('*').eq('user_id',currentUser.id).eq('status','active');if(!error&&Array.isArray(data)){currentProductPurchases=data;return data}}catch(e){console.warn('product_purchases konnte nicht gelesen werden.',e)}return[]}
     async function loadCurrentProfile(){if(!supabaseClient||!currentUser?.id){currentProfile=null;currentProductPurchases=[];return null}try{const{data}=await supabaseClient.from(CONFIG.profilesTable).select('*').eq('id',currentUser.id).maybeSingle();currentProfile=data||null;await loadCurrentProductPurchases();return currentProfile}catch{currentProfile=null;await loadCurrentProductPurchases();return null}}
     async function handleLogin(){clearMessages();const email=getEl('loginEmail').value.trim(),password=getEl('loginPassword').value;if(!email||!password)return showError('Bitte fülle E-Mail und Passwort aus.');if(!supabaseClient)return showError('Die Verbindung ist aktuell nicht verfügbar.');const btn=getEl('loginBtn');setLoading(btn,true,'Anmelden');try{const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)return showError(mapAuthError(error.message));currentUser=data?.user||null;if(currentUser)await loadCurrentProfile();showSuccess('Anmeldung erfolgreich.');setTimeout(()=>{closeAuthModal();refreshNavUI();refreshPremiumModalUI();if(pendingRouteIntent){const t=pendingRouteIntent;clearPendingRouteIntent();goToRoute(t);return}goToRoute('/')},400)}catch(e){showError('Die Anmeldung konnte nicht ausgeführt werden.')}finally{setLoading(btn,false,'Anmelden')}}
-    async function handleRegister(){clearMessages();const first=getEl('registerFirstName').value.trim(),last=getEl('registerLastName').value.trim(),email=getEl('registerEmail').value.trim(),password=getEl('registerPassword').value,freeIdeaEmailOptIn=!!getEl('registerFreeIdeaEmail')?.checked;if(!first||!last||!email||!password)return showError('Bitte fülle alle Felder aus.');if(!getEl('registerTerms').checked||!getEl('registerRiskNotice').checked)return showError('Bitte bestätige AGB, Datenschutzerklärung und den Risikohinweis.');if(password.length<6)return showError('Das Passwort muss mindestens 6 Zeichen lang sein.');if(!supabaseClient)return showError('Die Verbindung ist aktuell nicht verfügbar.');const btn=getEl('registerBtn'),idle=isFreeIdeaIntent()?'Jetzt kostenlos anmelden':'Konto erstellen';setLoading(btn,true,idle);try{const now=new Date().toISOString(),metadata={first_name:first,last_name:last,full_name:`${first} ${last}`,legal_terms_version:LEGAL_VERSION,legal_terms_accepted_at:now,privacy_version:LEGAL_VERSION,privacy_accepted_at:now,risk_notice_version:LEGAL_VERSION,risk_notice_accepted_at:now,plan:'free',is_premium:false,legal_acceptance_event:'register',free_idea_email_enabled:freeIdeaEmailOptIn,newsletter_enabled:freeIdeaEmailOptIn,email_alerts_enabled:true,plus_email_enabled:true,notification_channel:'email'};if(isFreeIdeaIntent()){metadata.free_idea_terms_version=FREE_IDEA_TERMS_VERSION;metadata.free_idea_terms_accepted_at=now}const{data,error}=await supabaseClient.auth.signUp({email,password,options:{emailRedirectTo:AUTH_CONFIRM_REDIRECT_URL,data:metadata}});if(error)return showError(mapAuthError(error.message));if(data?.user)await upsertProfileForUser(data.user,first,last,email);if(freeIdeaEmailOptIn&&supabaseClient){await supabaseClient.from('newsletter_subscribers').upsert({email,name:`${first} ${last}`.trim(),status:'active',source:'registration_free_idea_email',free_idea_email_enabled:true,newsletter_enabled:true,created_at:now,updated_at:now},{onConflict:'email'}).catch(()=>{})}showSuccess('Konto erstellt. Bitte bestätige deine E-Mail-Adresse über den professionellen Bestätigungslink in der Mail.')}catch(e){showError('Die Registrierung konnte nicht abgeschlossen werden.')}finally{setLoading(btn,false,idle)}}
+    async function handleRegister(){
+      clearMessages();
+      const first=getEl('registerFirstName')?.value?.trim()||'';
+      const last=getEl('registerLastName')?.value?.trim()||'';
+      const email=getEl('registerEmail')?.value?.trim()||'';
+      const password=getEl('registerPassword')?.value||'';
+      const freeIdeaEmailOptIn=!!getEl('registerFreeIdeaEmail')?.checked;
+      if(!first||!last||!email||!password)return showError('Bitte fülle alle Felder aus.');
+      if(!getEl('registerTerms')?.checked||!getEl('registerRiskNotice')?.checked)return showError('Bitte bestätige AGB, Datenschutzerklärung und den Risikohinweis.');
+      if(password.length<6)return showError('Das Passwort muss mindestens 6 Zeichen lang sein.');
+      if(!supabaseClient)return showError('Die Verbindung ist aktuell nicht verfügbar.');
+      const btn=getEl('registerBtn'),idle=isFreeIdeaIntent()?'Jetzt kostenlos anmelden':'Konto erstellen';
+      setLoading(btn,true,idle);
+      const now=new Date().toISOString();
+      let createdUser=null;
+      const nonBlockingErrors=[];
+      try{
+        const metadata={
+          first_name:first,
+          last_name:last,
+          full_name:`${first} ${last}`.trim(),
+          legal_terms_version:LEGAL_VERSION,
+          legal_terms_accepted_at:now,
+          privacy_version:LEGAL_VERSION,
+          privacy_accepted_at:now,
+          risk_notice_version:LEGAL_VERSION,
+          risk_notice_accepted_at:now,
+          plan:'free',
+          is_premium:false,
+          legal_acceptance_event:'register',
+          free_idea_email_enabled:freeIdeaEmailOptIn,
+          newsletter_enabled:freeIdeaEmailOptIn,
+          email_alerts_enabled:true,
+          plus_email_enabled:true,
+          notification_channel:'email'
+        };
+        if(isFreeIdeaIntent()){
+          metadata.free_idea_terms_version=FREE_IDEA_TERMS_VERSION;
+          metadata.free_idea_terms_accepted_at=now;
+        }
+        const {data,error}=await supabaseClient.auth.signUp({
+          email,
+          password,
+          options:{emailRedirectTo:AUTH_CONFIRM_REDIRECT_URL,data:metadata}
+        });
+        if(error){
+          console.error('Supabase signUp error:',error);
+          return showError(mapAuthError(error.message||String(error)));
+        }
+        createdUser=data?.user||null;
+      }catch(e){
+        console.error('Supabase signUp exception:',e);
+        return showError(mapAuthError(e?.message||String(e)||'Die Registrierung konnte nicht abgeschlossen werden.'));
+      }
+
+      if(createdUser){
+        try{
+          await upsertProfileForUser(createdUser,first,last,email);
+        }catch(e){
+          console.warn('Profil konnte nach Registrierung nicht vollständig gespeichert werden:',e);
+          nonBlockingErrors.push('Profil-Zusatzdaten');
+        }
+        try{
+          await recordLegalAcceptance('register',{userId:createdUser.id,email});
+        }catch(e){
+          console.warn('Rechtliche Bestätigung konnte nach Registrierung nicht gespeichert werden:',e);
+          nonBlockingErrors.push('Bestätigungsnachweis');
+        }
+      }
+
+      if(freeIdeaEmailOptIn&&supabaseClient){
+        const subscriberPayload={
+          email,
+          name:`${first} ${last}`.trim(),
+          status:'active',
+          source:'registration_free_idea_email',
+          free_idea_email_enabled:true,
+          newsletter_enabled:true,
+          consent_version:LEGAL_VERSION,
+          consent_at:now,
+          created_at:now,
+          updated_at:now
+        };
+        try{
+          const result=await safeSaveNewsletterSubscriber(subscriberPayload);
+          if(!result.ok)throw result.error||new Error('Newsletter konnte nicht gespeichert werden.');
+        }catch(e){
+          console.warn('Newsletter-Anmeldung konnte nach Registrierung nicht gespeichert werden:',e);
+          nonBlockingErrors.push('Newsletter-Anmeldung');
+        }
+        try{
+          const result=await safeSaveFreeIdeaReminder({
+            email,
+            status:'active',
+            source:'registration_free_idea_email',
+            consent_version:LEGAL_VERSION,
+            consent_at:now,
+            created_at:now,
+            updated_at:now
+          });
+          if(!result.ok)throw result.error||new Error('Dienstagsidee-Erinnerung konnte nicht gespeichert werden.');
+        }catch(e){
+          console.warn('Dienstagsidee-Erinnerung konnte nach Registrierung nicht gespeichert werden:',e);
+          nonBlockingErrors.push('Dienstagsidee-Erinnerung');
+        }
+      }
+
+      if(nonBlockingErrors.length){
+        showSuccess('Konto erstellt. Falls du E-Mail-Infos gewählt hast, wird diese Einstellung im Hintergrund gespeichert. Du kannst dich trotzdem anmelden.');
+      }else{
+        showSuccess('Konto erstellt. Bitte bestätige deine E-Mail-Adresse über den Bestätigungslink in der Mail.');
+      }
+      setLoading(btn,false,idle);
+    }
     async function acceptFreeIdeaTerms(){if(!currentUser||!supabaseClient){openAuthModal('register','/kostenlose-idee');return}if(!getEl('freeIdeaTermsCheck')?.checked||!getEl('freeIdeaLossCheck')?.checked||!getEl('freeIdeaDataCheck')?.checked)return showBanner('Bitte bestätige alle drei Punkte.');try{const now=new Date().toISOString();const saved=await recordLegalAcceptance('free_idea_access',{freeIdea:true,source:'free_idea_gate',acceptedAt:now,metadata:{loss_risk_confirmed:true,data_storage_confirmed:true}});if(!saved.ok)return showBanner('Die Bestätigung konnte nicht gespeichert werden.');const{data,error}=await supabaseClient.auth.updateUser({data:{free_idea_terms_version:FREE_IDEA_TERMS_VERSION,free_idea_terms_accepted_at:now,legal_terms_version:LEGAL_VERSION,legal_terms_accepted_at:now,privacy_version:LEGAL_VERSION,privacy_accepted_at:now,risk_notice_version:LEGAL_VERSION,risk_notice_accepted_at:now}});if(error)return showBanner('Die Bestätigung konnte nicht gespeichert werden.');currentUser=data?.user||currentUser;refreshPublicIdeaGate();await loadPublicOpportunity();showBanner('Bestätigung gespeichert. Die kostenlose Top-Idee ist jetzt freigeschaltet.')}catch(e){showBanner('Die Bestätigung konnte nicht gespeichert werden.')}}
     function refreshPublicIdeaGate(){const gate=getEl('publicIdeaAccessGate'),content=getEl('publicIdeaProtectedContent'),title=getEl('publicGateTitle'),text=getEl('publicGateText'),actions=getEl('publicGateActions'),checklist=getEl('publicGateChecklist');if(!currentUser){gate.classList.remove('hidden');content.classList.add('hidden');title.textContent='Kostenloses Konto und Bestätigung erforderlich';text.textContent='Um die kostenlose Top-Idee zu sehen, musst du dich kostenlos registrieren oder anmelden.';actions.innerHTML=`<button class="btn btn-hero-primary" type="button" onclick="openAuthModal('register','/kostenlose-idee')">Jetzt kostenlos anmelden</button><button class="btn btn-card-secondary" type="button" onclick="openAuthModal('login','/kostenlose-idee')">Anmelden</button>`;checklist.classList.add('hidden');return}if(!hasAcceptedFreeIdeaTerms()){gate.classList.remove('hidden');content.classList.add('hidden');title.textContent='Bitte kostenlose Idee rechtlich freischalten';text.textContent='Du bist eingeloggt. Speichere bitte noch deine Bestätigung.';actions.innerHTML='';checklist.classList.remove('hidden');return}gate.classList.add('hidden');content.classList.remove('hidden')}
     function getStorageKey(b){return`${b}_${currentUser?.id||'guest'}`}
@@ -1225,7 +1411,7 @@
     function getRenewalOrCancelDateLabel(){const cancelAtPeriodEnd=!!getProfileField('cancel_at_period_end','subscription_cancel_at_period_end');const cancelAt=getProfileField('cancel_at','subscription_cancel_at','canceled_at','cancelled_at');const currentPeriodEnd=getProfileField('current_period_end','subscription_current_period_end','stripe_current_period_end','plus_until','access_until','premium_until');if(cancelAtPeriodEnd||cancelAt)return{label:'Plus-Abo endet am',value:formatAccountDate(cancelAt||currentPeriodEnd)};if(isPremiumUser())return{label:'Nächste automatische Verlängerung',value:formatAccountDate(currentPeriodEnd)};return{label:'Nächste automatische Verlängerung',value:'Kein aktives Plus-Abo'}}
     function boolPref(value, fallback=false){return value===true?true:value===false?false:fallback}
     function renderNotificationSettings(){const box=getEl('accountNotificationSettings');if(!box||!currentUser)return;const plusEnabled=boolPref(currentProfile?.plus_email_enabled, true),freeEnabled=boolPref(currentProfile?.free_idea_email_enabled, false),newsletterEnabled=boolPref(currentProfile?.newsletter_enabled, false);box.innerHTML=`<label class="check-row"><input id="accountPlusEmailEnabled" type="checkbox" ${plusEnabled?'checked':''}><span><strong>Plus-Abo-Chancen per E-Mail</strong><br>Wenn dein Konto ein Plus-Abo hat, erhältst du E-Mails, sobald neue Plus-Abo-Chancen veröffentlicht werden. Du kannst das hier deaktivieren.</span></label><label class="check-row"><input id="accountFreeIdeaEmailEnabled" type="checkbox" ${freeEnabled?'checked':''}><span><strong>Kostenlose Dienstagsidee per E-Mail</strong><br>Du erhältst dienstags eine E-Mail, sobald die kostenlose Top-Idee veröffentlicht wurde.</span></label><label class="check-row"><input id="accountNewsletterEnabled" type="checkbox" ${newsletterEnabled?'checked':''}><span><strong>Newsletter / Marktüberblick</strong><br>Du erhältst gelegentliche Finanzimpulse, Marktüberblicke und Hinweise auf neue Inhalte.</span></label><div class="hero-actions" style="justify-content:flex-start;margin-top:14px"><button class="btn btn-card-primary" type="button" onclick="saveNotificationSettings()">Einstellungen speichern</button></div><div class="muted" id="accountNotificationStatus" style="margin-top:12px"></div><div class="notice" style="width:100%;margin:16px 0 0">Automatische WhatsApp- oder Telegram-Benachrichtigungen sind aktuell nicht aktiv. Diese Kanäle dienen derzeit nur der Kontaktaufnahme.</div>`}
-    async function saveNotificationSettings(){if(!supabaseClient||!currentUser?.id)return;const status=getEl('accountNotificationStatus'),now=new Date().toISOString(),plus=!!getEl('accountPlusEmailEnabled')?.checked,free=!!getEl('accountFreeIdeaEmailEnabled')?.checked,newsletter=!!getEl('accountNewsletterEnabled')?.checked;if(status)status.textContent='Speichern …';try{const update={plus_email_enabled:plus,free_idea_email_enabled:free,newsletter_enabled:newsletter,email_alerts_enabled:plus||free||newsletter,notification_channel:'email',updated_at:now};const {error}=await supabaseClient.from(CONFIG.profilesTable).update(update).eq('id',currentUser.id);if(error)throw error;currentProfile={...(currentProfile||{}),...update};if(newsletter||free){await supabaseClient.from('newsletter_subscribers').upsert({email:currentUser.email,status:'active',source:'account_notification_settings',newsletter_enabled:newsletter,free_idea_email_enabled:free,consent_version:LEGAL_VERSION,consent_at:now,updated_at:now},{onConflict:'email'}).catch(()=>{})}if(free){await supabaseClient.from('free_idea_reminders').upsert({email:currentUser.email,status:'active',source:'account_notification_settings',consent_version:LEGAL_VERSION,consent_at:now,updated_at:now},{onConflict:'email'}).catch(()=>{})}await recordLegalAcceptance('notification_settings_update',{source:'account',acceptedAt:now,metadata:{plus_email_enabled:plus,free_idea_email_enabled:free,newsletter_enabled:newsletter}});if(status)status.textContent='Einstellungen gespeichert.'}catch(e){console.warn(e);if(status)status.textContent='Einstellungen konnten nicht gespeichert werden.'}}
+    async function saveNotificationSettings(){if(!supabaseClient||!currentUser?.id)return;const status=getEl('accountNotificationStatus'),now=new Date().toISOString(),plus=!!getEl('accountPlusEmailEnabled')?.checked,free=!!getEl('accountFreeIdeaEmailEnabled')?.checked,newsletter=!!getEl('accountNewsletterEnabled')?.checked;if(status)status.textContent='Speichern …';try{const update={plus_email_enabled:plus,free_idea_email_enabled:free,newsletter_enabled:newsletter,email_alerts_enabled:plus||free||newsletter,notification_channel:'email',updated_at:now};const {error}=await supabaseClient.from(CONFIG.profilesTable).update(update).eq('id',currentUser.id);if(error)throw error;currentProfile={...(currentProfile||{}),...update};if(newsletter||free){await safeSaveNewsletterSubscriber({email:currentUser.email,status:'active',source:'account_notification_settings',newsletter_enabled:newsletter,free_idea_email_enabled:free,consent_version:LEGAL_VERSION,consent_at:now,created_at:now,updated_at:now}).catch(()=>{})}if(free){await safeSaveFreeIdeaReminder({email:currentUser.email,status:'active',source:'account_notification_settings',consent_version:LEGAL_VERSION,consent_at:now,created_at:now,updated_at:now}).catch(()=>{})}await recordLegalAcceptance('notification_settings_update',{source:'account',acceptedAt:now,metadata:{plus_email_enabled:plus,free_idea_email_enabled:free,newsletter_enabled:newsletter}});if(status)status.textContent='Einstellungen gespeichert.'}catch(e){console.warn(e);if(status)status.textContent='Einstellungen konnten nicht gespeichert werden.'}}
     function renderAccountPage(){if(!currentUser){openAuthModal('login','/konto');showView('view-landing');return}showView('view-account');const firstName=normalizeText(currentProfile?.first_name||currentUser?.user_metadata?.first_name||''),lastName=normalizeText(currentProfile?.last_name||currentUser?.user_metadata?.last_name||''),fullName=normalizeText(`${firstName} ${lastName}`)||getUserDisplayName(),statusLabel=getAccountStatusLabel(),subscriptionStatus=getSubscriptionStatusLabel(),renewalInfo=getRenewalOrCancelDateLabel(),stripeCustomerId=getProfileField('stripe_customer_id','customer_id'),stripeSubscriptionId=getProfileField('stripe_subscription_id','subscription_id');getEl('accountProfileMeta').innerHTML=`<div class="account-meta-row"><div class="label">Name</div><div class="value">${escapeHtml(fullName||'Noch nicht hinterlegt')}</div></div><div class="account-meta-row"><div class="label">E-Mail</div><div class="value">${escapeHtml(currentUser.email||'Noch nicht hinterlegt')}</div></div><div class="account-meta-row"><div class="label">Konto-ID</div><div class="value">${escapeHtml(currentUser.id||'—')}</div></div><div class="account-meta-row"><div class="label">Konto erstellt</div><div class="value">${escapeHtml(formatAccountDate(currentUser.created_at))}</div></div>`;getEl('accountPlanIntro').textContent=statusLabel==='Plus-Abo'?'Dein Konto ist aktuell für den Plus-Abo-Bereich freigeschaltet.':'Dein Konto ist aktuell im kostenlosen Free-Status.';getEl('accountSubscriptionMeta').innerHTML=`<div class="account-meta-row"><div class="label">Status</div><div class="value">${escapeHtml(statusLabel)}</div></div><div class="account-meta-row"><div class="label">Abo-Status</div><div class="value">${escapeHtml(subscriptionStatus)}</div></div><div class="account-meta-row"><div class="label">${escapeHtml(renewalInfo.label)}</div><div class="value">${escapeHtml(renewalInfo.value)}</div></div>`;getEl('accountPlanActions').innerHTML=statusLabel==='Plus-Abo'?`<button class="btn btn-card-secondary" type="button" onclick="requestPlusCancellation()">Verträge hier kündigen</button><button class="btn btn-hero-secondary" type="button" onclick="goToPremiumProtectedRoute('/premium/chancen')">Zum Plus-Abo-Bereich</button>`:`<button class="btn btn-hero-primary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus-Abo abschließen</button><button class="btn btn-card-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Idee ansehen</button>`};renderAccountProducts();renderNotificationSettings()
     function renderPlusCancelRoute(){showView('view-plus-cancel');if(!currentUser){showBanner('Bitte melde dich mit dem Konto an, mit dem du Plus-Abo gebucht hast. Danach kannst du direkt kündigen.');openAuthModal('login','/plus-kuendigen');return}if(!isPremiumUser()){showBanner('Dein Konto ist aktuell nicht als Plus-Abo-Konto markiert. Falls du trotzdem ein aktives Plus-Abo hast, kontaktiere uns bitte über die Kontaktseite.')}}
     async function requestPlusCancellation(){
@@ -1400,7 +1586,7 @@
     async function renderETFDatabase(){const body=getEl('makx-etf-db-body');if(!body)return;body.innerHTML='<tr><td colspan="7">ETF-Daten werden geladen …</td></tr>';const rows=[];for(const e of MAKX_ETFS){let q=null;try{q=await makxQuote(e.ticker)}catch{}const price=q?.c?formatMoney(q.c, e.ticker.endsWith('.DE')||e.ticker.endsWith('.AS')?'EUR':'USD'):'—';const ch=Number.isFinite(q?.dp)?`<span class="${q.dp>=0?'makx-positive':'makx-negative'}">${formatPercent(q.dp)}</span>`:'—';rows.push(`<tr><td><strong>${escapeHtml(e.name)}</strong><br><span class="makx-small">Ticker: ${escapeHtml(e.ticker)}</span></td><td>ISIN: ${escapeHtml(e.isin)}<br>WKN: ${escapeHtml(e.wkn)}</td><td>${escapeHtml(e.category)}</td><td>${escapeHtml(e.ter)}</td><td>${escapeHtml(e.use)}</td><td>${price}<br>${ch}</td><td>${escapeHtml(e.note)}</td></tr>`)}body.innerHTML=rows.join('')}
 
     function makxShowNewsletterMessage(text,isError=false){const box=getEl('makx-newsletter-message');if(!box)return;box.textContent=text;box.classList.remove('hidden');box.style.borderColor=isError?'rgba(255,124,145,.22)':'rgba(31,226,176,.22)';box.style.background=isError?'rgba(255,124,145,.10)':'rgba(31,226,176,.10)';box.style.color=isError?'#ffd1d8':'#d9fff5'}
-    async function makxSubscribeNewsletter(){const name=normalizeText(getEl('makx-newsletter-name')?.value||''),email=normalizeText(getEl('makx-newsletter-email')?.value||currentUser?.email||''),consent=!!getEl('makx-newsletter-consent')?.checked;if(!email||!email.includes('@')){makxShowNewsletterMessage('Bitte gib eine gültige E-Mail-Adresse ein.',true);return}if(!consent){makxShowNewsletterMessage('Bitte bestätige, dass du den Newsletter per E-Mail erhalten möchtest.',true);return}const btn=getEl('makx-newsletter-btn');setLoading(btn,true,'Newsletter kostenlos abonnieren');try{const now=new Date().toISOString();if(supabaseClient){const payload={email,name:name||null,status:'active',source:'website_newsletter',newsletter_enabled:true,free_idea_email_enabled:true,consent_text:'Newsletter und kostenlose Dienstagsidee per E-Mail abonniert',consent_version:LEGAL_VERSION,consent_at:now,created_at:now,updated_at:now};await supabaseClient.from('newsletter_subscribers').upsert(payload,{onConflict:'email'});if(currentUser){await supabaseClient.from(CONFIG.profilesTable).update({email_alerts_enabled:true,newsletter_enabled:true,free_idea_email_enabled:true,updated_at:now}).eq('id',currentUser.id);await recordLegalAcceptance('newsletter_signup',{source:'newsletter_page',acceptedAt:now,metadata:{email,newsletter_enabled:true,free_idea_email_enabled:true}})}}makxShowNewsletterMessage('Danke! Deine Newsletter-Anmeldung wurde gespeichert. Du kannst sie jederzeit im Konto oder per Kontakt wieder abbestellen.')}catch(e){makxShowNewsletterMessage('Die Anmeldung konnte nicht gespeichert werden. Bitte versuche es später erneut oder kontaktiere uns.',true)}finally{setLoading(btn,false,'Newsletter kostenlos abonnieren')}}
+    async function makxSubscribeNewsletter(){const name=normalizeText(getEl('makx-newsletter-name')?.value||''),email=normalizeText(getEl('makx-newsletter-email')?.value||currentUser?.email||''),consent=!!getEl('makx-newsletter-consent')?.checked;if(!email||!email.includes('@')){makxShowNewsletterMessage('Bitte gib eine gültige E-Mail-Adresse ein.',true);return}if(!consent){makxShowNewsletterMessage('Bitte bestätige, dass du den Newsletter per E-Mail erhalten möchtest.',true);return}const btn=getEl('makx-newsletter-btn');setLoading(btn,true,'Newsletter kostenlos abonnieren');try{const now=new Date().toISOString();if(supabaseClient){const payload={email,name:name||null,status:'active',source:'website_newsletter',newsletter_enabled:true,free_idea_email_enabled:true,consent_text:'Newsletter und kostenlose Dienstagsidee per E-Mail abonniert',consent_version:LEGAL_VERSION,consent_at:now,created_at:now,updated_at:now};const newsletterResult=await safeSaveNewsletterSubscriber(payload); if(!newsletterResult.ok) throw newsletterResult.error||new Error('Newsletter konnte nicht gespeichert werden.');if(currentUser){await supabaseClient.from(CONFIG.profilesTable).update({email_alerts_enabled:true,newsletter_enabled:true,free_idea_email_enabled:true,updated_at:now}).eq('id',currentUser.id);await recordLegalAcceptance('newsletter_signup',{source:'newsletter_page',acceptedAt:now,metadata:{email,newsletter_enabled:true,free_idea_email_enabled:true}})}}makxShowNewsletterMessage('Danke! Deine Newsletter-Anmeldung wurde gespeichert. Du kannst sie jederzeit im Konto oder per Kontakt wieder abbestellen.')}catch(e){makxShowNewsletterMessage('Die Anmeldung konnte nicht gespeichert werden. Bitte versuche es später erneut oder kontaktiere uns.',true)}finally{setLoading(btn,false,'Newsletter kostenlos abonnieren')}}
     function openPasswordReset(){clearMessages();closeAuthModal();getEl('passwordResetError').style.display='none';getEl('passwordResetSuccess').style.display='none';const mail=normalizeText(getEl('loginEmail')?.value||currentUser?.email||'');if(mail)getEl('passwordResetEmail').value=mail;getEl('passwordResetModal').classList.add('open');getEl('passwordResetModal').setAttribute('aria-hidden','false')}
     function closePasswordReset(){getEl('passwordResetModal').classList.remove('open');getEl('passwordResetModal').setAttribute('aria-hidden','true')}
     function openNewPasswordModal(){getEl('newPasswordError').style.display='none';getEl('newPasswordSuccess').style.display='none';getEl('newPasswordModal').classList.add('open');getEl('newPasswordModal').setAttribute('aria-hidden','false')}
@@ -1459,8 +1645,8 @@
       const now=new Date().toISOString();
       try{
         if(supabaseClient){
-          await supabaseClient.from('free_idea_reminders').upsert({email,status:'active',source:'kostenlose_idee_page',consent_version:LEGAL_VERSION,consent_at:now,page_url:`${location.origin}${location.pathname}#/kostenlose-idee`,created_at:now,updated_at:now},{onConflict:'email'});
-          await supabaseClient.from('newsletter_subscribers').upsert({email,status:'active',source:'free_idea_reminder',free_idea_email_enabled:true,newsletter_enabled:false,consent_text:'Kostenlose Dienstagsidee per E-Mail abonniert',consent_version:LEGAL_VERSION,consent_at:now,created_at:now,updated_at:now},{onConflict:'email'}).catch(()=>{});
+          const reminderResult=await safeSaveFreeIdeaReminder({email,status:'active',source:'kostenlose_idee_page',consent_version:LEGAL_VERSION,consent_at:now,page_url:`${location.origin}${location.pathname}#/kostenlose-idee`,created_at:now,updated_at:now}); if(!reminderResult.ok) throw reminderResult.error||new Error('Dienstagsidee-Erinnerung konnte nicht gespeichert werden.');
+          await safeSaveNewsletterSubscriber({email,status:'active',source:'free_idea_reminder',free_idea_email_enabled:true,newsletter_enabled:false,consent_text:'Kostenlose Dienstagsidee per E-Mail abonniert',consent_version:LEGAL_VERSION,consent_at:now,created_at:now,updated_at:now}).catch(()=>{});
           if(currentUser?.id){await supabaseClient.from(CONFIG.profilesTable).update({free_idea_email_enabled:true,updated_at:now}).eq('id',currentUser.id);await recordLegalAcceptance('free_idea_email_signup',{source:'free_idea_page',acceptedAt:now,metadata:{email,free_idea_email_enabled:true}})}
         }
         status.textContent='Du bist angemeldet. Du erhältst dienstags eine E-Mail, sobald die kostenlose Top-Idee veröffentlicht wurde.';
