@@ -196,6 +196,61 @@
     .password-toggle:hover{border-color:rgba(30,168,255,.42);background:rgba(30,168,255,.12)}
     .field-help{margin-top:8px;color:var(--soft);font-size:13px;line-height:1.5}
 
+  
+
+    /* Landingpage 2026: ruhiger, klarer und kundenfreundlicher */
+    .ak-landing-hero{min-height:auto;padding:54px 0 42px;text-align:center;display:flex;justify-content:center;align-items:center}
+    .ak-landing-hero .hero-inner{margin:0 auto;gap:18px;width:min(980px,100%);align-items:center;text-align:center}
+    .ak-landing-hero h1{font-size:clamp(42px,5.4vw,76px);max-width:980px;margin-left:auto;margin-right:auto;text-align:center}
+    .ak-landing-hero .hero-copy{max-width:860px;font-size:17px;line-height:1.72;margin-left:auto;margin-right:auto;text-align:center}
+    .ak-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;width:min(1120px,100%);margin:0 auto}
+    .ak-quick-card{padding:26px;border-radius:26px;background:linear-gradient(180deg,rgba(12,22,44,.96),rgba(10,20,40,.94));border:1px solid rgba(117,141,181,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.02);text-align:center;display:flex;flex-direction:column;align-items:center}
+    .ak-quick-card.featured{border-color:rgba(30,168,255,.36);box-shadow:var(--glow)}
+    .ak-quick-card h3{font-size:24px;font-weight:900;margin-bottom:12px;letter-spacing:-.035em;color:#f5f8fd}
+    .ak-quick-card p{color:var(--muted);line-height:1.7;font-size:15px;margin-bottom:14px}
+    .ak-clean-list{list-style:none;display:grid;gap:10px;margin:16px 0 20px;text-align:left;width:100%}
+    .ak-clean-list li{display:flex;gap:10px;align-items:flex-start;color:var(--muted);line-height:1.55;font-size:15px}
+    .ak-clean-list li:before{content:'✓';color:var(--success);font-weight:900;margin-top:1px}
+    .ak-price-highlight{font-size:42px;line-height:1;font-weight:900;letter-spacing:-.055em;color:#fff;margin:12px 0 4px}
+    .ak-price-sub{color:var(--soft);font-size:13px;font-weight:700;margin-bottom:18px}
+    .ak-trust-strip{width:min(1120px,100%);margin:0 auto;padding:22px;border-radius:24px;background:rgba(255,213,107,.08);border:1px solid rgba(255,213,107,.16);color:#eadfb7;line-height:1.7;font-size:14px;display:flex;justify-content:center;gap:18px;align-items:center;flex-wrap:wrap;text-align:center}
+    .ak-trust-strip strong{color:#fff5d0}
+    .ak-newsletter-card{width:min(1120px,100%);margin:0 auto;padding:32px;border-radius:30px;background:radial-gradient(circle at 50% 0,rgba(31,226,176,.16),transparent 34%),linear-gradient(180deg,rgba(12,22,44,.98),rgba(10,20,40,.96));border:1px solid rgba(31,226,176,.24);box-shadow:var(--glow);display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:center}
+    .ak-newsletter-card h2{font-size:clamp(28px,3vw,44px);font-weight:900;letter-spacing:-.045em;margin:12px 0;color:#f5f8fd}
+    .ak-newsletter-card p{color:var(--muted);line-height:1.7;font-size:16px}
+    .ak-newsletter-form{padding:22px;border-radius:22px;background:rgba(7,16,31,.52);border:1px solid rgba(117,141,181,.14)}
+    .ak-newsletter-form .field{margin-bottom:12px}
+    .ak-landing-message{display:none;margin-top:12px;padding:13px 15px;border-radius:15px;line-height:1.6;font-weight:800;font-size:14px}
+    .ak-landing-message.show{display:block}
+    .ak-landing-message.ok{background:rgba(31,226,176,.10);border:1px solid rgba(31,226,176,.22);color:#d9fff5}
+    .ak-landing-message.err{background:rgba(255,124,145,.10);border:1px solid rgba(255,124,145,.22);color:#ffd1d8}
+    .ak-history-shell{width:min(1120px,100%);margin:0 auto;padding:30px;border-radius:30px;background:linear-gradient(180deg,rgba(12,22,44,.96),rgba(10,20,40,.94));border:1px solid rgba(117,141,181,.16);box-shadow:var(--glow)}
+    .ak-history-shell .ak-history-toolbar{width:100%;margin:0 0 18px}
+    .ak-history-shell .stats-grid{width:100%!important;margin-left:0!important;margin-right:0!important}
+    .ak-history-shell .ak-history-list,.ak-history-shell .ak-history-empty{width:100%;margin-left:0;margin-right:0}
+    .ak-example-compact{width:min(1120px,100%);margin:0 auto;background:linear-gradient(180deg,rgba(12,22,44,.96),rgba(10,20,40,.94));border:1px solid rgba(30,168,255,.22);border-radius:28px;box-shadow:var(--glow);padding:26px}
+    .ak-example-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:24px;align-items:center}
+    .ak-low-priority{opacity:.96}
+    .ak-bottom-explain{width:min(1120px,100%);margin:0 auto;display:grid;gap:18px}
+    .ak-bottom-explain details{padding:22px;border-radius:22px;background:linear-gradient(180deg,rgba(12,22,44,.96),rgba(10,20,40,.94));border:1px solid rgba(117,141,181,.16)}
+    .ak-bottom-explain summary{cursor:pointer;font-size:20px;font-weight:900;color:#f5f8fd;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
+    .ak-bottom-explain summary::-webkit-details-marker{display:none}
+    .ak-bottom-explain summary:after{content:'+';font-size:26px;color:#1ea8ff;font-weight:900}
+    .ak-bottom-explain details[open] summary:after{content:'–'}
+    .ak-bottom-explain .ak-explain-grid,.ak-bottom-explain .steps-grid,.ak-bottom-explain .feature-grid{margin-top:18px}
+    .ak-soft-section{padding:28px 0 42px}
+    .ak-quick-card .btn{margin-top:auto}
+    .ak-newsletter-card > div:first-child{text-align:center}
+    .ak-newsletter-card .chips{justify-content:center}
+    .ak-history-toolbar{text-align:center}
+    .ak-history-toolbar > div{max-width:820px;margin:0 auto}
+    .ak-history-toolbar label{margin-left:auto}
+    .ak-example-compact .muted{text-align:left}
+    .ak-example-compact .promo-badge{margin-bottom:4px}
+
+    @media(max-width:1100px){.ak-quick-grid,.ak-newsletter-card,.ak-example-grid{grid-template-columns:1fr}.ak-newsletter-card{padding:24px}}
+    @media(max-width:820px){.ak-landing-hero{padding-top:38px}.ak-quick-card,.ak-newsletter-card,.ak-history-shell,.ak-example-compact{border-radius:22px;padding:20px}.ak-price-highlight{font-size:36px}.ak-trust-strip{align-items:flex-start}.ak-bottom-explain summary{font-size:18px}.ak-landing-hero .hero-actions .btn{width:100%}}
+
   </style>
 </head>
 <body>
@@ -208,255 +263,207 @@
   </div>
 
   <main id="view-landing" class="page-view active">
-    <section class="hero container">
+    <section class="ak-landing-hero container">
       <div class="hero-inner">
-        <div class="hero-pill">⚡ Kostenlose Top-Idee jeden Dienstag</div>
-        <h1>Weniger Börsenrauschen.<br>Mehr strukturierte Marktchancen.</h1>
-        <p class="hero-copy">AnlageKompass zeigt dir verständlich erklärte Marktideen für Aktien und ETFs – mit möglichem Einstiegswert, Zielbereich, Rücksetzbereich, Chance-Risiko-Einordnung und direkter Chartansicht. Transparent erklärt. Ohne Hype. Keine Anlageberatung.</p>
+        <div class="hero-pill">⚡ Kostenlose Top-Idee jeden Dienstag · Plus-Chancen täglich</div>
+        <h1>Strukturierte Marktchancen.<br>Verständlich erklärt.</h1>
+        <p class="hero-copy">AnlageKompass zeigt Aktien- und ETF-Ideen mit möglichem Einstiegswert, Zielbereich, Rücksetzbereich und klarer Einordnung. Weniger Börsenrauschen, mehr Struktur. Keine Anlageberatung.</p>
         <div class="trust-row" aria-label="Vertrauensmerkmale">
-          <span class="trust-badge">✓ Keine Anlageberatung</span>
-          <span class="trust-badge">✓ Risikohinweis transparent</span>
+          <span class="trust-badge">✓ Kostenlos starten</span>
           <span class="trust-badge">✓ Monatlich kündbar</span>
-          <span class="trust-badge">✓ Kostenlos testen</span>
+          <span class="trust-badge">✓ Transparente Historie</span>
+          <span class="trust-badge">✓ Keine Anlageberatung</span>
         </div>
-        <p class="hero-proof">Free-Nutzer erhalten jeden Dienstag eine kostenlose Top-Idee. Plus-Abo-Nutzer erhalten regelmäßig mehrere strukturierte Chancen pro Tag.</p>
         <div class="hero-actions">
-          <button class="btn btn-hero-primary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus-Abo für 19,99 € monatlich starten →</button>
+          <button class="btn btn-hero-primary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus-Abo starten</button>
           <button class="btn btn-hero-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Top-Idee ansehen</button>
+          <button class="btn btn-hero-secondary" type="button" onclick="document.getElementById('newsletter-start')?.scrollIntoView({behavior:'smooth'})">Newsletter abonnieren</button>
         </div>
       </div>
     </section>
 
-    <section class="section" style="padding-top:0">
+    <section class="ak-soft-section">
       <div class="container">
-        <div class="example-card">
-          <div class="example-top">
-            <div>
-              <div class="promo-badge">🔍 Beispiel einer AnlageKompass-Idee</div>
-              <h3>So sieht eine strukturierte Marktchance aus</h3>
-              <p>Ein Beispiel-Layout, damit Kunden sofort verstehen, was sie im Plus-Abo-Bereich erwartet. Die Werte sind beispielhaft und keine aktuelle Empfehlung.</p>
-            </div>
-            <div class="example-symbol"><strong>MSFT</strong><span>Beispiel · Aktie</span></div>
-          </div>
-          <div class="facts-grid">
-            <div class="fact-card"><div class="label">Idee</div><div class="value">Qualitätswert mit Rücksetzer-Chance</div></div>
-            <div class="fact-card"><div class="label">Möglicher Einstiegswert</div><div class="value">410,00 $ / ca. 377,20 €</div></div>
-            <div class="fact-card"><div class="label">Zielbereich</div><div class="value">420,00–450,00 $ / ca. 386,40–414,00 €</div></div>
-            <div class="fact-card"><div class="label">Rücksetzbereich</div><div class="value">385,00 $ / ca. 354,20 €</div></div>
-            <div class="fact-card"><div class="label">Chance-Risiko</div><div class="value">2,10<span class="ak-metric-note">Beispiel: mögliche Chance ist etwa 2,10-mal so groß wie das definierte Risiko.</span></div></div>
-          </div>
-          <div class="makx-highlight">Warum interessant? Starke Marktstellung, Cloud-Wachstum und KI-Fantasie. Risiko: Bewertung bereits ambitioniert, Rücksetzer bei schwachem Gesamtmarkt möglich.</div>
-          <div class="makx-small">Beispielhafte Darstellung. Keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf.</div>
+        <div class="ak-quick-grid">
+          <article class="ak-quick-card">
+            <div class="promo-badge">Kostenlos</div>
+            <h3>Free</h3>
+            <div class="ak-price-highlight">0 €</div>
+            <div class="ak-price-sub">für den Einstieg</div>
+            <ul class="ak-clean-list">
+              <li>Kostenlose Top-Idee jeden Dienstag</li>
+              <li>Newsletter mit Marktüberblick</li>
+              <li>Finanztools, Rechner und offene Inhalte</li>
+            </ul>
+            <button class="btn btn-card-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlos starten</button>
+          </article>
+
+          <article class="ak-quick-card featured">
+            <div class="promo-badge">Beliebt</div>
+            <h3>Plus-Abo</h3>
+            <div class="ak-price-highlight">19,99 €</div>
+            <div class="ak-price-sub">monatlich · jederzeit kündbar</div>
+            <ul class="ak-clean-list">
+              <li>Mehrere strukturierte Chancen pro Tag</li>
+              <li>Detailansicht mit Ziel- und Rücksetzbereich</li>
+              <li>Watchlist, Kursregeln und Chartansicht</li>
+            </ul>
+            <button class="btn btn-card-primary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus-Abo starten</button>
+          </article>
+
+          <article class="ak-quick-card">
+            <div class="promo-badge">Überblick</div>
+            <h3>Klare Orientierung</h3>
+            <p>AnlageKompass ordnet Marktchancen klar ein – mit verständlichen Modellwerten, Risikohinweis und direkter Chartansicht.</p>
+            <ul class="ak-clean-list">
+              <li>Möglicher Einstiegswert</li>
+              <li>Zielbereich und Rücksetzbereich</li>
+              <li>Chance-Risiko und Risikohinweis</li>
+            </ul>
+            <button class="btn btn-card-secondary" type="button" onclick="document.getElementById('historie')?.scrollIntoView({behavior:'smooth'})">Historie ansehen</button>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="ak-soft-section" style="padding-top:0">
       <div class="container">
-        <div class="section-head"><h2>Alles, was du brauchst</h2><p>AnlageKompass bringt Marktchancen, Plus-Abo-Einordnungen, Watchlist und Kursregeln an einen Ort.</p></div>
-        <div class="feature-grid">
-          <article class="feature-card"><span class="emoji">💡</span><h3>Konkrete Marktideen</h3><p>Jede Plus-Abo-Idee kommt mit Symbol, möglichem Einstiegswert, Zielbereich, Rücksetzbereich, Chance-Risiko und direkter Chartansicht.</p></article>
-          <article class="feature-card"><span class="emoji">⚡</span><h3>Mehrere Chancen pro Tag</h3><p>Im Plus-Abo-Bereich siehst du regelmäßig mehrere Chancen pro Tag – kompakt, sortiert und verständlich eingeordnet.</p></article>
-          <article class="feature-card"><span class="emoji">📈</span><h3>Direkte Chartansicht</h3><p>Jede Chance und jede öffentliche Idee lässt sich mit dem passenden TradingView-Chart ergänzen.</p></article>
-          <article class="feature-card"><span class="emoji">🏷️</span><h3>Watchlist &amp; Kursregeln</h3><p>Plus-Abo-Nutzer speichern Favoriten, öffnen Werte direkt im Chart und hinterlegen individuelle Kursregeln.</p></article>
-          <article class="feature-card"><span class="emoji">🗓️</span><h3>Kostenlose Top-Idee</h3><p>Jeden Dienstag gibt es eine kostenlose Top-Idee zum Kennenlernen – nach kostenlosem Login und Bestätigung der Rechtstexte.</p></article>
-          <article class="feature-card"><span class="emoji">🎯</span><h3>Klare Modellwerte</h3><p>Plus-Abo zeigt möglichen Einstiegswert, Zielbereich, Rücksetzbereich und Chance-Risiko auf einen Blick.</p></article>
+        <div class="ak-trust-strip">
+          <div><strong>Transparenz:</strong> AnlageKompass liefert strukturierte Informationen und Modellwerte. Es handelt sich nicht um Anlageberatung, nicht um eine Anlageempfehlung und nicht um eine Aufforderung zum Kauf oder Verkauf.</div>
+          <button class="btn btn-card-secondary" type="button" onclick="goToRoute('/risikohinweis')">Risikohinweis lesen</button>
         </div>
       </div>
     </section>
 
-    <section class="section" style="padding-top:0">
+    <section class="ak-soft-section" id="newsletter-start">
       <div class="container">
-        <div class="section-head"><h2>So funktioniert AnlageKompass</h2><p>Vom ersten Überblick bis zur eigenen Watchlist – klarer Prozess statt endloser Börsennews.</p></div>
-        <div class="steps-grid">
-          <article class="step-card"><div class="step-number">1</div><h3>Marktchance entdecken</h3><p>Du erhältst kompakte Ideen zu Aktien und ETFs.</p></article>
-          <article class="step-card"><div class="step-number">2</div><h3>Einordnung prüfen</h3><p>Du siehst Chancen, Risiken, möglichen Einstiegswert, Zielbereich und Rücksetzbereich.</p></article>
-          <article class="step-card"><div class="step-number">3</div><h3>Chart ansehen</h3><p>Jede Idee kann direkt im interaktiven Chart geprüft werden.</p></article>
-          <article class="step-card"><div class="step-number">4</div><h3>Watchlist nutzen</h3><p>Speichere interessante Werte und behalte sie im Blick.</p></article>
-          <article class="step-card"><div class="step-number">5</div><h3>Eigenverantwortlich entscheiden</h3><p>AnlageKompass liefert Struktur. Die Entscheidung bleibt immer bei dir.</p></article>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="section" style="padding-top:0">
-      <div class="container">
-        <div class="section-head"><h2>Wie wir Aktien auswählen</h2><p>Die Auswahl folgt einem regelbasierten Modell. Wir erklären die Logik transparent, ohne die exakten Gewichtungen offenzulegen.</p></div>
-        <div class="ak-explain-grid">
-          <article class="ak-explain-card"><h3>1. Marktfilter</h3><p>Der Scanner betrachtet nur Werte mit ausreichender Handelbarkeit, sinnvollem Preisniveau und verwertbarer Kurs- und Volumenhistorie. Illiquide oder stark verzerrte Werte werden möglichst aussortiert.</p></article>
-          <article class="ak-explain-card"><h3>2. Technische Struktur</h3><p>Bewertet werden unter anderem Trendrichtung, Momentum, Volumenauffälligkeit, Abstand zu relevanten Kurszonen und kurzfristige Bestätigung im Chart.</p></article>
-          <article class="ak-explain-card"><h3>3. Risiko und Plausibilität</h3><p>Eine Idee erscheint nur, wenn die Preislogik plausibel ist: Rücksetzbereich unter möglichem Einstiegswert und Zielbereich oberhalb des möglichen Einstiegswerts. Der Rücksetzbereich ist kein automatischer Verkaufsbefehl, sondern ein Bereich zur erneuten Beobachtung der Idee.</p></article>
-        </div>
-        <div class="makx-highlight" style="width:min(1120px,100%);margin:18px auto 0">Wichtig: AnlageKompass ist kein Garantiesystem. Eine Aktie kann trotz guter Modellwerte fallen. Deshalb zeigen wir möglichen Einstiegswert, Zielbereich, Rücksetzbereich, kritisches Niveau, Score, Chance-Risiko und die Erfolgshistorie offen an.</div>
-      </div>
-    </section>
-
-    <section class="section" style="padding-top:0">
-      <div class="container">
-        <div class="section-head"><h2>Transparente Erfolgshistorie</h2><p>Öffentlich sichtbar für alle Besucher: Hier wird nachvollziehbar, was aus früher veröffentlichten Chancen geworden ist. Detailliert angezeigt werden öffentlich nur die letzten 5 abgeschlossenen Aktienchancen.</p></div>
-        <div class="ak-history-toolbar">
+        <div class="ak-newsletter-card">
           <div>
-            <div class="promo-badge">📊 Modellhistorie</div>
-            <p class="makx-small" style="margin-top:10px">Ausgewertet wird nach neuer Rücksetz-Logik: Der Rücksetzbereich ist kein automatischer Fehlschlag. Als erfolgreich zählt auch, wenn der Zielbereich erst nach einem Rücksetzer erreicht wird. Gescheitert ist eine Idee erst, wenn das kritische Niveau deutlich unter dem Rücksetzbereich erreicht wird, bevor der Zielbereich erreicht wurde.</p>
+            <div class="makx-kicker">✉️ Kostenloser Marktüberblick</div>
+            <h2>Kostenlosen Marktüberblick per E-Mail erhalten</h2>
+            <p>Erhalte ausgewählte Marktnews, kurze deutsche Einordnungen, neue Inhalte und die kostenlose Dienstagsidee per E-Mail.</p>
+            <div class="chips"><span class="chip">Marktüberblick</span><span class="chip">Dienstagsidee</span><span class="chip">Finanzimpulse</span></div>
           </div>
-          <label class="makx-small">Monat wählen<br><select id="akHistoryMonthSelect" onchange="renderSuccessHistoryPreview()"><option value="all">Alle Monate</option></select></label>
-        </div>
-        <div class="stats-grid" id="akHistoryStats" style="width:min(1120px,100%);margin-left:auto;margin-right:auto">
-          <div class="fact-card"><div class="label">Ausgewertete Chancen</div><div class="value">—</div></div>
-          <div class="fact-card"><div class="label">Erfolgsquote</div><div class="value">—</div></div>
-        </div>
-        <div class="ak-explain-grid">
-          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-success">ABGESCHLOSSEN</span></h3><p>In der öffentlichen Historie werden nur abgeschlossene Chancen angezeigt. Laufende Ideen bleiben im Plus-Abo-Bereich und werden hier nicht veröffentlicht.</p></article>
-          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-success">ERFOLGREICH</span></h3><p>Erfolgreich bedeutet: Nach Veröffentlichung wurde die untere Grenze des Zielbereichs erreicht – direkt oder nach einem Rücksetzer.</p></article>
-          <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-failed">GESCHEITERT / ABGELAUFEN</span></h3><p>Gescheitert bedeutet: Das kritische Niveau wurde vor dem Zielbereich erreicht. Abgelaufen bedeutet: Die Idee wurde nach Ablauf der Prüfzeit geschlossen, ohne eindeutig Ziel oder kritisches Niveau zu erreichen.</p></article>
-        </div>
-        <div class="ak-history-list" id="akHistoryList"></div>
-        <div class="ak-history-empty" id="akHistoryEmpty">Noch keine öffentlich gespeicherten Ergebnisse gefunden. Sobald historische Chancen ausgewertet wurden, erscheinen sie hier ohne Plus-Abo-Login.</div>
-      </div>
-    </section>
-
-    <section class="section" style="padding-top:0">
-      <div class="container">
-        <div class="section-head"><h2>Produkt-Einblick</h2><p>Visuelle Vorschau auf die wichtigsten Plus-Abo-Funktionen.</p></div>
-        <div class="mockup-grid">
-          <article class="mockup-card"><h3>Plus-Abo-Idee</h3><div class="mock-line good"></div><div class="mock-line"></div><div class="mock-line short"></div><p>Symbol, Kurzthese, Chance-Risiko, möglichen Einstiegswert, Zielbereich und Rücksetzbereich in einer Ansicht.</p></article>
-          <article class="mockup-card"><h3>Watchlist</h3><div class="mock-line good"></div><div class="mock-line"></div><div class="mock-line"></div><p>Interessante Werte speichern und schneller wiederfinden.</p></article>
-          <article class="mockup-card"><h3>Kursregeln</h3><div class="mock-line"></div><div class="mock-line good"></div><div class="mock-line short"></div><p>Eigene Zielbereiche festlegen und wichtige Marken bewusster verfolgen.</p></article>
-          <article class="mockup-card"><h3>Chartansicht</h3><div class="mock-line good"></div><div class="mock-line good"></div><div class="mock-line"></div><p>TradingView-Charts direkt neben der jeweiligen Chance nutzen.</p></article>
+          <div class="ak-newsletter-form">
+            <div class="field"><label for="ak-landing-newsletter-name">Name</label><input id="ak-landing-newsletter-name" type="text" placeholder="Dein Name"></div>
+            <div class="field"><label for="ak-landing-newsletter-email">E-Mail-Adresse</label><input id="ak-landing-newsletter-email" type="email" placeholder="deine@email.de"></div>
+            <label class="check-row"><input id="ak-landing-newsletter-consent" type="checkbox"><span>Ich möchte den kostenlosen Newsletter und die kostenlose Dienstagsidee per E-Mail erhalten. Abmeldung jederzeit möglich.</span></label>
+            <button class="btn btn-card-primary" id="ak-landing-newsletter-btn" type="button" onclick="akLandingSubscribeNewsletter()">Kostenlos abonnieren</button>
+            <div id="ak-landing-newsletter-message" class="ak-landing-message"></div>
+            <p class="makx-small" style="margin-top:12px">Kostenlos. Jederzeit abmeldbar. Details stehen in der Datenschutzerklärung.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" style="padding-top:0">
+    <section class="ak-soft-section" id="historie">
       <div class="container">
-        <div class="section-head"><h2>Free oder Plus-Abo?</h2><p>Free ist zum Kennenlernen. Plus-Abo ist für alle, die regelmäßig strukturierte Marktchancen sehen möchten.</p></div>
-        <div class="comparison-table">
-          <table>
-            <thead><tr><th>Funktion</th><th>Free</th><th>Plus-Abo</th></tr></thead>
-            <tbody>
-              <tr><td>Kostenlose Top-Idee am Dienstag</td><td class="yes">✓ Enthalten</td><td class="yes">✓ Enthalten</td></tr>
-              <tr><td>Mehrere Chancen pro Tag</td><td class="no">—</td><td class="yes">✓ Enthalten</td></tr>
-              <tr><td>Möglicher Einstiegswert und Zielbereich</td><td class="limited">Teilweise in der Top-Idee</td><td class="yes">✓ Pro Chance</td></tr>
-              <tr><td>Rücksetzbereich</td><td class="limited">Teilweise in der Top-Idee</td><td class="yes">✓ Pro Chance</td></tr>
-              <tr><td>Chance-Risiko-Einordnung</td><td class="limited">Grundlegend</td><td class="yes">✓ Ausführlicher</td></tr>
-              <tr><td>Watchlist</td><td class="no">—</td><td class="yes">✓ Enthalten</td></tr>
-              <tr><td>Kursregeln &amp; Benachrichtigungen</td><td class="no">—</td><td class="yes">✓ Enthalten</td></tr>
-              <tr><td>Monatlich kündbar</td><td class="yes">✓ Kostenlos</td><td class="yes">✓ Ja</td></tr>
-            </tbody>
-          </table>
+        <div class="ak-history-shell">
+          <div class="ak-history-toolbar">
+            <div>
+              <div class="promo-badge">📊 Erfolgshistorie</div>
+              <h2 class="ak-section-title" style="font-size:clamp(28px,3vw,44px);margin:14px 0 10px">Was wurde aus früheren Chancen?</h2>
+              <p class="makx-small">Hier siehst du transparent, was aus früheren abgeschlossenen Chancen geworden ist. Laufende Chancen bleiben im Plus-Abo-Bereich; abgeschlossene Ergebnisse werden nachvollziehbar dargestellt.</p>
+            </div>
+            <label class="makx-small">Monat wählen<br><select id="akHistoryMonthSelect" onchange="renderSuccessHistoryPreview()"><option value="all">Alle Monate</option></select></label>
+          </div>
+          <div class="stats-grid" id="akHistoryStats">
+            <div class="fact-card"><div class="label">Ausgewertete Chancen</div><div class="value">—</div></div>
+            <div class="fact-card"><div class="label">Erfolgsquote</div><div class="value">—</div></div>
+          </div>
+          <div class="ak-explain-grid">
+            <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-success">ABGESCHLOSSEN</span></h3><p>In der öffentlichen Historie werden nur abgeschlossene Chancen angezeigt. Laufende Ideen bleiben im Plus-Abo-Bereich.</p></article>
+            <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-success">ERFOLGREICH</span></h3><p>Erfolgreich bedeutet: Nach Veröffentlichung wurde die untere Grenze des Zielbereichs erreicht – direkt oder nach einem Rücksetzer.</p></article>
+            <article class="ak-explain-card"><h3><span class="ak-status-pill ak-status-failed">GESCHEITERT / ABGELAUFEN</span></h3><p>Gescheitert bedeutet: Das kritische Niveau wurde vor dem Zielbereich erreicht. Abgelaufen bedeutet: Innerhalb der Prüfzeit wurde weder Zielbereich noch kritisches Niveau eindeutig erreicht.</p></article>
+          </div>
+          <div class="ak-history-list" id="akHistoryList"></div>
+          <div class="ak-history-empty" id="akHistoryEmpty">Noch keine öffentlich gespeicherten Ergebnisse gefunden. Sobald historische Ergebnisse verfügbar sind, werden sie hier angezeigt.</div>
         </div>
       </div>
     </section>
 
-    <section class="section" style="padding-top:0">
+    <section class="ak-soft-section">
       <div class="container">
-        <div class="audience-grid">
-          <article class="audience-card"><h3>Geeignet für</h3><ul><li>Anleger, die Marktideen strukturierter prüfen möchten</li><li>Nutzer, die Chancen und Risiken schneller erfassen wollen</li><li>Menschen, die Aktien und ETFs beobachten</li><li>Nutzer, die klare Einordnungen statt Börsenlärm suchen</li></ul></article>
-          <article class="audience-card"><h3>Nicht geeignet für</h3><ul><li>Menschen, die garantierte Gewinne erwarten</li><li>Nutzer, die individuelle Anlageberatung suchen</li><li>Personen, die ohne eigenes Risikoverständnis investieren möchten</li><li>Anleger, die Risiken und mögliche Verluste ausblenden</li></ul></article>
+        <div class="ak-example-compact">
+          <div class="ak-example-grid">
+            <div>
+              <div class="promo-badge">🔍 Beispiel-Idee</div>
+              <h2 class="section-head" style="text-align:left;margin:14px 0 10px"><span style="font-size:clamp(28px,3vw,42px);font-weight:900;letter-spacing:-.04em;color:#f5f8fd">So sieht eine strukturierte Marktchance aus</span></h2>
+              <p class="muted">Eine Beispiel-Darstellung, damit du sofort erkennst, welche Informationen im Plus-Abo wichtig sind. Die Werte sind beispielhaft und dienen nur zur Veranschaulichung.</p>
+              <div class="makx-highlight">Warum interessant? Das Beispiel zeigt, wie eine Chance mit möglichem Einstiegswert, Zielbereich, Rücksetzbereich und Risiko sauber eingeordnet wird.</div>
+            </div>
+            <div>
+              <div class="facts-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+                <div class="fact-card"><div class="label">Symbol</div><div class="value">MSFT</div></div>
+                <div class="fact-card"><div class="label">Idee</div><div class="value">Qualitätswert</div></div>
+                <div class="fact-card"><div class="label">Möglicher Einstieg</div><div class="value">410,00 $</div></div>
+                <div class="fact-card"><div class="label">Zielbereich</div><div class="value">420–450 $</div></div>
+                <div class="fact-card"><div class="label">Rücksetzbereich</div><div class="value">385,00 $</div></div>
+                <div class="fact-card"><div class="label">Chance-Risiko</div><div class="value">2,10</div></div>
+              </div>
+              <p class="makx-small" style="margin-top:12px">Beispielhafte Darstellung. Keine Anlageberatung und keine Empfehlung.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" style="padding-top:0">
+    <section class="ak-soft-section ak-low-priority">
       <div class="container">
-        <div class="warning-card">
-          <div class="warning-badge">⚠️ Transparenz ist Teil des Produkts</div>
-          <h3>Wichtiger Hinweis / Risikohinweis</h3>
-          <p>AnlageKompass liefert Informationen, Einordnungen und datenbasierte Marktideen. Es handelt sich nicht um Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten.</p>
-          <ul>
-            <li>Es erfolgt keine individuelle Beratung.</li>
-            <li>Informationen können unvollständig, vereinfacht, zeitverzögert oder fehlerhaft sein.</li>
-            <li>Kapitalanlagen sind mit erheblichen Risiken verbunden.</li>
-            <li>Es kann zum vollständigen Verlust des eingesetzten Kapitals kommen.</li>
-            <li>Jede Anlageentscheidung erfolgt ausschließlich eigenverantwortlich.</li>
-          </ul>
-          <div class="makx-actions"><button class="btn btn-card-secondary" type="button" onclick="goToRoute('/risikohinweis')">Vollständigen Risikohinweis lesen</button></div>
+        <div class="section-head" style="margin-bottom:22px"><h2>So funktioniert AnlageKompass im Detail</h2><p>Weitere Informationen zu Funktionen, Ablauf und Auswahlmodell – kompakt zusammengefasst.</p></div>
+        <div class="ak-bottom-explain">
+          <details>
+            <summary>Alles, was du brauchst</summary>
+            <div class="feature-grid">
+              <article class="feature-card"><span class="emoji">💡</span><h3>Konkrete Marktideen</h3><p>Jede Plus-Abo-Idee kommt mit Symbol, möglichem Einstiegswert, Zielbereich, Rücksetzbereich, Chance-Risiko und direkter Chartansicht.</p></article>
+              <article class="feature-card"><span class="emoji">⚡</span><h3>Mehrere Chancen pro Tag</h3><p>Im Plus-Abo-Bereich siehst du regelmäßig mehrere Chancen pro Tag – kompakt, sortiert und verständlich eingeordnet.</p></article>
+              <article class="feature-card"><span class="emoji">📈</span><h3>Direkte Chartansicht</h3><p>Jede Chance und jede öffentliche Idee lässt sich mit dem passenden TradingView-Chart ergänzen.</p></article>
+              <article class="feature-card"><span class="emoji">🏷️</span><h3>Watchlist &amp; Kursregeln</h3><p>Plus-Abo-Nutzer speichern Favoriten, öffnen Werte direkt im Chart und hinterlegen individuelle Kursregeln.</p></article>
+              <article class="feature-card"><span class="emoji">🗓️</span><h3>Kostenlose Top-Idee</h3><p>Jeden Dienstag gibt es eine kostenlose Top-Idee zum Kennenlernen – nach kostenlosem Login und Bestätigung der Rechtstexte.</p></article>
+              <article class="feature-card"><span class="emoji">🎯</span><h3>Klare Modellwerte</h3><p>Plus-Abo zeigt möglichen Einstiegswert, Zielbereich, Rücksetzbereich und Chance-Risiko auf einen Blick.</p></article>
+            </div>
+          </details>
+          <details>
+            <summary>So funktioniert AnlageKompass</summary>
+            <div class="steps-grid">
+              <article class="step-card"><div class="step-number">1</div><h3>Marktchance entdecken</h3><p>Du erhältst kompakte Ideen zu Aktien und ETFs.</p></article>
+              <article class="step-card"><div class="step-number">2</div><h3>Einordnung prüfen</h3><p>Du siehst Chancen, Risiken, möglichen Einstiegswert, Zielbereich und Rücksetzbereich.</p></article>
+              <article class="step-card"><div class="step-number">3</div><h3>Chart ansehen</h3><p>Jede Idee kann direkt im interaktiven Chart geprüft werden.</p></article>
+              <article class="step-card"><div class="step-number">4</div><h3>Watchlist nutzen</h3><p>Speichere interessante Werte und behalte sie im Blick.</p></article>
+              <article class="step-card"><div class="step-number">5</div><h3>Eigenverantwortlich entscheiden</h3><p>AnlageKompass liefert Struktur. Die Entscheidung bleibt immer bei dir.</p></article>
+            </div>
+          </details>
+          <details>
+            <summary>Wie wir Aktien auswählen</summary>
+            <div class="ak-explain-grid">
+              <article class="ak-explain-card"><h3>1. Marktfilter</h3><p>Der Scanner betrachtet nur Werte mit ausreichender Handelbarkeit, sinnvollem Preisniveau und verwertbarer Kurs- und Volumenhistorie.</p></article>
+              <article class="ak-explain-card"><h3>2. Technische Struktur</h3><p>Bewertet werden unter anderem Trendrichtung, Momentum, Volumenauffälligkeit, Abstand zu relevanten Kurszonen und kurzfristige Bestätigung im Chart.</p></article>
+              <article class="ak-explain-card"><h3>3. Risiko und Plausibilität</h3><p>Eine Idee erscheint nur, wenn die Preislogik plausibel ist: Rücksetzbereich unter möglichem Einstiegswert und Zielbereich oberhalb des möglichen Einstiegswerts.</p></article>
+            </div>
+          </details>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="ak-soft-section" style="padding-top:0">
       <div class="container">
-        <div class="section-head"><h2>Preise</h2><p>Klare Struktur: kostenlos kennenlernen oder Plus-Abo mit vollem Zugriff nutzen.</p></div>
-        <div class="pricing-grid">
-          <article class="price-card">
-            <div class="plan-name">Free</div>
-            <div class="price-line"><div class="price">0€</div><div class="per">/ Monat</div></div>
-            <ul class="feature-list">
-              <li><span class="tick">✓</span>Kostenloses Konto für die Top-Idee</li>
-              <li><span class="tick">✓</span>Öffentliche Top-Idee am Dienstag</li>
-              <li><span class="tick">✓</span>Einblick in Stil und Aufbereitung</li>
-              <li><span class="tick">✓</span>Rechtstexte und Risikohinweis bestätigen</li>
-            </ul>
-            <button class="btn btn-card-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Idee ansehen</button>
-          </article>
-          <article class="price-card plus">
-            <div class="recommend">⭐ Plus-Abo</div>
-            <div class="plan-name">AnlageKompass Plus-Abo</div>
-            <div class="price-line"><div class="price">19,99€</div><div class="per">/ Monat</div></div>
-            <ul class="feature-list">
-              <li><span class="tick">✓</span>Mehrere Chancen pro Tag</li>
-              <li><span class="tick">✓</span>Möglicher Einstiegswert, Zielbereich, Rücksetzbereich und Chance-Risiko</li>
-              <li><span class="tick">✓</span>Watchlist</li>
-              <li><span class="tick">✓</span>Kursregeln &amp; Benachrichtigungen</li>
-              <li><span class="tick">✓</span>Direkte Chartansicht pro Chance</li>
-              <li><span class="tick">✓</span>Monatlich kündbar</li>
-            </ul>
-            <p class="makx-small" style="margin:-8px 0 18px">Das entspricht rund 0,67 € pro Tag bei täglicher Nutzung.</p>
-            <button class="btn btn-card-primary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus-Abo jetzt starten</button>
-          </article>
-        </div>
-        <div class="promo-strip"><div class="promo-badge">📣 Warum Plus-Abo?</div><h3>Mehr Klarheit statt mehr Lärm</h3><p>AnlageKompass Plus-Abo zielt auf eine hohe Strukturqualität ab – aber kein Modell und kein Mensch erreicht 100 %. Genau deshalb bekommst du nicht nur eine Idee, sondern auch Risiko, möglichen Einstiegswert, Zielbereich und Rücksetzbereich.</p></div>
-      </div>
-    </section>
-
-    <section class="section" style="padding-top:0">
-      <div class="container">
-        <div class="section-head"><h2>Stimmen aus der Nutzung</h2><p>Nutzerstimmen zu Produkterlebnisses.</p></div>
-        <div class="review-grid">
-          <article class="review-card"><div class="stars">★★★★★</div><strong>„Sehr übersichtlich.“</strong><p>Ich sehe schneller, welche Werte gerade spannend sind und wo mögliche Risiken liegen.</p><div class="review-meta">Anna K.</div></article>
-          <article class="review-card"><div class="stars">★★★★☆</div><strong>„Gute Struktur.“</strong><p>Die Einordnung mit möglichem Einstiegswert, Zielbereich und Rücksetzbereich hilft mir mehr als reine Börsennews.</p><div class="review-meta">Markus S.</div></article>
-          <article class="review-card"><div class="stars">★★★★★</div><strong>„Stark für Watchlist.“</strong><p>Die Kombination aus Idee, Chart und Watchlist macht die Seite für mich sehr praktisch.</p><div class="review-meta">Leon M.</div></article>
-          <article class="review-card"><div class="stars">★★★★☆</div><strong>„Professionell, aber noch ausbaufähig.“</strong><p>Inhaltlich stark. Ich würde mir langfristig noch mehr historische Auswertungen wünschen.</p><div class="review-meta">Sarah B.</div></article>
-          <article class="review-card"><div class="stars">★★★☆☆</div><strong>„Für Anfänger etwas viel.“</strong><p>Die Infos sind hilfreich, aber manche Aktien musste ich mir am Anfang zweimal ansehen.</p><div class="review-meta">Timo R.</div></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" style="padding-top:0">
-      <div class="container">
-        <div class="section-head"><h2>Häufige Fragen</h2><p>Die wichtigsten Antworten vor dem Start.</p></div>
         <div class="faq-grid">
-          <article class="faq-item"><h3>Ist AnlageKompass eine Anlageberatung?</h3><p>Nein. Die Inhalte dienen ausschließlich Informationszwecken und ersetzen keine individuelle Beratung.</p></article>
-          <article class="faq-item"><h3>Wie oft kommen neue Ideen?</h3><p>Plus-Abo-Nutzer erhalten regelmäßig mehrere Chancen pro Tag. Free-Nutzer erhalten jeden Dienstag eine kostenlose Top-Idee.</p></article>
-          <article class="faq-item"><h3>Kann ich monatlich kündigen?</h3><p>Ja. Plus-Abo läuft monatlich und kann zum Ende des laufenden Abrechnungszeitraums gekündigt werden.</p></article>
-          <article class="faq-item"><h3>Was ist der Rücksetzbereich?</h3><p>Ein Orientierungsbereich unterhalb des möglichen Einstiegswerts. Wird er berührt, ist die Idee nicht automatisch gescheitert, sondern sollte besonders genau beobachtet werden. Erst das kritische Niveau unterhalb des Rücksetzbereichs gilt im Modell als gescheitert.</p></article>
-          <article class="faq-item"><h3>Sind Gewinne garantiert?</h3><p>Nein. Kapitalanlagen sind mit Risiken verbunden, bis hin zum vollständigen Verlust des eingesetzten Kapitals.</p></article>
-          <article class="faq-item"><h3>Für wen ist Plus-Abo geeignet?</h3><p>Für Nutzer, die Marktideen strukturiert prüfen möchten, aber keine Lust auf unübersichtliches Börsenrauschen haben.</p></article>
+          <article class="faq-item"><h3>Ist AnlageKompass eine Anlageberatung?</h3><p>Nein. AnlageKompass liefert ausschließlich Informationen, Modellwerte und strukturierte Marktideen. Es handelt sich nicht um Anlageberatung.</p></article>
+          <article class="faq-item"><h3>Wie oft kommen neue Ideen?</h3><p>Free-Nutzer sehen jeden Dienstag eine kostenlose Top-Idee. Plus-Abo-Nutzer erhalten regelmäßig mehrere Chancen pro Tag, abhängig vom Marktumfeld.</p></article>
+          <article class="faq-item"><h3>Kann ich monatlich kündigen?</h3><p>Ja. Das Plus-Abo kostet 19,99 € monatlich und ist monatlich kündbar.</p></article>
         </div>
       </div>
     </section>
 
     <section class="section" style="padding-top:0">
-      <div class="container">
-        <div class="final-cta">
-          <h2>Bereit für klarere Marktchancen?</h2>
-          <p>Teste AnlageKompass kostenlos mit der Dienstags-Idee oder starte Plus-Abo für den vollständigen Zugriff auf Chancen, Watchlist, Kursregeln und Charts.</p>
-          <div class="hero-actions">
-            <button class="btn btn-hero-primary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus-Abo jetzt starten</button>
-            <button class="btn btn-hero-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlos testen</button>
-          </div>
-        </div>
-      </div>
+      <div class="container"><div class="final-cta"><h2>Bereit für klarere Marktchancen?</h2><p>Starte kostenlos mit der Dienstagsidee oder nutze Plus für regelmäßige strukturierte Chancen, Watchlist und Kursregeln.</p><div class="hero-actions"><button class="btn btn-hero-primary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus-Abo starten</button><button class="btn btn-hero-secondary" type="button" onclick="goToRoute('/kostenlose-idee')">Kostenlose Idee ansehen</button></div></div></div>
     </section>
-
-    <div class="disclaimer container">Hinweis: AnlageKompass bietet Informationen, Einordnungen und datenbasierte Investment-Ideen, aber keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf von Finanzinstrumenten. Investitionen sind mit Risiken verbunden.</div>
   </main>
 
 
   
   <main id="view-finanz-tools" class="page-view"><div class="container app-shell">
-    <section class="makx-hero"><div class="makx-kicker">🧭 Finanz-Tools</div><h1>Digitale Finanzprodukte für deinen Vermögensaufbau</h1><p class="makx-copy">Kostenlose Finanzbildung, Vorlagen, Rechner, Kurse und praktische Planungsseiten für private Anleger. Geld verdienen soll jetzt vor allem der Plus-Abo-Bereich mit täglichen Chancen, Watchlist und laufenden Markteinordnungen.</p><div class="makx-actions"><button class="btn btn-hero-primary" onclick="openPremiumModal('/premium/chancen')">Plus-Abo-Chancen freischalten</button><button class="btn btn-hero-secondary" onclick="goToRoute('/kostenlose-idee')">Kostenlose Top-Idee</button><button class="btn btn-card-secondary" onclick="goToRoute('/finanzen-im-griff')">Finanzen im Griff</button></div></section>
+    <section class="makx-hero"><div class="makx-kicker">🧭 Finanz-Tools</div><h1>Digitale Finanzprodukte für deinen Vermögensaufbau</h1><p class="makx-copy">Kostenlose Finanzbildung, Vorlagen, Rechner, Kurse und praktische Planungsseiten für private Anleger. Ergänzend findest du hier praktische Inhalte für Finanzbildung, Planung und bessere Orientierung im Alltag.</p><div class="makx-actions"><button class="btn btn-hero-primary" onclick="openPremiumModal('/premium/chancen')">Plus-Abo-Chancen freischalten</button><button class="btn btn-hero-secondary" onclick="goToRoute('/kostenlose-idee')">Kostenlose Top-Idee</button><button class="btn btn-card-secondary" onclick="goToRoute('/finanzen-im-griff')">Finanzen im Griff</button></div></section>
     <div class="makx-route-tabs"><button class="btn btn-card-secondary" onclick="goToRoute('/finanzen-im-griff')">Finanzen im Griff</button><button class="btn btn-card-secondary" onclick="goToRoute('/etfs')">ETF-Welt</button><button class="btn btn-card-secondary" onclick="goToRoute('/finanzplaner')">Finanzplaner</button><button class="btn btn-card-secondary" onclick="goToRoute('/etf-minikurs')">ETF-Kurs</button><button class="btn btn-card-secondary" onclick="goToRoute('/berufseinsteiger')">Berufseinsteiger</button><button class="btn btn-card-secondary" onclick="goToRoute('/paar-finanzplaner')">Paare</button><button class="btn btn-card-secondary" onclick="goToRoute('/newsletter')">Newsletter</button></div>
     <section class="makx-section"><div class="makx-grid">
       <article class="makx-product"><span class="makx-badge">Für Anfänger</span><h3>ETF-Startpaket</h3><p>Der einfache Einstieg für alle, die ETFs, Sparpläne, MSCI World und wichtige Begriffe verstehen möchten.</p><ul><li>ETF-Grundlagen als PDF</li><li>Glossar und Checkliste</li><li>Typische Anfängerfehler</li><li>Beispielhafte Sparplan-Szenarien</li></ul><div class="makx-price">Kostenlos</div><button class="btn btn-card-primary" onclick="goToRoute('/etf-startpaket')">Kostenlos öffnen</button></article>
@@ -541,7 +548,7 @@
   <section class="makx-section"><div class="makx-table-card"><h3>Kommende Quartalszahlen – mehrere Wochen Vorschau</h3><p>Wenn Termine verfügbar sind, werden sie hier automatisch angezeigt. Zusätzlich werden wichtige Beispielwerte als Orientierung ergänzt.</p><div class="makx-table-wrap"><table class="makx-table"><thead><tr><th>Datum</th><th>Symbol</th><th>Unternehmen</th><th>EPS erwartet</th><th>Umsatz erwartet</th><th>Worauf achten?</th></tr></thead><tbody id="makx-earnings-body"><tr><td colspan="6">Quartalszahlen werden geladen …</td></tr></tbody></table></div><div class="makx-note">Daten können fehlen, verspätet sein oder je nach Börse/Unternehmen abweichen. Bitte immer mit Unternehmenskalender und IR-Seite gegenprüfen.</div></div></section>
 </div></main>
 
-  <main id="view-glossar" class="page-view"><div class="container app-shell"><section class="makx-hero"><div class="makx-kicker">📚 Finanzwissen</div><h1>Finanzbegriffe einfach erklärt</h1><p class="makx-copy">Ein Glossar für Begriffe rund um ETFs, Aktien, Sparpläne und Vermögensaufbau. Gut für Besucher, Google und interne Verlinkung.</p></section><section class="makx-section"><div class="makx-grid"><article class="makx-card"><h3>ETF</h3><p>Ein börsengehandelter Fonds, der meist einen Index wie den MSCI World oder S&P 500 abbildet.</p></article><article class="makx-card"><h3>Rendite</h3><p>Die Wertentwicklung einer Geldanlage in Prozent. Sie kann positiv oder negativ sein.</p></article><article class="makx-card"><h3>Zinseszins</h3><p>Der Effekt, wenn Erträge wieder angelegt werden und dadurch selbst neue Erträge erwirtschaften können.</p></article><article class="makx-card"><h3>TER</h3><p>Die Gesamtkostenquote eines Fonds oder ETFs. Sie zeigt laufende Kosten pro Jahr.</p></article><article class="makx-card"><h3>Volatilität</h3><p>Ein Maß für Schwankungen. Hohe Volatilität bedeutet stärkere Kursbewegungen.</p></article><article class="makx-card"><h3>Dividende</h3><p>Eine Gewinnausschüttung eines Unternehmens an seine Aktionäre.</p></article></div></section></div></main>
+  <main id="view-glossar" class="page-view"><div class="container app-shell"><section class="makx-hero"><div class="makx-kicker">📚 Finanzwissen</div><h1>Finanzbegriffe einfach erklärt</h1><p class="makx-copy">Ein Glossar für Begriffe rund um ETFs, Aktien, Sparpläne und Vermögensaufbau. Ein kompakter Überblick für Einsteiger und alle, die Finanzbegriffe schnell nachschlagen möchten.</p></section><section class="makx-section"><div class="makx-grid"><article class="makx-card"><h3>ETF</h3><p>Ein börsengehandelter Fonds, der meist einen Index wie den MSCI World oder S&P 500 abbildet.</p></article><article class="makx-card"><h3>Rendite</h3><p>Die Wertentwicklung einer Geldanlage in Prozent. Sie kann positiv oder negativ sein.</p></article><article class="makx-card"><h3>Zinseszins</h3><p>Der Effekt, wenn Erträge wieder angelegt werden und dadurch selbst neue Erträge erwirtschaften können.</p></article><article class="makx-card"><h3>TER</h3><p>Die Gesamtkostenquote eines Fonds oder ETFs. Sie zeigt laufende Kosten pro Jahr.</p></article><article class="makx-card"><h3>Volatilität</h3><p>Ein Maß für Schwankungen. Hohe Volatilität bedeutet stärkere Kursbewegungen.</p></article><article class="makx-card"><h3>Dividende</h3><p>Eine Gewinnausschüttung eines Unternehmens an seine Aktionäre.</p></article></div></section></div></main>
 
 
   <main id="view-product-success" class="page-view"><div class="container app-shell"><section class="success-hero"><div class="gate-badge">✅ Zahlung / Kauf</div><h1 id="makx-product-success-title">Danke für deinen Kauf.</h1><p id="makx-product-success-copy">Dein Produkt wird deinem Konto zugeordnet. Du kannst den Zugriff hier öffnen.</p><div class="hero-actions"><button class="btn btn-hero-primary" type="button" id="makx-product-success-open">Produkt öffnen</button><button class="btn btn-hero-secondary" type="button" onclick="goToRoute('/finanz-tools')">Alle Finanz-Tools</button><button class="btn btn-card-secondary" type="button" onclick="goToRoute('/konto')">Zum Konto</button></div></section></div></main>
@@ -560,7 +567,7 @@
 
   <main id="view-legal" class="page-view"><div class="container legal-shell"><article class="legal-card"><div class="kicker" id="legalKicker">Rechtliches</div><h1 id="legalTitle">Rechtliche Informationen</h1><p class="legal-meta" id="legalUpdated"></p><div class="legal-note hidden" id="legalNote"></div><div class="legal-body" id="legalBody"></div></article></div></main>
 
-  <main id="view-public-idea" class="page-view"><div class="container app-shell"><section class="page-hero"><div class="kicker">🎁 Kostenlose Top-Idee am Dienstag</div><div class="row-head"><div><h1 id="publicHeroTitle">Kostenlose Idee wird geladen …</h1><p class="page-hero-copy" id="publicHeroCopy">Jeden Dienstag veröffentlichen wir hier eine kostenlose Top-Idee.</p><div class="chips" id="publicHeroChips"></div></div><div class="price-box"><div class="price" id="publicHeroPrice">—</div><div class="change" id="publicHeroChange">—</div></div></div></section><section class="warning-card"><div class="warning-badge">⚠️ Disclaimer / Risikohinweis</div><h3>Die kostenlose Top-Idee ist keine Anlageberatung</h3><p>Die Inhalte dienen ausschließlich Informationszwecken und stellen keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf dar.</p><ul><li>Keine individuelle Beratung.</li><li>Teilweiser oder vollständiger Verlust möglich.</li><li>Vergangene Entwicklungen sind kein verlässlicher Indikator.</li><li>Jede Anlageentscheidung erfolgt eigenverantwortlich.</li></ul></section><section class="gate-card" id="publicIdeaAccessGate"><div class="gate-badge">🔐 Zugang zur kostenlosen Idee</div><h3 id="publicGateTitle">Kostenloses Konto und Bestätigung erforderlich</h3><p id="publicGateText">Um die kostenlose Top-Idee zu sehen, musst du ein kostenloses Konto haben und AGB, Datenschutzerklärung sowie den Risikohinweis bestätigen.</p><div id="publicGateActions" class="hero-actions" style="justify-content:flex-start;margin-top:18px"></div><div id="publicGateChecklist" class="hidden" style="margin-top:18px"><label class="check-row"><input id="freeIdeaTermsCheck" type="checkbox"><span>Ich bestätige die <a class="inline-legal-link" href="#/agb" onclick="closeOverlaysAndGoRoute('/agb');return false">AGB</a>, die <a class="inline-legal-link" href="#/datenschutz" onclick="closeOverlaysAndGoRoute('/datenschutz');return false">Datenschutzerklärung</a> und den <a class="inline-legal-link" href="#/risikohinweis" onclick="closeOverlaysAndGoRoute('/risikohinweis');return false">Risikohinweis</a>.</span></label><label class="check-row"><input id="freeIdeaLossCheck" type="checkbox"><span>Mir ist bewusst, dass AnlageKompass keine Anlageberatung erbringt und Kapitalanlagen Verlustgefahren haben.</span></label><label class="check-row"><input id="freeIdeaDataCheck" type="checkbox"><span>Ich bin damit einverstanden, dass diese Bestätigung zu Nachweiszwecken gespeichert wird.</span></label><div class="hero-actions" style="justify-content:flex-start;margin-top:14px"><button class="btn btn-hero-primary" type="button" onclick="acceptFreeIdeaTerms()">Bestätigung speichern und kostenlose Idee öffnen</button></div></div></section><div id="publicIdeaProtectedContent" class="hidden"><section class="subscribe-grid"><section class="subscribe-card"><h3>Diese Woche kostenlos sichtbar</h3><p class="muted" style="margin-bottom:18px">Die öffentliche Seite zeigt die beste Idee aus der neuesten Dienstags-Veröffentlichung.</p><h3>Was macht die Aktie?</h3><p class="body-copy" id="publicAboutText"></p><div class="detail-facts-grid" id="publicFactsGrid" style="margin-top:24px"></div><h3 style="margin-top:24px">Warum könnte das gerade interessant sein?</h3><p class="body-copy" id="publicWhyText"></p><div class="grid-3" style="margin-top:24px"><article class="mini-card"><h4>Chancen</h4><p id="publicChanceText"></p></article><article class="mini-card"><h4>Risiken</h4><p id="publicRiskText"></p></article><article class="mini-card"><h4>Alternative Idee</h4><p id="publicAlternativeText"></p></article></div><div id="freeIdeaAdSlot" style="margin-top:24px"></div></section><aside class="subscribe-card"><h3>Am Dienstag erinnern lassen</h3><p class="muted" style="margin-bottom:18px">Trage deine E-Mail ein und erhalte am Dienstag automatisch eine E-Mail, sobald die neue kostenlose Top-Idee veröffentlicht wurde.</p><div class="field"><label for="freeIdeaReminderEmail">E-Mail-Adresse</label><input id="freeIdeaReminderEmail" type="email" placeholder="deine@email.de" /></div><label class="check-row"><input id="freeIdeaReminderConsent" type="checkbox"><span>Ich möchte per E-Mail informiert werden, sobald die kostenlose Dienstagsidee veröffentlicht wurde. Abmeldung jederzeit möglich.</span></label><button class="submit-btn" id="freeIdeaReminderBtn" type="button" onclick="subscribeFreeIdeaReminder()">Dienstags erinnern</button><div class="muted" id="freeIdeaReminderStatus" style="margin-top:12px"></div></aside></section><section class="content-card" style="margin-top:24px"><div class="row-head" style="margin-bottom:18px"><div><div class="promo-badge">⭐ AnlageKompass Plus-Abo</div><h3 style="margin-top:14px">Mehr als nur die kostenlose Dienstags-Idee</h3><p class="muted">Mit Plus-Abo bekommst du mehrere Chancen pro Tag, möglichen Einstiegswert, Zielbereich, Rücksetzbereich, Chance-Risiko und deine Watchlist.</p></div><div class="hero-actions" style="justify-content:flex-end"><button class="btn btn-card-primary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus-Abo für 19,99€ ansehen</button></div></div></section></div></div></main>
+  <main id="view-public-idea" class="page-view"><div class="container app-shell"><section class="page-hero"><div class="kicker">🎁 Kostenlose Top-Idee am Dienstag</div><div class="row-head"><div><h1 id="publicHeroTitle">Kostenlose Idee wird geladen …</h1><p class="page-hero-copy" id="publicHeroCopy">Jeden Dienstag veröffentlichen wir hier eine kostenlose Top-Idee.</p><div class="chips" id="publicHeroChips"></div></div><div class="price-box"><div class="price" id="publicHeroPrice">—</div><div class="change" id="publicHeroChange">—</div></div></div></section><section class="warning-card"><div class="warning-badge">⚠️ Disclaimer / Risikohinweis</div><h3>Die kostenlose Top-Idee ist keine Anlageberatung</h3><p>Die Inhalte dienen ausschließlich Informationszwecken und stellen keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf dar.</p><ul><li>Keine individuelle Beratung.</li><li>Teilweiser oder vollständiger Verlust möglich.</li><li>Vergangene Entwicklungen sind kein verlässlicher Indikator.</li><li>Jede Anlageentscheidung erfolgt eigenverantwortlich.</li></ul></section><section class="gate-card" id="publicIdeaAccessGate"><div class="gate-badge">🔐 Zugang zur kostenlosen Idee</div><h3 id="publicGateTitle">Kostenloses Konto und Bestätigung erforderlich</h3><p id="publicGateText">Um die kostenlose Top-Idee zu sehen, musst du ein kostenloses Konto haben und AGB, Datenschutzerklärung sowie den Risikohinweis bestätigen.</p><div id="publicGateActions" class="hero-actions" style="justify-content:flex-start;margin-top:18px"></div><div id="publicGateChecklist" class="hidden" style="margin-top:18px"><label class="check-row"><input id="freeIdeaTermsCheck" type="checkbox"><span>Ich bestätige die <a class="inline-legal-link" href="#/agb" onclick="closeOverlaysAndGoRoute('/agb');return false">AGB</a>, die <a class="inline-legal-link" href="#/datenschutz" onclick="closeOverlaysAndGoRoute('/datenschutz');return false">Datenschutzerklärung</a> und den <a class="inline-legal-link" href="#/risikohinweis" onclick="closeOverlaysAndGoRoute('/risikohinweis');return false">Risikohinweis</a>.</span></label><label class="check-row"><input id="freeIdeaLossCheck" type="checkbox"><span>Mir ist bewusst, dass AnlageKompass keine Anlageberatung erbringt und Kapitalanlagen Verlustgefahren haben.</span></label><label class="check-row"><input id="freeIdeaDataCheck" type="checkbox"><span>Ich bin damit einverstanden, dass diese Bestätigung zu Nachweiszwecken gespeichert wird.</span></label><div class="hero-actions" style="justify-content:flex-start;margin-top:14px"><button class="btn btn-hero-primary" type="button" onclick="acceptFreeIdeaTerms()">Bestätigung speichern und kostenlose Idee öffnen</button></div></div></section><div id="publicIdeaProtectedContent" class="hidden"><section class="subscribe-grid"><section class="subscribe-card"><h3>Diese Woche kostenlos sichtbar</h3><p class="muted" style="margin-bottom:18px">Hier wird die aktuelle kostenlose Dienstagsidee angezeigt.</p><h3>Was macht die Aktie?</h3><p class="body-copy" id="publicAboutText"></p><div class="detail-facts-grid" id="publicFactsGrid" style="margin-top:24px"></div><h3 style="margin-top:24px">Warum könnte das gerade interessant sein?</h3><p class="body-copy" id="publicWhyText"></p><div class="grid-3" style="margin-top:24px"><article class="mini-card"><h4>Chancen</h4><p id="publicChanceText"></p></article><article class="mini-card"><h4>Risiken</h4><p id="publicRiskText"></p></article><article class="mini-card"><h4>Alternative Idee</h4><p id="publicAlternativeText"></p></article></div><div id="freeIdeaAdSlot" style="margin-top:24px"></div></section><aside class="subscribe-card"><h3>Am Dienstag erinnern lassen</h3><p class="muted" style="margin-bottom:18px">Trage deine E-Mail ein und erhalte am Dienstag automatisch eine E-Mail, sobald die neue kostenlose Top-Idee veröffentlicht wurde.</p><div class="field"><label for="freeIdeaReminderEmail">E-Mail-Adresse</label><input id="freeIdeaReminderEmail" type="email" placeholder="deine@email.de" /></div><label class="check-row"><input id="freeIdeaReminderConsent" type="checkbox"><span>Ich möchte per E-Mail informiert werden, sobald die kostenlose Dienstagsidee veröffentlicht wurde. Abmeldung jederzeit möglich.</span></label><button class="submit-btn" id="freeIdeaReminderBtn" type="button" onclick="subscribeFreeIdeaReminder()">Dienstags erinnern</button><div class="muted" id="freeIdeaReminderStatus" style="margin-top:12px"></div></aside></section><section class="content-card" style="margin-top:24px"><div class="row-head" style="margin-bottom:18px"><div><div class="promo-badge">⭐ AnlageKompass Plus-Abo</div><h3 style="margin-top:14px">Mehr als nur die kostenlose Dienstags-Idee</h3><p class="muted">Mit Plus-Abo bekommst du mehrere Chancen pro Tag, möglichen Einstiegswert, Zielbereich, Rücksetzbereich, Chance-Risiko und deine Watchlist.</p></div><div class="hero-actions" style="justify-content:flex-end"><button class="btn btn-card-primary" type="button" onclick="openPremiumModal('/premium/chancen')">Plus-Abo für 19,99 € ansehen</button></div></div></section></div></div></main>
 
   <main id="view-watchlist" class="page-view"><div class="container app-shell"><section class="page-hero"><div class="kicker">📌 Watchlist & Alerts</div><h1>Beobachte Aktien, lege Kursregeln fest und öffne direkt den passenden Chart</h1><p class="page-hero-copy">Suche nach Aktien, füge Werte zur Watchlist hinzu und springe ohne Umweg in den richtigen Chart.</p></section><section class="stats-grid"><article class="mini-card"><h4>Aktiensuche</h4><p>Finde Unternehmen über Namen oder Symbol.</p></article><article class="mini-card"><h4>Favoriten</h4><p>Speichere bis zu 30 Titel gleichzeitig.</p></article><article class="mini-card"><h4>Kursregeln</h4><p>Lege Preis- oder Prozent-Regeln an.</p></article></section><section class="app-layout"><aside class="sidebar-card"><h3>Aktiensuche</h3><p class="muted">Beispiele: Apple, Microsoft, NVDA, ASML</p><div class="search-stack"><div class="search-box"><input id="stockSearchInput" type="text" placeholder="Aktie suchen..." /><button class="btn btn-top-primary" type="button" id="stockSearchBtn">Suchen</button></div><div class="results-stack" id="searchResults"><div class="search-empty">Noch keine Suche gestartet.</div></div></div></aside><div class="content-grid"><section class="content-card"><div class="row-head"><div><h2 id="watchTitle">Noch kein Favorit ausgewählt</h2><p class="muted" id="watchSubtitle">Wähle einen Favoriten oder suche zuerst nach einer Aktie.</p></div><div class="price-box"><div class="price" id="watchPrice">—</div><div class="change" id="watchChange">—</div></div></div><div class="facts-grid" id="watchFactsGrid"><div class="fact-card"><div class="label">Status</div><div class="value">Keine Auswahl</div></div><div class="fact-card"><div class="label">Favoriten</div><div class="value" id="favoritesCountBox">0 / 30</div></div><div class="fact-card"><div class="label">Hinweis</div><div class="value">Suche starten</div></div><div class="fact-card"><div class="label">Chart</div><div class="value">Bereit</div></div></div></section><section class="content-card"><div class="row-head" style="margin-bottom:18px"><div><h3>Meine Favoriten</h3><p class="muted">Maximal 30 Favoriten gleichzeitig.</p></div><div class="pill-count" id="favoritesCountPill">0 / 30 Favoriten</div></div><div class="favorites-stack" id="favoritesList"><div class="search-empty">Noch keine Favoriten gespeichert.</div></div></section><section class="content-card"><div class="row-head" style="margin-bottom:18px"><div><h3>Aktive Kursregeln</h3><p class="muted">Alle gespeicherten Regeln werden hier gesammelt angezeigt.</p></div><div class="inline-actions"><button class="mini-btn" type="button" onclick="enableBrowserNotifications()">Benachrichtigungen aktivieren</button></div></div><div class="alert-list" id="watchAlertList"><div class="fact-card"><div class="value">Noch keine Kursregeln gespeichert.</div></div></div></section><section class="chart-card"><div class="chart-header"><h2 class="chart-title" id="watchChartTitle">Chart zur Aktie</h2><p class="chart-subtitle">Interaktiver TradingView-Chart für deine Watchlist-Aktie.</p></div><div class="chart-wrap"><div class="chart-box"><div id="tv-chart-watchlist" class="tv-container"></div></div></div></section></div></section></div></main>
 
@@ -1674,6 +1681,10 @@
     async function makxQuote(symbol){try{return await makxFinnhub(`quote?symbol=${encodeURIComponent(symbol)}`)}catch(e){return null}}
     function makxExplainMove(change,name='Der Wert'){if(!Number.isFinite(change))return 'Keine aktuelle Kursbewegung verfügbar.';const abs=Math.abs(change);if(abs<0.3)return `${name} bewegt sich heute kaum. Das spricht eher für abwartende Marktstimmung oder fehlende neue Impulse.`;if(change>0)return `${name} steigt heute. Mögliche Gründe können positive Unternehmensnachrichten, bessere Markterwartungen, starke Branchentrends, sinkende Zinsen oder allgemeine Risikofreude sein. Prüfe zusätzlich News, Quartalszahlen und Ausblick.`;return `${name} fällt heute. Mögliche Gründe können schwächere Zahlen, vorsichtiger Ausblick, Gewinnmitnahmen, steigende Zinsen, Branchenbelastung oder allgemeine Risikoaversion sein. Prüfe zusätzlich News, Bewertung und Marktumfeld.`}
     async function renderETFDatabase(){const body=getEl('makx-etf-db-body');if(!body)return;body.innerHTML='<tr><td colspan="7">ETF-Daten werden geladen …</td></tr>';const rows=[];for(const e of MAKX_ETFS){let q=null;try{q=await makxQuote(e.ticker)}catch{}const price=q?.c?formatMoney(q.c, e.ticker.endsWith('.DE')||e.ticker.endsWith('.AS')?'EUR':'USD'):'—';const ch=Number.isFinite(q?.dp)?`<span class="${q.dp>=0?'makx-positive':'makx-negative'}">${formatPercent(q.dp)}</span>`:'—';rows.push(`<tr><td><strong>${escapeHtml(e.name)}</strong><br><span class="makx-small">Ticker: ${escapeHtml(e.ticker)}</span></td><td>ISIN: ${escapeHtml(e.isin)}<br>WKN: ${escapeHtml(e.wkn)}</td><td>${escapeHtml(e.category)}</td><td>${escapeHtml(e.ter)}</td><td>${escapeHtml(e.use)}</td><td>${price}<br>${ch}</td><td>${escapeHtml(e.note)}</td></tr>`)}body.innerHTML=rows.join('')}
+
+
+    function akLandingShowNewsletterMessage(text,isError=false){const box=getEl('ak-landing-newsletter-message');if(!box)return;box.textContent=text;box.className='ak-landing-message show '+(isError?'err':'ok')}
+    async function akLandingSubscribeNewsletter(){const name=normalizeText(getEl('ak-landing-newsletter-name')?.value||''),email=normalizeText(getEl('ak-landing-newsletter-email')?.value||currentUser?.email||''),consent=!!getEl('ak-landing-newsletter-consent')?.checked;if(!email||!email.includes('@')){akLandingShowNewsletterMessage('Bitte gib eine gültige E-Mail-Adresse ein.',true);return}if(!consent){akLandingShowNewsletterMessage('Bitte bestätige, dass du den Newsletter per E-Mail erhalten möchtest.',true);return}const btn=getEl('ak-landing-newsletter-btn');setLoading(btn,true,'Kostenlos abonnieren');try{const now=new Date().toISOString();if(supabaseClient){const payload={email,name:name||null,status:'active',source:'landing_newsletter',newsletter_enabled:true,free_idea_email_enabled:true,consent_text:'Newsletter und kostenlose Dienstagsidee per E-Mail abonniert',consent_version:LEGAL_VERSION,consent_at:now,created_at:now,updated_at:now};const result=await safeSaveNewsletterSubscriber(payload);if(!result.ok)throw result.error||new Error('Newsletter konnte nicht gespeichert werden.');if(currentUser){await supabaseClient.from(CONFIG.profilesTable).update({email_alerts_enabled:true,newsletter_enabled:true,free_idea_email_enabled:true,updated_at:now}).eq('id',currentUser.id);await recordLegalAcceptance('newsletter_signup',{source:'landing_newsletter',acceptedAt:now,metadata:{email,newsletter_enabled:true,free_idea_email_enabled:true}})}}akLandingShowNewsletterMessage('Danke! Deine Newsletter-Anmeldung wurde gespeichert.')}catch(e){console.warn(e);akLandingShowNewsletterMessage('Die Anmeldung konnte nicht gespeichert werden. Bitte versuche es später erneut oder nutze das Kontaktformular.',true)}finally{setLoading(btn,false,'Kostenlos abonnieren')}}
 
     function makxShowNewsletterMessage(text,isError=false){const box=getEl('makx-newsletter-message');if(!box)return;box.textContent=text;box.classList.remove('hidden');box.style.borderColor=isError?'rgba(255,124,145,.22)':'rgba(31,226,176,.22)';box.style.background=isError?'rgba(255,124,145,.10)':'rgba(31,226,176,.10)';box.style.color=isError?'#ffd1d8':'#d9fff5'}
     async function makxSubscribeNewsletter(){const name=normalizeText(getEl('makx-newsletter-name')?.value||''),email=normalizeText(getEl('makx-newsletter-email')?.value||currentUser?.email||''),consent=!!getEl('makx-newsletter-consent')?.checked;if(!email||!email.includes('@')){makxShowNewsletterMessage('Bitte gib eine gültige E-Mail-Adresse ein.',true);return}if(!consent){makxShowNewsletterMessage('Bitte bestätige, dass du den Newsletter per E-Mail erhalten möchtest.',true);return}const btn=getEl('makx-newsletter-btn');setLoading(btn,true,'Newsletter kostenlos abonnieren');try{const now=new Date().toISOString();if(supabaseClient){const payload={email,name:name||null,status:'active',source:'website_newsletter',newsletter_enabled:true,free_idea_email_enabled:true,consent_text:'Newsletter und kostenlose Dienstagsidee per E-Mail abonniert',consent_version:LEGAL_VERSION,consent_at:now,created_at:now,updated_at:now};const newsletterResult=await safeSaveNewsletterSubscriber(payload); if(!newsletterResult.ok) throw newsletterResult.error||new Error('Newsletter konnte nicht gespeichert werden.');if(currentUser){await supabaseClient.from(CONFIG.profilesTable).update({email_alerts_enabled:true,newsletter_enabled:true,free_idea_email_enabled:true,updated_at:now}).eq('id',currentUser.id);await recordLegalAcceptance('newsletter_signup',{source:'newsletter_page',acceptedAt:now,metadata:{email,newsletter_enabled:true,free_idea_email_enabled:true}})}}makxShowNewsletterMessage('Danke! Deine Newsletter-Anmeldung wurde gespeichert. Du kannst sie jederzeit im Konto oder per Kontakt wieder abbestellen.')}catch(e){makxShowNewsletterMessage('Die Anmeldung konnte nicht gespeichert werden. Bitte versuche es später erneut oder kontaktiere uns.',true)}finally{setLoading(btn,false,'Newsletter kostenlos abonnieren')}}
