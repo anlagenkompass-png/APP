@@ -1839,7 +1839,26 @@
       showView('view-landing')
     }
     window.addEventListener('popstate',handleRoute);window.addEventListener('hashchange',handleRoute);document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o){o.classList.remove('open');o.setAttribute('aria-hidden','true')}}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAuthModal();closePremiumModal()}});
-    window.addEventListener('DOMContentLoaded',async()=>{getEl('footerYear').textContent=String(new Date().getFullYear());loadPendingRouteIntent();if(supabaseClient){await handlePasswordRecoveryFromUrl();const{data}=await supabaseClient.auth.getSession();currentUser=data?.session?.user||currentUser||null;await loadCurrentProfile();supabaseClient.auth.onAuthStateChange(async(_e,session)=>{if(_e==='PASSWORD_RECOVERY')setTimeout(openNewPasswordModal,250);currentUser=session?.user||null;await loadCurrentProfile();refreshNavUI();refreshPremiumModalUI();refreshAuthModalUI();refreshPublicIdeaGate();updateFavoritesCounter();refreshProductPurchaseButtons();if(authInitialized)handleRoute()})}getEl('stockSearchBtn')?.addEventListener('click',searchStocks);getEl('stockSearchInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')searchStocks()});getEl('navUserText')?.addEventListener('click',e=>{e.preventDefault();goToAccountRoute();});refreshNavUI();refreshPremiumModalUI();refreshAuthModalUI();refreshPublicIdeaGate();updateFavoritesCounter();refreshProductPurchaseButtons();initCookieConsent();renderTradingViewChart('tv-chart-watchlist',chartDefaults.symbol);renderTradingViewChart('tv-chart-premium',chartDefaults.symbol);getEl('makx-stock-query')?.addEventListener('keydown',e=>{if(e.key==='Enter')makxSearchStock()});getEl('makx-earnings-query')?.addEventListener('keydown',e=>{if(e.key==='Enter')makxSearchEarningsSymbol()});authInitialized=true;handleRoute()});
+
+    function setupAuthEnterSubmit(){
+      const bindEnter=(ids,handler)=>{
+        ids.forEach(id=>{
+          const el=getEl(id);
+          if(!el||el.dataset.enterSubmitBound==='1')return;
+          el.dataset.enterSubmitBound='1';
+          el.addEventListener('keydown',e=>{
+            if(e.key!=='Enter')return;
+            e.preventDefault();
+            if(typeof handler==='function')handler();
+          });
+        });
+      };
+      bindEnter(['loginEmail','loginPassword'],handleLogin);
+      bindEnter(['registerFirstName','registerLastName','registerEmail','registerPassword','registerPasswordConfirm'],handleRegister);
+      bindEnter(['passwordResetEmail'],sendPasswordResetEmail);
+      bindEnter(['newPasswordInput','newPasswordConfirmInput'],updateRecoveredPassword);
+    }
+    window.addEventListener('DOMContentLoaded',async()=>{getEl('footerYear').textContent=String(new Date().getFullYear());loadPendingRouteIntent();setupAuthEnterSubmit();if(supabaseClient){await handlePasswordRecoveryFromUrl();const{data}=await supabaseClient.auth.getSession();currentUser=data?.session?.user||currentUser||null;await loadCurrentProfile();supabaseClient.auth.onAuthStateChange(async(_e,session)=>{if(_e==='PASSWORD_RECOVERY')setTimeout(openNewPasswordModal,250);currentUser=session?.user||null;await loadCurrentProfile();refreshNavUI();refreshPremiumModalUI();refreshAuthModalUI();refreshPublicIdeaGate();updateFavoritesCounter();refreshProductPurchaseButtons();if(authInitialized)handleRoute()})}getEl('stockSearchBtn')?.addEventListener('click',searchStocks);getEl('stockSearchInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')searchStocks()});getEl('navUserText')?.addEventListener('click',e=>{e.preventDefault();goToAccountRoute();});refreshNavUI();refreshPremiumModalUI();refreshAuthModalUI();refreshPublicIdeaGate();updateFavoritesCounter();refreshProductPurchaseButtons();initCookieConsent();renderTradingViewChart('tv-chart-watchlist',chartDefaults.symbol);renderTradingViewChart('tv-chart-premium',chartDefaults.symbol);getEl('makx-stock-query')?.addEventListener('keydown',e=>{if(e.key==='Enter')makxSearchStock()});getEl('makx-earnings-query')?.addEventListener('keydown',e=>{if(e.key==='Enter')makxSearchEarningsSymbol()});authInitialized=true;handleRoute()});
 
     function handlePlusReviewSubmit(event){
       const form=event?.target;
